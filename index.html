@@ -8,7 +8,7 @@
         :root { --primary: #1a2a3a; --accent: #3498db; --error: #e74c3c; --success: #27ae60; --bg: #f4f7f9; --finished: #bdc3c7; }
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         
-        /* TELA DE LOGIN */
+        /* LOGIN */
         #loginScreen { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 320px; }
         .login-logo { max-width: 150px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
@@ -22,43 +22,47 @@
         
         header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
         .header-logo { max-height: 50px; margin-right: 15px; }
+
+        /* RESUMO */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .stat-card { background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent); text-align: center; }
+        .stat-card h3 { margin: 0; font-size: 12px; color: #666; text-transform: uppercase; }
+        .stat-card p { margin: 5px 0 0; font-size: 20px; font-weight: bold; color: var(--primary); }
         
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; background: #fafafa; padding: 20px; border-radius: 8px; border: 1px solid #eaeaea; }
+        /* FORMULÁRIO E FILTROS */
+        .form-grid, .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; background: #fafafa; padding: 20px; border-radius: 8px; border: 1px solid #eaeaea; margin-bottom: 20px; }
+        .filter-grid { background: #eef2f7; border-color: #d1d9e6; }
         .field { display: flex; flex-direction: column; gap: 5px; }
         .field label { font-size: 12px; font-weight: bold; color: #666; }
         input, select { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
         .btn-marcar { grid-column: 1 / -1; padding: 15px; background: var(--success); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
+        .btn-export { background: #55acee; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
         
         /* TABELA */
-        .table-wrapper { margin-top: 30px; overflow-x: auto; }
+        .table-wrapper { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         th { background: #f8f9fa; padding: 15px; text-align: left; border-bottom: 2px solid #dee2e6; }
         td { padding: 15px; border-bottom: 1px solid #eee; }
         
-        /* ESTADOS DOS JOGOS */
         .row-conflito { background-color: #fff5f5 !important; }
-        .row-finalizado { background-color: #f2f4f5 !important; color: #7f8c8d !important; text-decoration: none; }
-        .row-finalizado td { border-bottom: 1px solid #dfe6e9; }
+        .row-finalizado { background-color: #f2f4f5 !important; color: #7f8c8d !important; }
         
         .badge { padding: 5px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; }
         .badge-casa { background: #d1ecf1; color: #0c5460; }
         .badge-fora { background: #e2e3e5; color: #383d41; }
-        .badge-pendente { background: #fff3cd; color: #856404; }
         .badge-finalizado { background: #bdc3c7; color: white; }
         
-        .error-tag { color: var(--error); font-size: 11px; display: block; font-weight: bold; }
         .btn-action { background: none; border: 1px solid #ddd; padding: 5px 8px; border-radius: 4px; cursor: pointer; margin-right: 5px; }
         .btn-finalizar { background: var(--accent); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
-        .btn-finalizar:hover { background: #2980b9; }
+        
+        @media print { .login-box, .form-grid, .filter-grid, .btn-action, .btn-finalizar, header button { display: none !important; } }
     </style>
 </head>
 <body>
 
 <div id="loginScreen">
     <div class="login-box">
-        <img src="academicos.png" alt="Logo Acadêmicos" class="login-logo">
-        
-        <p>Acesso Compartilhado</p>
+        <img src="https://images2.imgbox.com/39/53/7nS3t1D4_o.png" alt="Logo" class="login-logo">
         <input type="text" id="userIn" placeholder="Usuário">
         <input type="password" id="passIn" placeholder="Senha">
         <button onclick="checkLogin()">Entrar</button>
@@ -69,26 +73,46 @@
     <div class="container">
         <header>
             <div style="display: flex; align-items: center;">
-                <img src="academicos.png" alt="Logo Acadêmicos" class="header-logo">
-                <h2 style="margin:0;">📅 Gestão de Jogos</h2>
+                <img src="https://images2.imgbox.com/39/53/7nS3t1D4_o.png" alt="Logo" class="header-logo">
+                <h2 style="margin:0;">📅 Gestão de Jogos Acadêmicos</h2>
             </div>
             <button onclick="location.reload()" style="cursor:pointer;">Sair</button>
         </header>
 
+        <div class="stats-grid">
+            <div class="stat-card"><h3>Total Jogos</h3><p id="statTotal">0</p></div>
+            <div class="stat-card" style="border-left-color: #d1ecf1;"><h3>Em Casa</h3><p id="statCasa">0</p></div>
+            <div class="stat-card" style="border-left-color: #e2e3e5;"><h3>Fora</h3><p id="statFora">0</p></div>
+            <div class="stat-card" style="border-left-color: var(--success);"><h3>Finalizados</h3><p id="statFim">0</p></div>
+        </div>
+
         <div class="form-grid">
-            <div class="field"><label>Treinador</label><input type="text" id="treinador"></div>
-            <div class="field"><label>Cor</label><input type="color" id="cor" value="#3498db"></div>
-            <div class="field"><label>Localização</label>
-                <select id="casaFora">
-                    <option value="Casa">Casa 🏠</option>
-                    <option value="Fora">Fora 🚌</option>
+            <div class="field"><label>Treinador</label>
+                <select id="treinador">
+                    <option value="">Selecione...</option>
+                    <option value="Jorge Torres">Jorge Torres</option>
+                    <option value="Amanda González">Amanda González</option>
+                    <option value="Pedro Carvalho">Pedro Carvalho</option>
+                    <option value="Inês Ferreira">Inês Ferreira</option>
+                    <option value="Hamilton Júnior">Hamilton Júnior</option>
+                    <option value="Ricardo Pereira">Ricardo Pereira</option>
+                    <option value="Ricardo Magno">Ricardo Magno</option>
+                    <option value="Pedro Pavezzi">Pedro Pavezzi</option>
+                    <option value="Carlos Louro">Carlos Louro</option>
+                    <option value="Cristina Cortez">Cristina Cortez</option>
+                    <option value="Bruno Pereira">Bruno Pereira</option>
+                    <option value="Pablo Romero">Pablo Romero</option>
+                    <option value="Hélder Serrão">Hélder Serrão</option>
+                    <option value="Carlos Martins">Carlos Martins</option>
                 </select>
             </div>
+            <div class="field"><label>Cor</label><input type="color" id="cor" value="#3498db"></div>
+            <div class="field"><label>Localização</label><select id="casaFora"><option value="Casa">Casa 🏠</option><option value="Fora">Fora 🚌</option></select></div>
             <div class="field"><label>Data</label><input type="date" id="data"></div>
             <div class="field"><label>Hora</label><input type="time" id="hora"></div>
             <div class="field"><label>Escalão</label>
                 <select id="escalao">
-                    <option value="">Selecione o escalão...</option>
+                    <option value="">Selecione...</option>
                     <option value="Infantis A Fem">Infantis A Fem</option>
                     <option value="Infantis B Fem">Infantis B Fem</option>
                     <option value="Infantis C Fem">Infantis C Fem</option>
@@ -112,8 +136,14 @@
             <button class="btn-marcar" id="btnSalvar" onclick="salvarJogo()">AGENDAR / ATUALIZAR JOGO</button>
         </div>
 
+        <div class="filter-grid">
+            <div class="field"><label>🔍 Filtrar Treinador</label><select id="filterTreinador" onchange="render()"><option value="">Todos</option></select></div>
+            <div class="field"><label>🔍 Filtrar Escalão</label><select id="filterEscalao" onchange="render()"><option value="">Todos</option></select></div>
+            <div style="display: flex; align-items: flex-end;"><button class="btn-export" onclick="window.print()">🖨️ Exportar / PDF</button></div>
+        </div>
+
         <div class="table-wrapper">
-            <table>
+            <table id="tabelaJogos">
                 <thead>
                     <tr><th></th><th>Treinador</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr>
                 </thead>
@@ -127,7 +157,6 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    // Configuração do seu Firebase Academicos
     const firebaseConfig = {
         apiKey: "AIzaSyB86TeZnp2qdOXXwjvD3hFfzTi3Z3NkVMc",
         authDomain: "academicos-d2cfc.firebaseapp.com",
@@ -149,14 +178,20 @@
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('app').style.display = 'block';
             carregarJogos();
+            popularFiltros();
         } else { alert("Senha incorreta!"); }
     };
+
+    function popularFiltros() {
+        const tSel = document.getElementById('treinador').innerHTML;
+        const eSel = document.getElementById('escalao').innerHTML;
+        document.getElementById('filterTreinador').innerHTML = '<option value="">Todos os Treinadores</option>' + tSel;
+        document.getElementById('filterEscalao').innerHTML = '<option value="">Todos os Escalões</option>' + eSel;
+    }
 
     window.salvarJogo = async () => {
         const btn = document.getElementById('btnSalvar');
         btn.disabled = true;
-        btn.innerText = "Processando...";
-
         const dados = {
             treinador: document.getElementById('treinador').value,
             cor: document.getElementById('cor').value,
@@ -166,33 +201,20 @@
             escalao: document.getElementById('escalao').value,
             adversario: document.getElementById('adversario').value,
             pavilhao: document.getElementById('pavilhao').value,
-            timestamp: Date.now(),
-            finalizado: false // Novo campo padrão
+            finalizado: false
         };
 
         try {
-            if(editId) {
-                await updateDoc(doc(db, "jogos", editId), dados);
-                editId = null;
-            } else {
-                await addDoc(jogosCol, dados);
-            }
+            if(editId) { await updateDoc(doc(db, "jogos", editId), dados); editId = null; }
+            else { await addDoc(jogosCol, dados); }
             limpar();
         } catch (e) { alert("Erro ao salvar!"); }
-        
         btn.disabled = false;
-        btn.innerText = "AGENDAR / ATUALIZAR JOGO";
     };
 
-    // Função para Finalizar o Jogo (Exige Senha)
     window.finalizarJogoPrompt = async (id) => {
-        const confirmacao = prompt("O horário do jogo já passou. Para mover para o histórico e bloquear edições, digite a senha:");
-        if (confirmacao === "academicos2026") {
-            try {
-                await updateDoc(doc(db, "jogos", id), { finalizado: true });
-            } catch (e) { alert("Erro ao finalizar o jogo."); }
-        } else if (confirmacao !== null) {
-            alert("Senha incorreta.");
+        if (prompt("Digite a senha para finalizar:") === "academicos2026") {
+            await updateDoc(doc(db, "jogos", id), { finalizado: true });
         }
     };
 
@@ -204,20 +226,22 @@
         });
     }
 
-    function render() {
+    window.render = () => {
         const lista = document.getElementById('lista');
+        const fTreinador = document.getElementById('filterTreinador').value;
+        const fEscalao = document.getElementById('filterEscalao').value;
         lista.innerHTML = '';
         const agora = new Date();
-        
-        // 1. Reset conflitos
+
+        // Stats
+        let cCasa = 0, cFora = 0, cFim = 0;
+
+        // Reset conflitos
         jogosAtuais.forEach(j => j.conflito = false);
-        
-        // 2. Validar conflitos (ignora jogos finalizados)
         for (let i = 0; i < jogosAtuais.length; i++) {
             for (let j = i + 1; j < jogosAtuais.length; j++) {
                 let a = jogosAtuais[i], b = jogosAtuais[j];
-                // SÓ VALIDA SE AMBOS NÃO ESTIVEREM FINALIZADOS
-                if(!a.finalizado && !b.finalizado && a.casaFora === 'Casa' && b.casaFora === 'Casa' && a.data && b.data && a.hora && b.hora && a.data === b.data) {
+                if(!a.finalizado && !b.finalizado && a.casaFora === 'Casa' && b.casaFora === 'Casa' && a.data === b.data) {
                     let diff = Math.abs(new Date(a.data+'T'+a.hora) - new Date(b.data+'T'+b.hora)) / 60000;
                     if(diff < 120) { a.conflito = true; b.conflito = true; }
                 }
@@ -225,58 +249,44 @@
         }
 
         jogosAtuais.forEach(j => {
-            const tr = document.createElement('tr');
-            const dataFormatada = j.data ? j.data.split('-').reverse().join('/') : '---';
-            const horaFormatada = j.hora || '--:--';
-            const isFinalizado = j.finalizado === true;
-            
-            // Lógica para mostrar o botão "Finalizar Jogo"
-            let mostrarBotaoFinalizar = false;
-            if (!isFinalizado && j.data && j.hora) {
-                const horarioJogo = new Date(`${j.data}T${j.hora}`);
-                if (agora > horarioJogo) {
-                    mostrarBotaoFinalizar = true;
-                }
-            }
+            // Contabilizar para o resumo (antes do filtro de vista)
+            if(j.finalizado) cFim++; else if(j.casaFora === 'Casa') cCasa++; else cFora++;
 
-            // Classes visuais
-            if(isFinalizado) tr.className = 'row-finalizado';
+            // Aplicar Filtros de Vista
+            if(fTreinador && j.treinador !== fTreinador) return;
+            if(fEscalao && j.escalao !== fEscalao) return;
+
+            const tr = document.createElement('tr');
+            if(j.finalizado) tr.className = 'row-finalizado';
             else if(j.conflito) tr.className = 'row-conflito';
 
-            // Badge de status
-            let badgeClass = '';
-            let statusTexto = j.casaFora;
-            if (isFinalizado) {
-                badgeClass = 'badge-finalizado';
-                statusTexto = "Finalizado ✔️";
-            } else if (!j.data || !j.hora) {
-                badgeClass = 'badge-pendente';
-            } else {
-                badgeClass = j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora';
-            }
+            const isPassado = !j.finalizado && j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
 
             tr.innerHTML = `
                 <td style="background:${j.cor}; width:6px;"></td>
-                <td style="font-weight:bold; color:${isFinalizado ? '#7f8c8d' : j.cor}">${j.treinador}</td>
+                <td style="font-weight:bold; color:${j.finalizado ? '#7f8c8d' : j.cor}">${j.treinador}</td>
                 <td>${j.escalao}</td><td>${j.adversario}</td>
                 <td>
-                    ${dataFormatada} às ${horaFormatada} 
-                    ${j.conflito && !isFinalizado ? '<span class="error-tag">⚠️ Conflito Casa (2h)</span>' : ''}
-                    ${mostrarBotaoFinalizar ? `<br><button class="btn-finalizar" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar Jogo</button>` : ''}
+                    ${j.data ? j.data.split('-').reverse().join('/') : '---'} às ${j.hora || '--:--'}
+                    ${isPassado ? `<br><button class="btn-finalizar" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}
                 </td>
                 <td>${j.pavilhao || '---'}</td>
-                <td><span class="badge ${badgeClass}">${statusTexto}</span></td>
+                <td><span class="badge ${j.finalizado ? 'badge-finalizado' : (j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora')}">${j.finalizado ? 'Finalizado ✔️' : j.casaFora}</span></td>
                 <td>
-                    ${!isFinalizado ? `<button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button>` : '🔒'}
+                    ${!j.finalizado ? `<button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button>` : '🔒'}
                     <button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button>
                 </td>`;
             lista.appendChild(tr);
         });
-    }
+
+        document.getElementById('statTotal').innerText = jogosAtuais.length;
+        document.getElementById('statCasa').innerText = cCasa;
+        document.getElementById('statFora').innerText = cFora;
+        document.getElementById('statFim').innerText = cFim;
+    };
 
     window.prepararEdicao = (id) => {
         const j = jogosAtuais.find(x => x.id === id);
-        if (j.finalizado) { alert("Este jogo já foi finalizado e não pode ser editado."); return; }
         document.getElementById('treinador').value = j.treinador;
         document.getElementById('cor').value = j.cor;
         document.getElementById('casaFora').value = j.casaFora;
@@ -289,20 +299,10 @@
     };
 
     window.eliminarJogo = async (id) => {
-        const confirmacao = prompt("Para eliminar este jogo (mesmo que finalizado), digite a senha:");
-        if (confirmacao === "academicos2026") {
-            await deleteDoc(doc(db, "jogos", id));
-        } else if (confirmacao !== null) {
-            alert("Senha incorreta!");
-        }
+        if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id));
     };
 
-    function limpar() { 
-        ['data','hora','adversario','pavilhao'].forEach(id => document.getElementById(id).value = '');
-    }
+    function limpar() { ['data','hora','adversario','pavilhao'].forEach(id => document.getElementById(id).value = ''); }
 </script>
 </body>
 </html>
-
-
-
