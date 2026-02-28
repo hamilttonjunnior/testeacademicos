@@ -160,6 +160,7 @@
     };
 
     function carregarJogos() {
+        // ORDENAÇÃO POR DATA E HORA
         const q = query(jogosCol, orderBy("data"), orderBy("hora"));
         onSnapshot(q, (snapshot) => {
             jogosAtuais = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -171,6 +172,7 @@
         const lista = document.getElementById('lista');
         lista.innerHTML = '';
         
+        // RECALCULA CONFLITOS COM BASE NA NOVA ORDEM
         jogosAtuais.forEach(j => j.conflito = false);
         for (let i = 0; i < jogosAtuais.length; i++) {
             for (let j = i + 1; j < jogosAtuais.length; j++) {
