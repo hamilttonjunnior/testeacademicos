@@ -9,15 +9,16 @@
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         #loginScreen { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 320px; }
-        .login-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box; }
-        .login-box button { width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; }
+        .login-box input, .login-box button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; box-sizing: border-box; }
+        .login-box input { border: 1px solid #ddd; }
+        .login-box button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; }
         .main-content { width: 95%; max-width: 1200px; margin: 20px auto; display: none; }
         .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; background: #fafafa; padding: 20px; border-radius: 8px; border: 1px solid #eaeaea; }
         .field { display: flex; flex-direction: column; gap: 5px; }
         .field label { font-size: 12px; font-weight: bold; color: #666; }
-        input, select { padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
+        input, select { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
         .btn-marcar { grid-column: 1 / -1; padding: 15px; background: var(--success); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
         .table-wrapper { margin-top: 30px; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
@@ -54,10 +55,35 @@
         <div class="form-grid">
             <div class="field"><label>Treinador</label><input type="text" id="treinador"></div>
             <div class="field"><label>Cor</label><input type="color" id="cor" value="#3498db"></div>
-            <div class="field"><label>Localização</label><select id="casaFora"><option value="Casa">Casa 🏠</option><option value="Fora">Fora 🚌</option></select></div>
+            <div class="field"><label>Localização</label>
+                <select id="casaFora">
+                    <option value="Casa">Casa 🏠</option>
+                    <option value="Fora">Fora 🚌</option>
+                </select>
+            </div>
             <div class="field"><label>Data</label><input type="date" id="data"></div>
             <div class="field"><label>Hora</label><input type="time" id="hora"></div>
-            <div class="field"><label>Escalão</label><input type="text" id="escalao"></div>
+            <div class="field"><label>Escalão</label>
+                <select id="escalao">
+                    <option value="">Selecione o escalão...</option>
+                    <option value="Infantis A Fem">Infantis A Fem</option>
+                    <option value="Infantis B Fem">Infantis B Fem</option>
+                    <option value="Infantis C Fem">Infantis C Fem</option>
+                    <option value="Iniciados A Fem">Iniciados A Fem</option>
+                    <option value="Iniciados B Fem">Iniciados B Fem</option>
+                    <option value="Iniciados Masc">Iniciados Masc</option>
+                    <option value="Cadetes Fem">Cadetes Fem</option>
+                    <option value="Cadetes Masc">Cadetes Masc</option>
+                    <option value="Juvenis A Fem">Juvenis A Fem</option>
+                    <option value="Juvenis B Fem">Juvenis B Fem</option>
+                    <option value="Juvenis Masc">Juvenis Masc</option>
+                    <option value="Sub21 Fem">Sub21 Fem</option>
+                    <option value="Séniores Fem">Séniores Fem</option>
+                    <option value="Séniores Masc">Séniores Masc</option>
+                    <option value="Veteranos +35 Masc">Veteranos +35 Masc</option>
+                    <option value="Veteranos +45 Masc">Veteranos +45 Masc</option>
+                </select>
+            </div>
             <div class="field"><label>Adversário</label><input type="text" id="adversario"></div>
             <div class="field"><label>Pavilhão</label><input type="text" id="pavilhao"></div>
             <button class="btn-marcar" id="btnSalvar" onclick="salvarJogo()">AGENDAR / ATUALIZAR JOGO</button>
@@ -94,7 +120,6 @@
     let jogosAtuais = [];
     let editId = null;
 
-    // LOGIN
     window.checkLogin = () => {
         if(document.getElementById('userIn').value === 'academicos' && document.getElementById('passIn').value === 'academicos2026') {
             document.getElementById('loginScreen').style.display = 'none';
@@ -103,7 +128,6 @@
         } else { alert("Senha incorreta!"); }
     };
 
-    // SALVAR
     window.salvarJogo = async () => {
         const btn = document.getElementById('btnSalvar');
         btn.disabled = true;
@@ -135,7 +159,6 @@
         btn.innerText = "AGENDAR / ATUALIZAR JOGO";
     };
 
-    // CARREGAR (REAL-TIME)
     function carregarJogos() {
         const q = query(jogosCol, orderBy("data"), orderBy("hora"));
         onSnapshot(q, (snapshot) => {
@@ -148,7 +171,6 @@
         const lista = document.getElementById('lista');
         lista.innerHTML = '';
         
-        // Validar conflitos localmente após baixar da nuvem
         jogosAtuais.forEach(j => j.conflito = false);
         for (let i = 0; i < jogosAtuais.length; i++) {
             for (let j = i + 1; j < jogosAtuais.length; j++) {
