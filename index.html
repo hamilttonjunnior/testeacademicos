@@ -110,6 +110,7 @@
             <div class="field"><label>Localização</label><select id="casaFora"><option value="Casa">Casa 🏠</option><option value="Fora">Fora 🚌</option></select></div>
             <div class="field"><label>Data</label><input type="date" id="data"></div>
             <div class="field"><label>Hora</label><input type="time" id="hora"></div>
+            <div class="field"><label>Jornada</label><input type="text" id="jornada" placeholder="Ex: 1ª"></div>
             <div class="field"><label>Nº Jogo</label><input type="number" id="numJogo" placeholder="Ex: 1024"></div>
             <div class="field"><label>Escalão</label>
                 <select id="escalao">
@@ -146,7 +147,7 @@
         <div class="table-wrapper">
             <table>
                 <thead>
-                    <tr><th></th><th>Treinador</th><th>Nº Jogo</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr>
+                    <tr><th></th><th>Treinador</th><th>Jornada</th><th>Nº Jogo</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr>
                 </thead>
                 <tbody id="lista"></tbody>
             </table>
@@ -199,6 +200,7 @@
             casaFora: document.getElementById('casaFora').value,
             data: document.getElementById('data').value,
             hora: document.getElementById('hora').value,
+            jornada: document.getElementById('jornada').value,
             numJogo: document.getElementById('numJogo').value,
             escalao: document.getElementById('escalao').value,
             adversario: document.getElementById('adversario').value,
@@ -221,7 +223,6 @@
     };
 
     function carregarJogos() {
-        // Ordenação flexível: por número do jogo (se existir) ou por data/hora
         const q = query(jogosCol, orderBy("data"), orderBy("hora"));
         onSnapshot(q, (snapshot) => {
             jogosAtuais = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -263,6 +264,7 @@
             tr.innerHTML = `
                 <td style="background:${j.cor}; width:6px;"></td>
                 <td style="font-weight:bold; color:${j.finalizado ? '#7f8c8d' : j.cor}">${j.treinador}</td>
+                <td>${j.jornada || '---'}</td>
                 <td><strong>${j.numJogo || '---'}</strong></td>
                 <td>${j.escalao}</td><td>${j.adversario}</td>
                 <td>
@@ -291,6 +293,7 @@
         document.getElementById('casaFora').value = j.casaFora;
         document.getElementById('data').value = j.data;
         document.getElementById('hora').value = j.hora;
+        document.getElementById('jornada').value = j.jornada || '';
         document.getElementById('numJogo').value = j.numJogo || '';
         document.getElementById('escalao').value = j.escalao;
         document.getElementById('adversario').value = j.adversario;
@@ -299,10 +302,12 @@
     };
 
     window.eliminarJogo = async (id) => {
-        if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id));
+        if (confirm("Deseja realmente eliminar este jogo?")) {
+            if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id));
+        }
     };
 
-    function limpar() { ['data','hora','numJogo','adversario','pavilhao'].forEach(id => document.getElementById(id).value = ''); }
+    function limpar() { ['data','hora','jornada','numJogo','adversario','pavilhao'].forEach(id => document.getElementById(id).value = ''); }
 </script>
 </body>
 </html>
