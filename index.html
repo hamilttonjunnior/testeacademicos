@@ -62,7 +62,7 @@
 
 <div id="loginScreen">
     <div class="login-box">
-        <img src="academicos.png" alt="Logo" class="login-logo">
+        <img src="https://images2.imgbox.com/39/53/7nS3t1D4_o.png" alt="Logo" class="login-logo">
         <input type="text" id="userIn" placeholder="Usuário">
         <input type="password" id="passIn" placeholder="Senha">
         <button onclick="checkLogin()">Entrar</button>
@@ -73,7 +73,7 @@
     <div class="container">
         <header>
             <div style="display: flex; align-items: center;">
-                <img src="academicos.png" alt="Logo" class="header-logo">
+                <img src="https://images2.imgbox.com/39/53/7nS3t1D4_o.png" alt="Logo" class="header-logo">
                 <h2 style="margin:0;">📅 Gestão de Jogos Acadêmicos</h2>
             </div>
             <button onclick="location.reload()" style="cursor:pointer;">Sair</button>
@@ -141,6 +141,13 @@
         <div class="filter-grid">
             <div class="field"><label>🔍 Filtrar Treinador</label><select id="filterTreinador" onchange="render()"><option value="">Todos</option></select></div>
             <div class="field"><label>🔍 Filtrar Escalão</label><select id="filterEscalao" onchange="render()"><option value="">Todos</option></select></div>
+            <div class="field"><label>🔍 Filtrar Local</label>
+                <select id="filterLocal" onchange="render()">
+                    <option value="">Todos</option>
+                    <option value="Casa">Casa 🏠</option>
+                    <option value="Fora">Fora 🚌</option>
+                </select>
+            </div>
             <div style="display: flex; align-items: flex-end;"><button class="btn-export" onclick="window.print()">🖨️ Exportar / PDF</button></div>
         </div>
 
@@ -234,6 +241,7 @@
         const lista = document.getElementById('lista');
         const fTreinador = document.getElementById('filterTreinador').value;
         const fEscalao = document.getElementById('filterEscalao').value;
+        const fLocal = document.getElementById('filterLocal').value;
         lista.innerHTML = '';
         const agora = new Date();
 
@@ -252,8 +260,11 @@
 
         jogosAtuais.forEach(j => {
             if(j.finalizado) cFim++; else if(j.casaFora === 'Casa') cCasa++; else cFora++;
+            
+            // Filtros combinados
             if(fTreinador && j.treinador !== fTreinador) return;
             if(fEscalao && j.escalao !== fEscalao) return;
+            if(fLocal && j.casaFora !== fLocal) return;
 
             const tr = document.createElement('tr');
             if(j.finalizado) tr.className = 'row-finalizado';
@@ -302,9 +313,7 @@
     };
 
     window.eliminarJogo = async (id) => {
-        if (confirm("Deseja realmente eliminar este jogo?")) {
-            if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id));
-        }
+        if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id));
     };
 
     function limpar() { ['data','hora','jornada','numJogo','adversario','pavilhao'].forEach(id => document.getElementById(id).value = ''); }
