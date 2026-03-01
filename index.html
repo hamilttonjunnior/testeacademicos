@@ -37,7 +37,7 @@
         input, select { padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
         .btn-marcar { grid-column: 1 / -1; padding: 15px; background: var(--success); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
         .btn-export { background: #55acee; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
-    
+        
         /* TABELA */
         .table-wrapper { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
@@ -110,6 +110,7 @@
             <div class="field"><label>Localização</label><select id="casaFora"><option value="Casa">Casa 🏠</option><option value="Fora">Fora 🚌</option></select></div>
             <div class="field"><label>Data</label><input type="date" id="data"></div>
             <div class="field"><label>Hora</label><input type="time" id="hora"></div>
+            <div class="field"><label>Torneio</label><input type="text" id="torneio" placeholder="Ex: Regional"></div>
             <div class="field"><label>Jornada</label><input type="text" id="jornada" placeholder="Ex: 1ª"></div>
             <div class="field"><label>Nº Jogo</label><input type="number" id="numJogo" placeholder="Ex: 1024"></div>
             <div class="field"><label>Escalão</label>
@@ -154,7 +155,7 @@
         <div class="table-wrapper">
             <table>
                 <thead>
-                    <tr><th></th><th>Treinador</th><th>Jornada</th><th>Nº Jogo</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr>
+                    <tr><th></th><th>Treinador</th><th>Torneio</th><th>Jornada</th><th>Nº Jogo</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr>
                 </thead>
                 <tbody id="lista"></tbody>
             </table>
@@ -207,6 +208,7 @@
             casaFora: document.getElementById('casaFora').value,
             data: document.getElementById('data').value,
             hora: document.getElementById('hora').value,
+            torneio: document.getElementById('torneio').value,
             jornada: document.getElementById('jornada').value,
             numJogo: document.getElementById('numJogo').value,
             escalao: document.getElementById('escalao').value,
@@ -260,8 +262,6 @@
 
         jogosAtuais.forEach(j => {
             if(j.finalizado) cFim++; else if(j.casaFora === 'Casa') cCasa++; else cFora++;
-            
-            // Filtros combinados
             if(fTreinador && j.treinador !== fTreinador) return;
             if(fEscalao && j.escalao !== fEscalao) return;
             if(fLocal && j.casaFora !== fLocal) return;
@@ -275,6 +275,7 @@
             tr.innerHTML = `
                 <td style="background:${j.cor}; width:6px;"></td>
                 <td style="font-weight:bold; color:${j.finalizado ? '#7f8c8d' : j.cor}">${j.treinador}</td>
+                <td>${j.torneio || '---'}</td>
                 <td>${j.jornada || '---'}</td>
                 <td><strong>${j.numJogo || '---'}</strong></td>
                 <td>${j.escalao}</td><td>${j.adversario}</td>
@@ -304,6 +305,7 @@
         document.getElementById('casaFora').value = j.casaFora;
         document.getElementById('data').value = j.data;
         document.getElementById('hora').value = j.hora;
+        document.getElementById('torneio').value = j.torneio || '';
         document.getElementById('jornada').value = j.jornada || '';
         document.getElementById('numJogo').value = j.numJogo || '';
         document.getElementById('escalao').value = j.escalao;
@@ -316,11 +318,7 @@
         if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id));
     };
 
-    function limpar() { ['data','hora','jornada','numJogo','adversario','pavilhao'].forEach(id => document.getElementById(id).value = ''); }
+    function limpar() { ['data','hora','torneio','jornada','numJogo','adversario','pavilhao'].forEach(id => document.getElementById(id).value = ''); }
 </script>
 </body>
 </html>
-
-
-
-
