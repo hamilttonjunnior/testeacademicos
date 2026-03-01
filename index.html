@@ -8,7 +8,6 @@
         :root { --primary: #1a2a3a; --accent: #3498db; --error: #e74c3c; --success: #27ae60; --bg: #f4f7f9; --finished: #bdc3c7; }
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         
-        /* LOGIN */
         #loginScreen { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 320px; }
         .login-logo { max-width: 150px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
@@ -16,20 +15,17 @@
         .login-box input { border: 1px solid #ddd; }
         .login-box button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; }
         
-        /* DASHBOARD */
         .main-content { width: 95%; max-width: 1200px; margin: 20px auto; display: none; }
         .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px; }
         
         header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
         .header-logo { max-height: 50px; margin-right: 15px; }
 
-        /* RESUMO */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .stat-card { background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent); text-align: center; }
         .stat-card h3 { margin: 0; font-size: 12px; color: #666; text-transform: uppercase; }
         .stat-card p { margin: 5px 0 0; font-size: 20px; font-weight: bold; color: var(--primary); }
         
-        /* FORMULÁRIO E FILTROS */
         .form-grid, .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; background: #fafafa; padding: 20px; border-radius: 8px; border: 1px solid #eaeaea; margin-bottom: 20px; }
         .filter-grid { background: #eef2f7; border-color: #d1d9e6; }
         .field { display: flex; flex-direction: column; gap: 5px; }
@@ -38,7 +34,6 @@
         .btn-marcar { grid-column: 1 / -1; padding: 15px; background: var(--success); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
         .btn-export { background: #55acee; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
         
-        /* TABELA */
         .table-wrapper { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         th { background: #f8f9fa; padding: 15px; text-align: left; border-bottom: 2px solid #dee2e6; }
@@ -55,6 +50,8 @@
         .btn-action { background: none; border: 1px solid #ddd; padding: 5px 8px; border-radius: 4px; cursor: pointer; margin-right: 5px; }
         .btn-finalizar { background: var(--accent); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
         
+        .resultado-tag { font-weight: bold; color: var(--primary); font-size: 14px; display: block; margin-top: 4px; }
+        .parciais-tag { font-size: 11px; color: #7f8c8d; font-style: italic; }
         .secao-titulo { margin: 40px 0 15px 0; color: var(--primary); display: flex; align-items: center; gap: 10px; }
 
         @media print { .login-box, .form-grid, .filter-grid, .btn-action, .btn-finalizar, header button { display: none !important; } }
@@ -83,9 +80,9 @@
 
         <div class="stats-grid">
             <div class="stat-card"><h3>Total Jogos</h3><p id="statTotal">0</p></div>
-            <div class="stat-card" style="border-left-color: #d1ecf1;"><h3>Em Casa</h3><p id="statCasa">0</p></div>
-            <div class="stat-card" style="border-left-color: #e2e3e5;"><h3>Fora</h3><p id="statFora">0</p></div>
-            <div class="stat-card" style="border-left-color: var(--success);"><h3>Finalizados</h3><p id="statFim">0</p></div>
+            <div class="stat-card"><h3>Em Casa</h3><p id="statCasa">0</p></div>
+            <div class="stat-card"><h3>Fora</h3><p id="statFora">0</p></div>
+            <div class="stat-card"><h3>Finalizados</h3><p id="statFim">0</p></div>
         </div>
 
         <div class="form-grid">
@@ -112,9 +109,9 @@
             <div class="field"><label>Localização</label><select id="casaFora"><option value="Casa">Casa 🏠</option><option value="Fora">Fora 🚌</option></select></div>
             <div class="field"><label>Data</label><input type="date" id="data"></div>
             <div class="field"><label>Hora</label><input type="time" id="hora"></div>
-            <div class="field"><label>Competição</label><input type="text" id="competicao" placeholder="Ex: Regional"></div>
-            <div class="field"><label>Jornada</label><input type="text" id="jornada" placeholder="Ex: 1ª"></div>
-            <div class="field"><label>Nº Jogo</label><input type="number" id="numJogo" placeholder="Ex: 1024"></div>
+            <div class="field"><label>Competição</label><input type="text" id="competicao"></div>
+            <div class="field"><label>Jornada</label><input type="text" id="jornada"></div>
+            <div class="field"><label>Nº Jogo</label><input type="number" id="numJogo"></div>
             <div class="field"><label>Escalão</label>
                 <select id="escalao">
                     <option value="">Selecione...</option>
@@ -138,19 +135,17 @@
             </div>
             <div class="field"><label>Adversário</label><input type="text" id="adversario"></div>
             <div class="field"><label>Pavilhão</label><input type="text" id="pavilhao"></div>
+            
+            <div class="field" id="boxSetPro" style="display:none;"><label>Sets Pró (Académicos)</label><input type="number" id="setPro" value="0"></div>
+            <div class="field" id="boxSetContra" style="display:none;"><label>Sets Contra</label><input type="number" id="setContra" value="0"></div>
+            <div class="field" id="boxParciais" style="display:none; grid-column: 1 / -1;"><label>Parciais (ex: 25-10, 25-15, 25-20)</label><input type="text" id="parciais"></div>
+
             <button class="btn-marcar" id="btnSalvar" onclick="salvarJogo()">AGENDAR / ATUALIZAR JOGO</button>
         </div>
 
         <div class="filter-grid">
             <div class="field"><label>🔍 Filtrar Treinador</label><select id="filterTreinador" onchange="render()"><option value="">Todos</option></select></div>
             <div class="field"><label>🔍 Filtrar Escalão</label><select id="filterEscalao" onchange="render()"><option value="">Todos</option></select></div>
-            <div class="field"><label>🔍 Filtrar Local</label>
-                <select id="filterLocal" onchange="render()">
-                    <option value="">Todos</option>
-                    <option value="Casa">Casa 🏠</option>
-                    <option value="Fora">Fora 🚌</option>
-                </select>
-            </div>
             <div style="display: flex; align-items: flex-end;"><button class="btn-export" onclick="window.print()">🖨️ Exportar / PDF</button></div>
         </div>
 
@@ -166,9 +161,9 @@
 
         <h3 class="secao-titulo">📜 Histórico de Jogos Finalizados</h3>
         <div class="table-wrapper">
-            <table style="opacity: 0.85;">
+            <table>
                 <thead>
-                    <tr><th></th><th>Treinador</th><th>Competição</th><th>Jornada</th><th>Nº Jogo</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr>
+                    <tr><th></th><th>Treinador</th><th>Competição</th><th>Jornada</th><th>Nº Jogo</th><th>Escalão</th><th>Adversário / Resultado</th><th>Data/Hora</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr>
                 </thead>
                 <tbody id="listaHistorico"></tbody>
             </table>
@@ -227,7 +222,10 @@
             escalao: document.getElementById('escalao').value,
             adversario: document.getElementById('adversario').value,
             pavilhao: document.getElementById('pavilhao').value,
-            finalizado: false
+            setPro: document.getElementById('setPro').value || 0,
+            setContra: document.getElementById('setContra').value || 0,
+            parciais: document.getElementById('parciais').value || '',
+            finalizado: editId ? (jogosAtuais.find(x => x.id === editId).finalizado || false) : false
         };
 
         try {
@@ -236,11 +234,18 @@
             limpar();
         } catch (e) { alert("Erro ao salvar!"); }
         btn.disabled = false;
+        document.getElementById('boxSetPro').style.display = 'none';
+        document.getElementById('boxSetContra').style.display = 'none';
+        document.getElementById('boxParciais').style.display = 'none';
     };
 
-    window.finalizarJogoPrompt = async (id) => {
+    window.finalizarJogoPrompt = (id) => {
+        const j = jogosAtuais.find(x => x.id === id);
         if (prompt("Digite a senha para finalizar:") === "academicos2026") {
-            await updateDoc(doc(db, "jogos", id), { finalizado: true });
+            const sp = prompt("Sets Pró (Académicos):", "0");
+            const sc = prompt("Sets Contra:", "0");
+            const pa = prompt("Parciais (ex: 25-10, 25-20):", "");
+            updateDoc(doc(db, "jogos", id), { finalizado: true, setPro: sp, setContra: sc, parciais: pa });
         }
     };
 
@@ -257,40 +262,21 @@
         const listaHistorico = document.getElementById('listaHistorico');
         const fTreinador = document.getElementById('filterTreinador').value;
         const fEscalao = document.getElementById('filterEscalao').value;
-        const fLocal = document.getElementById('filterLocal').value;
         
         lista.innerHTML = '';
         listaHistorico.innerHTML = '';
         const agora = new Date();
-
         let cCasa = 0, cFora = 0, cFim = 0;
 
-        // Reset conflitos apenas para jogos ativos
-        jogosAtuais.forEach(j => j.conflito = false);
-        for (let i = 0; i < jogosAtuais.length; i++) {
-            for (let j = i + 1; j < jogosAtuais.length; j++) {
-                let a = jogosAtuais[i], b = jogosAtuais[j];
-                if(!a.finalizado && !b.finalizado && a.casaFora === 'Casa' && b.casaFora === 'Casa' && a.data === b.data) {
-                    let diff = Math.abs(new Date(a.data+'T'+a.hora) - new Date(b.data+'T'+b.hora)) / 60000;
-                    if(diff < 120) { a.conflito = true; b.conflito = true; }
-                }
-            }
-        }
-
-        // Separar jogos para o histórico (ordenar descendente)
         const finalizados = jogosAtuais.filter(j => j.finalizado).reverse();
         const ativos = jogosAtuais.filter(j => !j.finalizado);
 
-        // Render Ativos
         ativos.forEach(j => {
             if(j.casaFora === 'Casa') cCasa++; else cFora++;
             if(fTreinador && j.treinador !== fTreinador) return;
             if(fEscalao && j.escalao !== fEscalao) return;
-            if(fLocal && j.casaFora !== fLocal) return;
 
             const tr = document.createElement('tr');
-            if(j.conflito) tr.className = 'row-conflito';
-
             const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
 
             tr.innerHTML = `
@@ -300,46 +286,44 @@
                 <td>${j.jornada || '---'}</td>
                 <td><strong>${j.numJogo || '---'}</strong></td>
                 <td>${j.escalao}</td><td>${j.adversario}</td>
-                <td>
-                    ${j.data ? j.data.split('-').reverse().join('/') : '---'} às ${j.hora || '--:--'}
+                <td>${j.data ? j.data.split('-').reverse().join('/') : '---'} às ${j.hora || '--:--'}
                     ${isPassado ? `<br><button class="btn-finalizar" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}
                 </td>
                 <td>${j.pavilhao || '---'}</td>
                 <td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td>
-                <td>
-                    <button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button>
-                    <button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button>
-                </td>`;
+                <td><button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button>
+                    <button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
             lista.appendChild(tr);
         });
 
-        // Render Histórico
         finalizados.forEach(j => {
             cFim++;
             if(fTreinador && j.treinador !== fTreinador) return;
             if(fEscalao && j.escalao !== fEscalao) return;
-            if(fLocal && j.casaFora !== fLocal) return;
 
             const tr = document.createElement('tr');
             tr.className = 'row-finalizado';
-
             tr.innerHTML = `
                 <td style="background:${j.cor}; width:6px;"></td>
                 <td style="font-weight:bold;">${j.treinador}</td>
                 <td>${j.competicao || '---'}</td>
                 <td>${j.jornada || '---'}</td>
                 <td><strong>${j.numJogo || '---'}</strong></td>
-                <td>${j.escalao}</td><td>${j.adversario}</td>
+                <td>${j.escalao}</td>
+                <td>
+                    ${j.adversario}<br>
+                    <span class="resultado-tag">${j.setPro} - ${j.setContra}</span>
+                    <span class="parciais-tag">(${j.parciais || 'sem parciais'})</span>
+                </td>
                 <td>${j.data ? j.data.split('-').reverse().join('/') : '---'} às ${j.hora || '--:--'}</td>
                 <td>${j.pavilhao || '---'}</td>
-                <td><span class="badge badge-finalizado">Finalizado ✔️</span></td>
-                <td>
-                    <button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button>
-                </td>`;
+                <td><span class="badge badge-finalizado">Finalizado</span></td>
+                <td><button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button>
+                    <button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
             listaHistorico.appendChild(tr);
         });
 
-        document.getElementById('statTotal').innerText = jogosAtuais.length;
+        document.getElementById('statTotal').innerText = ativos.length + cFim;
         document.getElementById('statCasa').innerText = cCasa;
         document.getElementById('statFora').innerText = cFora;
         document.getElementById('statFim').innerText = cFim;
@@ -358,6 +342,15 @@
         document.getElementById('escalao').value = j.escalao;
         document.getElementById('adversario').value = j.adversario;
         document.getElementById('pavilhao').value = j.pavilhao;
+        
+        // Mostrar campos de resultado na edição
+        document.getElementById('boxSetPro').style.display = 'block';
+        document.getElementById('boxSetContra').style.display = 'block';
+        document.getElementById('boxParciais').style.display = 'block';
+        document.getElementById('setPro').value = j.setPro || 0;
+        document.getElementById('setContra').value = j.setContra || 0;
+        document.getElementById('parciais').value = j.parciais || '';
+        
         editId = id; window.scrollTo(0,0);
     };
 
@@ -365,7 +358,7 @@
         if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id));
     };
 
-    function limpar() { ['data','hora','competicao','jornada','numJogo','adversario','pavilhao'].forEach(id => document.getElementById(id).value = ''); }
+    function limpar() { ['data','hora','competicao','jornada','numJogo','adversario','pavilhao','setPro', 'setContra', 'parciais'].forEach(id => document.getElementById(id).value = ''); }
 </script>
 </body>
 </html>
