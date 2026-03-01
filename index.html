@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Académicos - Gestão de Jogos</title>
+    <title>Acadêmicos - Gestão de Jogos</title>
     <style>
         :root { --primary: #1a2a3a; --accent: #3498db; --error: #e74c3c; --success: #27ae60; --bg: #f4f7f9; --finished: #bdc3c7; }
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
@@ -18,7 +18,7 @@
         
         /* DASHBOARD */
         .main-content { width: 95%; max-width: 1200px; margin: 20px auto; display: none; }
-        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px; }
         
         header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
         .header-logo { max-height: 50px; margin-right: 15px; }
@@ -45,7 +45,7 @@
         td { padding: 15px; border-bottom: 1px solid #eee; }
         
         .row-conflito { background-color: #fff5f5 !important; }
-        .row-finalizado { background-color: #f2f4f5 !important; color: #7f8c8d !important; }
+        .row-finalizado { background-color: #f2f4f5 !important; color: #7f8c8d !important; font-size: 13px; }
         
         .badge { padding: 5px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; }
         .badge-casa { background: #d1ecf1; color: #0c5460; }
@@ -55,6 +55,8 @@
         .btn-action { background: none; border: 1px solid #ddd; padding: 5px 8px; border-radius: 4px; cursor: pointer; margin-right: 5px; }
         .btn-finalizar { background: var(--accent); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: bold; }
         
+        .secao-titulo { margin: 40px 0 15px 0; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+
         @media print { .login-box, .form-grid, .filter-grid, .btn-action, .btn-finalizar, header button { display: none !important; } }
     </style>
 </head>
@@ -152,12 +154,23 @@
             <div style="display: flex; align-items: flex-end;"><button class="btn-export" onclick="window.print()">🖨️ Exportar / PDF</button></div>
         </div>
 
+        <h3 class="secao-titulo">🏐 Próximos Jogos</h3>
         <div class="table-wrapper">
             <table>
                 <thead>
                     <tr><th></th><th>Treinador</th><th>Competição</th><th>Jornada</th><th>Nº Jogo</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr>
                 </thead>
                 <tbody id="lista"></tbody>
+            </table>
+        </div>
+
+        <h3 class="secao-titulo">📜 Histórico de Jogos Finalizados</h3>
+        <div class="table-wrapper">
+            <table style="opacity: 0.85;">
+                <thead>
+                    <tr><th></th><th>Treinador</th><th>Competição</th><th>Jornada</th><th>Nº Jogo</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr>
+                </thead>
+                <tbody id="listaHistorico"></tbody>
             </table>
         </div>
     </div>
@@ -241,14 +254,18 @@
 
     window.render = () => {
         const lista = document.getElementById('lista');
+        const listaHistorico = document.getElementById('listaHistorico');
         const fTreinador = document.getElementById('filterTreinador').value;
         const fEscalao = document.getElementById('filterEscalao').value;
         const fLocal = document.getElementById('filterLocal').value;
+        
         lista.innerHTML = '';
+        listaHistorico.innerHTML = '';
         const agora = new Date();
 
         let cCasa = 0, cFora = 0, cFim = 0;
 
+        // Reset conflitos apenas para jogos ativos
         jogosAtuais.forEach(j => j.conflito = false);
         for (let i = 0; i < jogosAtuais.length; i++) {
             for (let j = i + 1; j < jogosAtuais.length; j++) {
@@ -260,21 +277,25 @@
             }
         }
 
-        jogosAtuais.forEach(j => {
-            if(j.finalizado) cFim++; else if(j.casaFora === 'Casa') cCasa++; else cFora++;
+        // Separar jogos para o histórico (ordenar descendente)
+        const finalizados = jogosAtuais.filter(j => j.finalizado).reverse();
+        const ativos = jogosAtuais.filter(j => !j.finalizado);
+
+        // Render Ativos
+        ativos.forEach(j => {
+            if(j.casaFora === 'Casa') cCasa++; else cFora++;
             if(fTreinador && j.treinador !== fTreinador) return;
             if(fEscalao && j.escalao !== fEscalao) return;
             if(fLocal && j.casaFora !== fLocal) return;
 
             const tr = document.createElement('tr');
-            if(j.finalizado) tr.className = 'row-finalizado';
-            else if(j.conflito) tr.className = 'row-conflito';
+            if(j.conflito) tr.className = 'row-conflito';
 
-            const isPassado = !j.finalizado && j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
+            const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
 
             tr.innerHTML = `
                 <td style="background:${j.cor}; width:6px;"></td>
-                <td style="font-weight:bold; color:${j.finalizado ? '#7f8c8d' : j.cor}">${j.treinador}</td>
+                <td style="font-weight:bold; color:${j.cor}">${j.treinador}</td>
                 <td>${j.competicao || '---'}</td>
                 <td>${j.jornada || '---'}</td>
                 <td><strong>${j.numJogo || '---'}</strong></td>
@@ -284,12 +305,38 @@
                     ${isPassado ? `<br><button class="btn-finalizar" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}
                 </td>
                 <td>${j.pavilhao || '---'}</td>
-                <td><span class="badge ${j.finalizado ? 'badge-finalizado' : (j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora')}">${j.finalizado ? 'Finalizado ✔️' : j.casaFora}</span></td>
+                <td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td>
                 <td>
-                    ${!j.finalizado ? `<button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button>` : '🔒'}
+                    <button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button>
                     <button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button>
                 </td>`;
             lista.appendChild(tr);
+        });
+
+        // Render Histórico
+        finalizados.forEach(j => {
+            cFim++;
+            if(fTreinador && j.treinador !== fTreinador) return;
+            if(fEscalao && j.escalao !== fEscalao) return;
+            if(fLocal && j.casaFora !== fLocal) return;
+
+            const tr = document.createElement('tr');
+            tr.className = 'row-finalizado';
+
+            tr.innerHTML = `
+                <td style="background:${j.cor}; width:6px;"></td>
+                <td style="font-weight:bold;">${j.treinador}</td>
+                <td>${j.competicao || '---'}</td>
+                <td>${j.jornada || '---'}</td>
+                <td><strong>${j.numJogo || '---'}</strong></td>
+                <td>${j.escalao}</td><td>${j.adversario}</td>
+                <td>${j.data ? j.data.split('-').reverse().join('/') : '---'} às ${j.hora || '--:--'}</td>
+                <td>${j.pavilhao || '---'}</td>
+                <td><span class="badge badge-finalizado">Finalizado ✔️</span></td>
+                <td>
+                    <button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button>
+                </td>`;
+            listaHistorico.appendChild(tr);
         });
 
         document.getElementById('statTotal').innerText = jogosAtuais.length;
