@@ -53,6 +53,7 @@
         .resultado-tag { font-weight: bold; color: var(--primary); font-size: 14px; display: block; margin-top: 4px; }
         .parciais-tag { font-size: 11px; color: #7f8c8d; font-style: italic; }
         .secao-titulo { margin: 40px 0 15px 0; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        .error-tag { color: var(--error); font-size: 11px; display: block; font-weight: bold; }
 
         @media print { .login-box, .form-grid, .filter-grid, .btn-action, .btn-finalizar, header button { display: none !important; } }
     </style>
@@ -109,9 +110,9 @@
             <div class="field"><label>Localização</label><select id="casaFora"><option value="Casa">Casa 🏠</option><option value="Fora">Fora 🚌</option></select></div>
             <div class="field"><label>Data</label><input type="date" id="data"></div>
             <div class="field"><label>Hora</label><input type="time" id="hora"></div>
-            <div class="field"><label>Competição</label><input type="text" id="competicao"></div>
-            <div class="field"><label>Jornada</label><input type="text" id="jornada"></div>
-            <div class="field"><label>Nº Jogo</label><input type="number" id="numJogo"></div>
+            <div class="field"><label>Competição</label><input type="text" id="competicao" placeholder="Ex: Regional"></div>
+            <div class="field"><label>Jornada</label><input type="text" id="jornada" placeholder="Ex: 1ª"></div>
+            <div class="field"><label>Nº Jogo</label><input type="number" id="numJogo" placeholder="Ex: 1024"></div>
             <div class="field"><label>Escalão</label>
                 <select id="escalao">
                     <option value="">Selecione...</option>
@@ -240,7 +241,6 @@
     };
 
     window.finalizarJogoPrompt = (id) => {
-        const j = jogosAtuais.find(x => x.id === id);
         if (prompt("Digite a senha para finalizar:") === "academicos2026") {
             const sp = prompt("Sets Pró (Académicos):", "0");
             const sc = prompt("Sets Contra:", "0");
@@ -268,6 +268,18 @@
         const agora = new Date();
         let cCasa = 0, cFora = 0, cFim = 0;
 
+        // Reset conflitos
+        jogosAtuais.forEach(j => j.conflito = false);
+        for (let i = 0; i < jogosAtuais.length; i++) {
+            for (let j = i + 1; j < jogosAtuais.length; j++) {
+                let a = jogosAtuais[i], b = jogosAtuais[j];
+                if(!a.finalizado && !b.finalizado && a.casaFora === 'Casa' && b.casaFora === 'Casa' && a.data && b.data && a.data === b.data) {
+                    let diff = Math.abs(new Date(a.data+'T'+a.hora) - new Date(b.data+'T'+b.hora)) / 60000;
+                    if(diff < 120) { a.conflito = true; b.conflito = true; }
+                }
+            }
+        }
+
         const finalizados = jogosAtuais.filter(j => j.finalizado).reverse();
         const ativos = jogosAtuais.filter(j => !j.finalizado);
 
@@ -277,6 +289,7 @@
             if(fEscalao && j.escalao !== fEscalao) return;
 
             const tr = document.createElement('tr');
+            if(j.conflito) tr.className = 'row-conflito';
             const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
 
             tr.innerHTML = `
@@ -287,6 +300,7 @@
                 <td><strong>${j.numJogo || '---'}</strong></td>
                 <td>${j.escalao}</td><td>${j.adversario}</td>
                 <td>${j.data ? j.data.split('-').reverse().join('/') : '---'} às ${j.hora || '--:--'}
+                    ${j.conflito ? '<span class="error-tag">⚠️ Conflito Casa (2h)</span>' : ''}
                     ${isPassado ? `<br><button class="btn-finalizar" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}
                 </td>
                 <td>${j.pavilhao || '---'}</td>
@@ -343,7 +357,6 @@
         document.getElementById('adversario').value = j.adversario;
         document.getElementById('pavilhao').value = j.pavilhao;
         
-        // Mostrar campos de resultado na edição
         document.getElementById('boxSetPro').style.display = 'block';
         document.getElementById('boxSetContra').style.display = 'block';
         document.getElementById('boxParciais').style.display = 'block';
