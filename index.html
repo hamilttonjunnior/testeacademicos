@@ -110,7 +110,7 @@
             <div class="field"><label>Localização</label><select id="casaFora"><option value="Casa">Casa 🏠</option><option value="Fora">Fora 🚌</option></select></div>
             <div class="field"><label>Data</label><input type="date" id="data"></div>
             <div class="field"><label>Hora</label><input type="time" id="hora"></div>
-            <div class="field"><label>Torneio</label><input type="text" id="torneio" placeholder="Ex: Regional"></div>
+            <div class="field"><label>Competição</label><input type="text" id="competicao" placeholder="Ex: Regional"></div>
             <div class="field"><label>Jornada</label><input type="text" id="jornada" placeholder="Ex: 1ª"></div>
             <div class="field"><label>Nº Jogo</label><input type="number" id="numJogo" placeholder="Ex: 1024"></div>
             <div class="field"><label>Escalão</label>
@@ -155,7 +155,7 @@
         <div class="table-wrapper">
             <table>
                 <thead>
-                    <tr><th></th><th>Treinador</th><th>Torneio</th><th>Jornada</th><th>Nº Jogo</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr>
+                    <tr><th></th><th>Treinador</th><th>Competição</th><th>Jornada</th><th>Nº Jogo</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr>
                 </thead>
                 <tbody id="lista"></tbody>
             </table>
@@ -208,7 +208,7 @@
             casaFora: document.getElementById('casaFora').value,
             data: document.getElementById('data').value,
             hora: document.getElementById('hora').value,
-            torneio: document.getElementById('torneio').value,
+            competicao: document.getElementById('competicao').value,
             jornada: document.getElementById('jornada').value,
             numJogo: document.getElementById('numJogo').value,
             escalao: document.getElementById('escalao').value,
@@ -275,7 +275,7 @@
             tr.innerHTML = `
                 <td style="background:${j.cor}; width:6px;"></td>
                 <td style="font-weight:bold; color:${j.finalizado ? '#7f8c8d' : j.cor}">${j.treinador}</td>
-                <td>${j.torneio || '---'}</td>
+                <td>${j.competicao || '---'}</td>
                 <td>${j.jornada || '---'}</td>
                 <td><strong>${j.numJogo || '---'}</strong></td>
                 <td>${j.escalao}</td><td>${j.adversario}</td>
@@ -305,7 +305,7 @@
         document.getElementById('casaFora').value = j.casaFora;
         document.getElementById('data').value = j.data;
         document.getElementById('hora').value = j.hora;
-        document.getElementById('torneio').value = j.torneio || '';
+        document.getElementById('competicao').value = j.competicao || '';
         document.getElementById('jornada').value = j.jornada || '';
         document.getElementById('numJogo').value = j.numJogo || '';
         document.getElementById('escalao').value = j.escalao;
@@ -318,7 +318,7 @@
         if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id));
     };
 
-    function limpar() { ['data','hora','torneio','jornada','numJogo','adversario','pavilhao'].forEach(id => document.getElementById(id).value = ''); }
+    function limpar() { ['data','hora','competicao','jornada','numJogo','adversario','pavilhao'].forEach(id => document.getElementById(id).value = ''); }
 </script>
 </body>
 </html>
