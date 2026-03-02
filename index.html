@@ -147,6 +147,13 @@
         <div class="filter-grid">
             <div class="field"><label>🔍 Filtrar Treinador</label><select id="filterTreinador" onchange="render()"><option value="">Todos</option></select></div>
             <div class="field"><label>🔍 Filtrar Escalão</label><select id="filterEscalao" onchange="render()"><option value="">Todos</option></select></div>
+            <div class="field"><label>🔍 Filtrar Local</label>
+                <select id="filterLocal" onchange="render()">
+                    <option value="">Todos</option>
+                    <option value="Casa">Casa 🏠</option>
+                    <option value="Fora">Fora 🚌</option>
+                </select>
+            </div>
             <div style="display: flex; align-items: flex-end;"><button class="btn-export" onclick="window.print()">🖨️ Exportar / PDF</button></div>
         </div>
 
@@ -262,6 +269,7 @@
         const listaHistorico = document.getElementById('listaHistorico');
         const fTreinador = document.getElementById('filterTreinador').value;
         const fEscalao = document.getElementById('filterEscalao').value;
+        const fLocal = document.getElementById('filterLocal').value;
         
         lista.innerHTML = '';
         listaHistorico.innerHTML = '';
@@ -285,8 +293,11 @@
 
         ativos.forEach(j => {
             if(j.casaFora === 'Casa') cCasa++; else cFora++;
+            
+            // FILTROS
             if(fTreinador && j.treinador !== fTreinador) return;
             if(fEscalao && j.escalao !== fEscalao) return;
+            if(fLocal && j.casaFora !== fLocal) return;
 
             const tr = document.createElement('tr');
             if(j.conflito) tr.className = 'row-conflito';
@@ -312,8 +323,10 @@
 
         finalizados.forEach(j => {
             cFim++;
+            // FILTROS HISTÓRICO
             if(fTreinador && j.treinador !== fTreinador) return;
             if(fEscalao && j.escalao !== fEscalao) return;
+            if(fLocal && j.casaFora !== fLocal) return;
 
             const tr = document.createElement('tr');
             tr.className = 'row-finalizado';
