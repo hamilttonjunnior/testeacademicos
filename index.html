@@ -147,6 +147,7 @@
         <div class="filter-grid">
             <div class="field"><label>🔍 Filtrar Treinador</label><select id="filterTreinador" onchange="render()"><option value="">Todos</option></select></div>
             <div class="field"><label>🔍 Filtrar Escalão</label><select id="filterEscalao" onchange="render()"><option value="">Todos</option></select></div>
+            <div class="field"><label>🔍 Filtrar Data</label><input type="date" id="filterData" onchange="render()"></div>
             <div class="field"><label>🔍 Filtrar Local</label>
                 <select id="filterLocal" onchange="render()">
                     <option value="">Todos</option>
@@ -270,6 +271,7 @@
         const fTreinador = document.getElementById('filterTreinador').value;
         const fEscalao = document.getElementById('filterEscalao').value;
         const fLocal = document.getElementById('filterLocal').value;
+        const fData = document.getElementById('filterData').value;
         
         lista.innerHTML = '';
         listaHistorico.innerHTML = '';
@@ -294,10 +296,11 @@
         ativos.forEach(j => {
             if(j.casaFora === 'Casa') cCasa++; else cFora++;
             
-            // FILTROS
+            // FILTROS ATIVOS
             if(fTreinador && j.treinador !== fTreinador) return;
             if(fEscalao && j.escalao !== fEscalao) return;
             if(fLocal && j.casaFora !== fLocal) return;
+            if(fData && j.data !== fData) return;
 
             const tr = document.createElement('tr');
             if(j.conflito) tr.className = 'row-conflito';
@@ -327,6 +330,7 @@
             if(fTreinador && j.treinador !== fTreinador) return;
             if(fEscalao && j.escalao !== fEscalao) return;
             if(fLocal && j.casaFora !== fLocal) return;
+            if(fData && j.data !== fData) return;
 
             const tr = document.createElement('tr');
             tr.className = 'row-finalizado';
