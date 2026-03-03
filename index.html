@@ -148,6 +148,23 @@
             <div class="field"><label>🔍 Filtrar Treinador</label><select id="filterTreinador" onchange="render()"><option value="">Todos</option></select></div>
             <div class="field"><label>🔍 Filtrar Escalão</label><select id="filterEscalao" onchange="render()"><option value="">Todos</option></select></div>
             <div class="field"><label>🔍 Filtrar Data</label><input type="date" id="filterData" onchange="render()"></div>
+            <div class="field"><label>🔍 Filtrar Mês</label>
+                <select id="filterMes" onchange="render()">
+                    <option value="">Todos os Meses</option>
+                    <option value="01">Janeiro</option>
+                    <option value="02">Fevereiro</option>
+                    <option value="03">Março</option>
+                    <option value="04">Abril</option>
+                    <option value="05">Maio</option>
+                    <option value="06">Junho</option>
+                    <option value="07">Julho</option>
+                    <option value="08">Agosto</option>
+                    <option value="09">Setembro</option>
+                    <option value="10">Outubro</option>
+                    <option value="11">Novembro</option>
+                    <option value="12">Dezembro</option>
+                </select>
+            </div>
             <div class="field"><label>🔍 Filtrar Local</label>
                 <select id="filterLocal" onchange="render()">
                     <option value="">Todos</option>
@@ -272,6 +289,7 @@
         const fEscalao = document.getElementById('filterEscalao').value;
         const fLocal = document.getElementById('filterLocal').value;
         const fData = document.getElementById('filterData').value;
+        const fMes = document.getElementById('filterMes').value;
         
         lista.innerHTML = '';
         listaHistorico.innerHTML = '';
@@ -301,6 +319,7 @@
             if(fEscalao && j.escalao !== fEscalao) return;
             if(fLocal && j.casaFora !== fLocal) return;
             if(fData && j.data !== fData) return;
+            if(fMes && j.data && j.data.split('-')[1] !== fMes) return;
 
             const tr = document.createElement('tr');
             if(j.conflito) tr.className = 'row-conflito';
@@ -331,6 +350,7 @@
             if(fEscalao && j.escalao !== fEscalao) return;
             if(fLocal && j.casaFora !== fLocal) return;
             if(fData && j.data !== fData) return;
+            if(fMes && j.data && j.data.split('-')[1] !== fMes) return;
 
             const tr = document.createElement('tr');
             tr.className = 'row-finalizado';
