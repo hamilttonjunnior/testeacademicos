@@ -297,7 +297,7 @@
         document.getElementById('boxSetPro').style.display = 'none';
         document.getElementById('boxSetContra').style.display = 'none';
         document.getElementById('boxParciais').style.display = 'none';
-        window.togglePavilionField(); // Reseta o seletor para Casa (default)
+        window.togglePavilionField(); 
     };
 
     window.finalizarJogoPrompt = (id) => {
@@ -421,7 +421,7 @@
         document.getElementById('cor').value = j.cor;
         document.getElementById('casaFora').value = j.casaFora;
         
-        window.togglePavilionField(); // Atualiza o tipo de campo antes de preencher o valor
+        window.togglePavilionField(); 
         
         document.getElementById('data').value = j.data;
         document.getElementById('hora').value = j.hora;
