@@ -31,7 +31,7 @@
         .login-box button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; }
         
         .main-content { 
-            width: 98%; /* Aumentado para evitar scroll lateral */
+            width: 98%; 
             max-width: 1400px; 
             margin: 15px auto; 
             display: none; 
@@ -75,8 +75,6 @@
             transition: all 0.2s; 
         }
         
-        input:focus, select:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); }
-        
         .btn-marcar { 
             grid-column: 1 / -1; 
             padding: 15px; 
@@ -88,21 +86,20 @@
             cursor: pointer; 
             text-transform: uppercase; 
             letter-spacing: 1px; 
-            transition: all 0.2s; 
         }
-        .btn-marcar:hover { background: #219150; }
         .btn-atualizar { background: #e67e22 !important; }
-        .btn-atualizar:hover { background: #d35400 !important; }
         
+        /* ADAPTAÇÃO PARA MOBILE */
         .table-wrapper { 
-            overflow-x: hidden; /* Remove scroll lateral */
             background: #ffffff; 
             border-radius: 12px; 
             border: 1px solid #e2e8f0; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            overflow-x: auto; /* Ativa scroll apenas se necessário */
+            -webkit-overflow-scrolling: touch; /* Suaviza scroll no iPhone */
         }
         
-        table { width: 100%; border-collapse: collapse; table-layout: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; } /* Mantém largura mínima para não esmagar texto */
         
         th { 
             background: #f8fafc; 
@@ -112,38 +109,33 @@
             color: #64748b; 
             font-size: 12px; 
             text-transform: uppercase; 
-            font-weight: 700; 
         }
         
-        td { 
-            padding: 12px 10px; 
-            border-bottom: 1px solid #f1f5f9; 
-            background: #fcfdfe; 
-            font-size: 13px; /* Reduzido para caber tudo */
-        }
+        td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; background: #fcfdfe; font-size: 13px; }
         
-        /* DESTAQUE DE CONFLITO - LINHA BEM VERMELHA */
         .row-conflito td { background-color: #ffe3e3 !important; color: #c92a2a !important; font-weight: 600; }
         .row-conflito { border-left: 8px solid var(--error) !important; }
-        
-        .row-finalizado td { background-color: #f1f5f9 !important; color: #475569 !important; }
-        .row-finalizado { font-size: 12px; }
         
         .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
         .badge-casa { background: #d0ebff; color: #1971c2; }
         .badge-fora { background: #ffe3e3; color: #c92a2a; }
-        .badge-finalizado { background: #e2e8f0; color: #475569; }
         
-        .btn-action { background: #ffffff; border: 1px solid #e2e8f0; padding: 4px 8px; border-radius: 6px; cursor: pointer; transition: background 0.2s; }
+        .btn-action { background: #ffffff; border: 1px solid #e2e8f0; padding: 4px 8px; border-radius: 6px; cursor: pointer; }
         .btn-finalizar { background: var(--accent); color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 10px; font-weight: bold; }
 
-        .resultado-tag { font-weight: 800; color: var(--primary); font-size: 14px; display: block; margin-top: 4px; }
         .secao-titulo { margin: 30px 0 15px 0; color: var(--primary); display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; }
         .secao-titulo::before { content: ""; width: 5px; height: 20px; background: var(--accent); border-radius: 3px; }
 
-        .error-tag { color: var(--error); font-size: 10px; display: inline-flex; align-items: center; gap: 3px; font-weight: 800; margin-top: 4px; padding: 2px 5px; background: #ffffff; border-radius: 4px; border: 1px solid var(--error); }
+        .error-tag { color: var(--error); font-size: 10px; font-weight: 800; margin-top: 4px; padding: 2px 5px; background: #ffffff; border-radius: 4px; border: 1px solid var(--error); }
 
         @media print { #loginScreen, .form-grid, .filter-grid, .btn-action, .btn-finalizar, header button { display: none !important; } }
+        
+        /* Ajuste fino para ecrãs muito pequenos */
+        @media screen and (max-width: 600px) {
+            .container { padding: 10px; }
+            .main-content { width: 100%; margin: 0; }
+            .secao-titulo { font-size: 16px; }
+        }
     </style>
 </head>
 <body>
@@ -162,16 +154,16 @@
         <header>
             <div style="display: flex; align-items: center;">
                 <img src="academicos.png" alt="Logo" class="header-logo">
-                <h2 style="margin:0; color: var(--primary); font-size: 1.2rem;">FC Académicos - Gestão</h2>
+                <h2 style="margin:0; color: var(--primary); font-size: 1.1rem;">FC Académicos - Gestão</h2>
             </div>
-            <button onclick="location.reload()" style="cursor:pointer; padding: 6px 15px; border-radius: 8px; border: 1px solid #cbd5e0; background: white; font-weight: 600; font-size: 0.8rem;">Sair</button>
+            <button onclick="location.reload()" style="cursor:pointer; padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e0; background: white; font-weight: 600; font-size: 0.7rem;">Sair</button>
         </header>
 
         <div class="stats-grid">
-            <div class="stat-card"><h3>Total Jogos</h3><p id="statTotal">0</p></div>
-            <div class="stat-card" style="border-left-color: #3498db;"><h3>Em Casa</h3><p id="statCasa">0</p></div>
+            <div class="stat-card"><h3>Total</h3><p id="statTotal">0</p></div>
+            <div class="stat-card" style="border-left-color: #3498db;"><h3>Casa</h3><p id="statCasa">0</p></div>
             <div class="stat-card" style="border-left-color: #e67e22;"><h3>Fora</h3><p id="statFora">0</p></div>
-            <div class="stat-card" style="border-left-color: var(--success);"><h3>Finalizados</h3><p id="statFim">0</p></div>
+            <div class="stat-card" style="border-left-color: var(--success);"><h3>Fim</h3><p id="statFim">0</p></div>
         </div>
 
         <div class="form-grid">
@@ -194,7 +186,7 @@
                     <option value="Carlos Martins">Carlos Martins</option>
                 </select>
             </div>
-            <div class="field"><label>Cor do Treinador</label><input type="color" id="cor" value="#3498db"></div>
+            <div class="field"><label>Cor</label><input type="color" id="cor" value="#3498db"></div>
             <div class="field"><label>Localização</label>
                 <select id="casaFora" onchange="togglePavilionField()">
                     <option value="Casa">Casa 🏠</option>
@@ -203,8 +195,8 @@
             </div>
             <div class="field"><label>Data</label><input type="date" id="data"></div>
             <div class="field"><label>Hora</label><input type="time" id="hora"></div>
-            <div class="field"><label>Competição</label><input type="text" id="competicao" placeholder="Ex: Regional"></div>
-            <div class="field"><label>Jornada</label><input type="text" id="jornada" placeholder="Ex: 1ª"></div>
+            <div class="field"><label>Comp.</label><input type="text" id="competicao" placeholder="Competição"></div>
+            <div class="field"><label>Jor.</label><input type="text" id="jornada" placeholder="Jornada"></div>
             <div class="field"><label>Nº Jogo</label><input type="number" id="numJogo" placeholder="Ex: 1024"></div>
             <div class="field"><label>Escalão</label>
                 <select id="escalao">
@@ -235,8 +227,8 @@
                 </select>
             </div>
             
-            <div class="field" id="boxSetPro" style="display:none;"><label>Sets Pró</label><input type="number" id="setPro" value="0"></div>
-            <div class="field" id="boxSetContra" style="display:none;"><label>Sets Contra</label><input type="number" id="setContra" value="0"></div>
+            <div class="field" id="boxSetPro" style="display:none;"><label>Set Pró</label><input type="number" id="setPro" value="0"></div>
+            <div class="field" id="boxSetContra" style="display:none;"><label>Set Contra</label><input type="number" id="setContra" value="0"></div>
             <div class="field" id="boxParciais" style="display:none; grid-column: 1 / -1;"><label>Parciais</label><input type="text" id="parciais"></div>
 
             <button class="btn-marcar" id="btnSalvar" onclick="salvarJogo()">Agendar Jogo</button>
@@ -248,19 +240,19 @@
             <div class="field"><label>🔍 Data</label><input type="date" id="filterData" onchange="render()"></div>
             <div class="field"><label>🔍 Mês</label>
                 <select id="filterMes" onchange="render()">
-                    <option value="">Todos os Meses</option>
-                    <option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option><option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option><option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
+                    <option value="">Todos</option>
+                    <option value="01">Jan</option><option value="02">Fev</option><option value="03">Mar</option><option value="04">Abr</option><option value="05">Mai</option><option value="06">Jun</option><option value="07">Jul</option><option value="08">Ago</option><option value="09">Set</option><option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option>
                 </select>
             </div>
             <div class="field"><label>🔍 Local</label><select id="filterLocal" onchange="render()"><option value="">Todos</option><option value="Casa">Casa</option><option value="Fora">Fora</option></select></div>
-            <div style="display: flex; align-items: flex-end;"><button onclick="window.print()" style="padding: 10px 15px; cursor:pointer; background: #55acee; color: white; border:none; border-radius: 8px; font-weight:bold; font-size: 0.8rem;">🖨️ PDF</button></div>
+            <div style="display: flex; align-items: flex-end;"><button onclick="window.print()" style="padding: 10px; cursor:pointer; background: #55acee; color: white; border:none; border-radius: 8px; font-weight:bold; font-size: 0.7rem;">🖨️ PDF</button></div>
         </div>
 
         <h3 class="secao-titulo">Próximos Jogos</h3>
-        <div class="table-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Competição</th><th>Jornada</th><th>Nº Jogo</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr></thead><tbody id="lista"></tbody></table></div>
+        <div class="table-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr></thead><tbody id="lista"></tbody></table></div>
 
-        <h3 class="secao-titulo">Histórico de Jogos</h3>
-        <div class="table-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Competição</th><th>Jornada</th><th>Nº Jogo</th><th>Escalão</th><th>Adversário / Resultado</th><th>Data/Hora</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistorico"></tbody></table></div>
+        <h3 class="secao-titulo">Histórico</h3>
+        <div class="table-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário/Res.</th><th>Data/Hora</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistorico"></tbody></table></div>
     </div>
 </div>
 
@@ -281,7 +273,7 @@
         if (local === 'Casa') {
             container.innerHTML = `<label>Pavilhão</label><select id="pavilhao"><option value="ES ALCAIDES FARIA">ES ALCAIDES FARIA</option><option value="MUNICIPAL DE ADÃES">MUNICIPAL DE ADÃES</option></select>`;
         } else {
-            container.innerHTML = `<label>Pavilhão</label><input type="text" id="pavilhao" placeholder="Nome do pavilhão fora">`;
+            container.innerHTML = `<label>Pavilhão</label><input type="text" id="pavilhao" placeholder="Nome pavilhão">`;
         }
     };
 
@@ -322,14 +314,14 @@
             if(j.conflito) tr.className = 'row-conflito'; 
             const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
             
-            tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao || '---'}</td><td>${j.jornada || '---'}</td><td><strong>${j.numJogo || '---'}</strong></td><td>${j.escalao}</td><td>${j.adversario}</td><td>${j.data ? j.data.split('-').reverse().join('/') : '---'} às ${j.hora || '--:--'}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button class="btn-finalizar" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao || '---'}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button><button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+            tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao || '-'}</td><td>${j.jornada || '-'}</td><td>${j.numJogo || '-'}</td><td>${j.escalao}</td><td>${j.adversario}</td><td>${j.data ? j.data.split('-').reverse().join('/') : '-'} às ${j.hora || '--:--'}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button class="btn-finalizar" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao || '-'}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button><button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
             lista.appendChild(tr);
         });
         
         finalizados.forEach(j => {
             cFim++; if(fTreinador && j.treinador !== fTreinador) return; if(fEscalao && j.escalao !== fEscalao) return; if(fLocal && j.casaFora !== fLocal) return; if(fData && j.data !== fData) return; if(fMes && j.data && j.data.split('-')[1] !== fMes) return;
             const tr = document.createElement('tr'); tr.className = 'row-finalizado';
-            tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao || '---'}</td><td>${j.jornada || '---'}</td><td><strong>${j.numJogo || '---'}</strong></td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}</span><span class="parciais-tag">(${j.parciais || '---'})</span></td><td>${j.data ? j.data.split('-').reverse().join('/') : '---'} às ${j.hora || '--:--'}</td><td>${j.pavilhao || '---'}</td><td><span class="badge badge-finalizado">Finalizado</span></td><td><button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button><button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+            tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao || '-'}</td><td>${j.jornada || '-'}</td><td>${j.numJogo || '-'}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}</span><span class="parciais-tag">(${j.parciais || '---'})</span></td><td>${j.data ? j.data.split('-').reverse().join('/') : '-'} às ${j.hora || '--:--'}</td><td>${j.pavilhao || '-'}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button><button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
             listaHistorico.appendChild(tr);
         });
         document.getElementById('statTotal').innerText = ativos.length + cFim; document.getElementById('statCasa').innerText = cCasa; document.getElementById('statFora').innerText = cFora; document.getElementById('statFim').innerText = cFim;
