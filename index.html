@@ -5,17 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acadêmicos - Gestão de Jogos</title>
     <style>
-        :root { 
-            --primary: #1a2a3a; 
-            --accent: #3498db; 
-            --error: #e74c3c; 
-            --success: #27ae60; 
-            --bg: #f4f7f9; 
-            --finished: #bdc3c7; 
-        }
+        :root { --primary: #1a2a3a; --accent: #3498db; --error: #e74c3c; --success: #27ae60; --bg: #f4f7f9; --finished: #bdc3c7; }
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         
-        /* TELAS E CONTAINERS */
         #loginScreen { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 320px; }
         .login-logo { max-width: 150px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
@@ -24,18 +16,16 @@
         .login-box button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; }
         
         .main-content { width: 95%; max-width: 1200px; margin: 20px auto; display: none; }
-        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .container { background: #ebebeb; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 30px; }
         
         header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid #eee; padding-bottom: 15px; }
         .header-logo { max-height: 50px; margin-right: 15px; }
 
-        /* DASHBOARD STATS */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .stat-card { background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid var(--accent); text-align: center; }
         .stat-card h3 { margin: 0; font-size: 12px; color: #666; text-transform: uppercase; }
         .stat-card p { margin: 5px 0 0; font-size: 20px; font-weight: bold; color: var(--primary); }
         
-        /* FORMULÁRIOS E FILTROS */
         .form-grid, .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; background: #fafafa; padding: 20px; border-radius: 8px; border: 1px solid #eaeaea; margin-bottom: 20px; }
         .filter-grid { background: #eef2f7; border-color: #d1d9e6; }
         .field { display: flex; flex-direction: column; gap: 5px; }
@@ -44,18 +34,17 @@
         .btn-marcar { grid-column: 1 / -1; padding: 15px; background: var(--success); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; }
         .btn-export { background: #55acee; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-bottom: 10px; }
         
-        /* TABELAS */
         .table-wrapper { overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 800px; }
         th { background: #f8f9fa; padding: 15px; text-align: left; border-bottom: 2px solid #dee2e6; }
         td { padding: 15px; border-bottom: 1px solid #eee; }
         
         .row-conflito { background-color: #fff5f5 !important; }
-        .row-finalizado { background-color: #f2f4f5 !important; color: #7f8c8d !important; font-size: 13px; }
+        .row-finalizado { background-color: #f6f6f6 !important; color: #7f8c8d !important; font-size: 13px; }
         
         .badge { padding: 5px 10px; border-radius: 4px; font-size: 11px; font-weight: 800; }
         .badge-casa { background: #d1ecf1; color: #0c5460; }
-        .badge-fora { background: #e2e3e5; color: #383d41; }
+        .badge-fora { background: #ffc6cc; color: #383d41; }
         .badge-finalizado { background: #bdc3c7; color: white; }
         
         .btn-action { background: none; border: 1px solid #ddd; padding: 5px 8px; border-radius: 4px; cursor: pointer; margin-right: 5px; }
@@ -98,8 +87,7 @@
         </div>
 
         <div class="form-grid">
-            <div class="field">
-                <label>Treinador</label>
+            <div class="field"><label>Treinador</label>
                 <select id="treinador">
                     <option value="">Selecione...</option>
                     <option value="Jorge Torres">Jorge Torres</option>
@@ -131,8 +119,7 @@
             <div class="field"><label>Competição</label><input type="text" id="competicao" placeholder="Ex: Regional"></div>
             <div class="field"><label>Jornada</label><input type="text" id="jornada" placeholder="Ex: 1ª"></div>
             <div class="field"><label>Nº Jogo</label><input type="number" id="numJogo" placeholder="Ex: 1024"></div>
-            <div class="field">
-                <label>Escalão</label>
+            <div class="field"><label>Escalão</label>
                 <select id="escalao">
                     <option value="">Selecione...</option>
                     <option value="Infantis A Fem">Infantis A Fem</option>
@@ -174,14 +161,19 @@
             <div class="field"><label>🔍 Filtrar Treinador</label><select id="filterTreinador" onchange="render()"><option value="">Todos</option></select></div>
             <div class="field"><label>🔍 Filtrar Escalão</label><select id="filterEscalao" onchange="render()"><option value="">Todos</option></select></div>
             <div class="field"><label>🔍 Filtrar Data</label><input type="date" id="filterData" onchange="render()"></div>
-            <div class="field">
-                <label>🔍 Filtrar Mês</label>
+            <div class="field"><label>🔍 Filtrar Mês</label>
                 <select id="filterMes" onchange="render()">
                     <option value="">Todos os Meses</option>
                     <option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option><option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option><option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option>
                 </select>
             </div>
-            <div class="field"><label>🔍 Filtrar Local</label><select id="filterLocal" onchange="render()"><option value="">Todos</option><option value="Casa">Casa 🏠</option><option value="Fora">Fora 🚌</option></select></div>
+            <div class="field"><label>🔍 Filtrar Local</label>
+                <select id="filterLocal" onchange="render()">
+                    <option value="">Todos</option>
+                    <option value="Casa">Casa 🏠</option>
+                    <option value="Fora">Fora 🚌</option>
+                </select>
+            </div>
             <div style="display: flex; align-items: flex-end;"><button class="btn-export" onclick="window.print()">🖨️ Exportar / PDF</button></div>
         </div>
 
@@ -243,7 +235,7 @@
         document.getElementById('filterEscalao').innerHTML = '<option value="">Todos os Escalões</option>' + eSel;
     }
 
-    // FUNÇÃO PARA TROCAR O CAMPO DO PAVILHÃO
+    // LÓGICA DE TROCA DE PAVILHÃO
     window.togglePavilionField = () => {
         const local = document.getElementById('casaFora').value;
         const container = document.getElementById('pavilhaoContainer');
@@ -283,16 +275,10 @@
         };
 
         try {
-            if(editId) {
-                await updateDoc(doc(db, "jogos", editId), dados);
-                editId = null;
-            } else {
-                await addDoc(jogosCol, dados);
-            }
+            if(editId) { await updateDoc(doc(db, "jogos", editId), dados); editId = null; }
+            else { await addDoc(jogosCol, dados); }
             limpar();
-        } catch (e) {
-            alert("Erro ao salvar!");
-        }
+        } catch (e) { alert("Erro ao salvar!"); }
         btn.disabled = false;
         document.getElementById('boxSetPro').style.display = 'none';
         document.getElementById('boxSetContra').style.display = 'none';
@@ -370,10 +356,8 @@
                 </td>
                 <td>${j.pavilhao || '---'}</td>
                 <td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td>
-                <td>
-                    <button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button>
-                    <button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button>
-                </td>`;
+                <td><button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button>
+                    <button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
             lista.appendChild(tr);
         });
 
@@ -402,10 +386,8 @@
                 <td>${j.data ? j.data.split('-').reverse().join('/') : '---'} às ${j.hora || '--:--'}</td>
                 <td>${j.pavilhao || '---'}</td>
                 <td><span class="badge badge-finalizado">Finalizado</span></td>
-                <td>
-                    <button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button>
-                    <button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button>
-                </td>`;
+                <td><button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button>
+                    <button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
             listaHistorico.appendChild(tr);
         });
 
@@ -446,9 +428,7 @@
         if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id));
     };
 
-    function limpar() { 
-        ['data','hora','competicao','jornada','numJogo','adversario','setPro', 'setContra', 'parciais'].forEach(id => document.getElementById(id).value = ''); 
-    }
+    function limpar() { ['data','hora','competicao','jornada','numJogo','adversario','setPro', 'setContra', 'parciais'].forEach(id => document.getElementById(id).value = ''); }
 </script>
 </body>
 </html>
