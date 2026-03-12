@@ -17,12 +17,14 @@
         
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         
+        /* TELAS DE ACESSO */
         #loginScreen { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 320px; }
         .login-logo { max-width: 150px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
         .login-box input, .login-box button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; box-sizing: border-box; }
         .login-box button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; }
         
+        /* ESTRUTURA PRINCIPAL */
         .main-content { width: 98%; max-width: 1400px; margin: 15px auto; display: none; }
         .container { background: #f1f3f5; padding: 20px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); margin-bottom: 30px; }
         
@@ -55,17 +57,18 @@
         }
         .collapsible-content.active { max-height: 1200px; margin-bottom: 20px; }
 
+        /* DASHBOARD - RESPONSIVO */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
         .stat-card { background: #ffffff; padding: 12px; border-radius: 10px; border-left: 5px solid var(--accent); text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
         .stat-card p { margin: 5px 0 0; font-size: 20px; font-weight: 800; color: var(--primary); }
         
-        .form-grid, .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        /* FORMULÁRIOS E FILTROS - RESPONSIVOS */
+        .form-grid, .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
         .filter-grid { background: #eef2f7; border-color: #d1d9e6; margin-bottom: 20px; }
         .field { display: flex; flex-direction: column; gap: 4px; }
         .field label { font-size: 11px; font-weight: bold; color: #475569; }
-        input, select { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; }
+        input, select { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; width: 100%; box-sizing: border-box; }
         
-        /* BOTÃO DE AGENDAR ESCURECIDO COM HOVER */
         .btn-marcar { 
             grid-column: 1 / -1; 
             padding: 15px; 
@@ -83,6 +86,7 @@
         .btn-atualizar { background: #e67e22 !important; }
         .btn-atualizar:hover { background: #d35400 !important; }
         
+        /* TABELAS */
         .table-wrapper { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; min-width: 900px; }
         th { background: #f8fafc; padding: 12px 10px; text-align: left; border-bottom: 2px solid #e2e8f0; color: #64748b; font-size: 12px; text-transform: uppercase; }
@@ -108,7 +112,23 @@
         .secao-titulo::before { content: ""; width: 5px; height: 20px; background: var(--accent); border-radius: 3px; }
         .error-tag { color: var(--error); font-size: 10px; font-weight: 800; margin-top: 4px; padding: 2px 5px; background: #ffffff; border-radius: 4px; border: 1px solid var(--error); }
 
-        @media screen and (max-width: 600px) { .container { padding: 10px; } .main-content { width: 100%; margin: 0; } }
+        /* AJUSTES DE RESPONSIVIDADE (MEDIA QUERIES) */
+        @media screen and (max-width: 1024px) {
+            .form-grid, .filter-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media screen and (max-width: 600px) {
+            .container { padding: 10px; }
+            .main-content { width: 100%; margin: 0; }
+            header { flex-direction: column; gap: 10px; text-align: center; }
+            .header-logo { margin-right: 0; }
+            .form-grid, .filter-grid { grid-template-columns: 1fr; padding: 15px; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .collapsible-trigger { font-size: 13px; padding: 12px; }
+            .secao-titulo { font-size: 16px; }
+        }
+
+        @media print { #loginScreen, .collapsible-trigger, .filter-grid, .btn-action, .btn-finalizar, header button { display: none !important; } }
     </style>
 </head>
 <body>
@@ -327,7 +347,7 @@
         const btn = document.getElementById('btnSalvar'); btn.innerText = "Atualizar Informações"; btn.classList.add("btn-atualizar"); document.getElementById('formAgendamento').classList.add('active'); document.getElementById('formAgendamentoIcon').innerText = '▲'; editId = id; window.scrollTo(0,0);
     };
 
-    window.eliminarJogo = async (id) => { if (prompt("Senha:") === "academicos2026") await deleteDoc(doc(db, "jogos", id)); };
+    window.eliminarJogo = async (id) => { if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id)); };
     function limpar() { ['data','hora','competicao','jornada','numJogo','adversario','setPro', 'setContra', 'parciais'].forEach(id => document.getElementById(id).value = ''); const btn = document.getElementById('btnSalvar'); btn.innerText = "Agendar Jogo"; btn.classList.remove("btn-atualizar"); }
 </script>
 </body>
