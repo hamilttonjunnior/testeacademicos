@@ -72,7 +72,9 @@
         .row-conflito { background-color: #ffe3e3 !important; border-left: 8px solid var(--error) !important; }
         .conflito-card { border-left: 6px solid var(--error); background: #fff5f5; }
         .win-icon { color: #f1c40f; }
-        .maps-link { text-decoration: none; font-size: 16px; cursor: pointer; }
+        
+        /* Estilo do ícone de mapa */
+        .maps-link { text-decoration: none; font-size: 18px; cursor: pointer; margin-left: 5px; }
 
         @media screen and (min-width: 1025px) {
             .table-wrapper { display: block !important; }
@@ -103,7 +105,7 @@
         <header>
             <div style="display: flex; align-items: center;">
                 <img src="academicos.png" alt="Logo" class="header-logo">
-                <h2 style="margin:0; color: var(--primary); font-size: 1.1rem;">FC Académicos</h2>
+                <h2 style="margin:0; color: var(--primary);">FC Académicos</h2>
             </div>
             <button onclick="location.reload()" style="padding: 8px 12px; border-radius: 8px; cursor:pointer;">Sair</button>
         </header>
@@ -139,7 +141,7 @@
                 </div>
                 <div class="field"><label>Adversário</label><input type="text" id="adversario"></div>
                 <div class="field" id="pavilhaoContainer"><label>Pavilhão</label><select id="pavilhao"><option value="ES ALCAIDES FARIA">ES ALCAIDES FARIA</option><option value="MUNICIPAL DE ADÃES">MUNICIPAL DE ADÃES</option></select></div>
-                <div class="field" id="mapsContainer" style="display:none;"><label>Link Google Maps</label><input type="text" id="mapsLink" placeholder="Cole o link aqui"></div>
+                <div class="field" id="mapsContainer" style="display:none;"><label>Link Google Maps</label><input type="text" id="mapsLink" placeholder="Cole o link da rota aqui"></div>
                 
                 <div class="field" id="boxSetPro" style="display:none;"><label>Set Pró</label><input type="number" id="setPro" value="0"></div>
                 <div class="field" id="boxSetContra" style="display:none;"><label>Set Contra</label><input type="number" id="setContra" value="0"></div>
@@ -256,7 +258,7 @@
             const dt = j.data ? j.data.split('-').reverse().join('/') : '-';
             const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
             const bL = j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora';
-            const pinIcon = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link" title="Ver Localização">📍</a>` : '';
+            const pinIcon = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link" title="Ver Rota no Mapa">🗺️</a>` : '';
 
             if(!j.finalizado) {
                 if(j.casaFora === 'Casa') cC++; else cF++;
@@ -289,7 +291,7 @@
         document.getElementById('competicao').value = j.competicao||''; document.getElementById('jornada').value = j.jornada||''; 
         document.getElementById('numJogo').value = j.numJogo||''; document.getElementById('escalao').value = j.escalao; 
         document.getElementById('adversario').value = j.adversario; document.getElementById('pavilhao').value = j.pavilhao;
-        if(j.casaFora === 'Fora') document.getElementById('mapsLink').value = j.mapsLink || '';
+        if(j.casaFora === 'Fora' && document.getElementById('mapsLink')) document.getElementById('mapsLink').value = j.mapsLink || '';
 
         document.getElementById('boxSetPro').style.display = 'block'; document.getElementById('boxSetContra').style.display = 'block'; 
         document.getElementById('boxParciais').style.display = 'block'; document.getElementById('setPro').value = j.setPro||0; 
