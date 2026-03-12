@@ -14,7 +14,6 @@
         
         #loginScreen { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 320px; }
-        .login-logo { max-width: 150px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
         .login-box input, .login-box button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; box-sizing: border-box; }
         .login-box button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; }
         
@@ -44,15 +43,15 @@
         .btn-marcar { grid-column: 1 / -1; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
         .btn-atualizar { background: #e67e22 !important; }
         
-        /* WEB TABLE */
-        .table-wrapper { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 20px; }
+        /* WEB TABLE - VISÍVEL APENAS NA WEB */
+        .table-wrapper { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 20px; display: block; }
         .historico-wrapper { background: var(--finished-bg) !important; }
         table { width: 100%; border-collapse: collapse; min-width: 900px; }
         th { background: #f8fafc; padding: 12px 10px; text-align: left; color: #64748b; font-size: 11px; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; }
         td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
         .row-finalizado td { background-color: var(--finished-bg) !important; color: var(--finished-text) !important; }
 
-        /* MOBILE CARDS */
+        /* MOBILE CARDS - ESCONDIDOS POR PADRÃO NA WEB */
         .mobile-list { display: none; flex-direction: column; gap: 12px; }
         .game-card { background: white; border-radius: 15px; padding: 15px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .card-finalizado-mobile { background: #d1d5db !important; border-color: #94a3b8 !important; }
@@ -69,12 +68,18 @@
         .conflito-card { border-left: 6px solid var(--error); background: #fff5f5; }
         .win-icon { color: #f1c40f; margin-left: 5px; }
 
+        /* REGRAS DE EXIBIÇÃO: SEPARAÇÃO TOTAL */
         @media screen and (max-width: 1024px) {
-            .table-wrapper { display: none; }
-            .mobile-list { display: flex; }
+            .table-wrapper { display: none !important; } /* Esconde a tabela no mobile */
+            .mobile-list { display: flex !important; } /* Mostra os cartões no mobile */
             .form-grid, .filter-grid { grid-template-columns: 1fr; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
             header { flex-direction: column; text-align: center; gap: 10px; }
+        }
+
+        @media screen and (min-width: 1025px) {
+            .table-wrapper { display: block !important; } /* Mostra a tabela no PC */
+            .mobile-list { display: none !important; } /* Garante que os cartões não aparecem no PC */
         }
     </style>
 </head>
@@ -93,7 +98,7 @@
         <header>
             <div style="display: flex; align-items: center;">
                 <img src="academicos.png" alt="Logo" class="header-logo">
-                <h2 style="margin:0; color: var(--primary);">FC Académicos</h2>
+                <h2 style="margin:0; color: var(--primary); font-size: 1.1rem;">FC Académicos</h2>
             </div>
             <button onclick="location.reload()" style="padding: 8px 12px; border-radius: 8px; cursor:pointer;">Sair</button>
         </header>
@@ -146,8 +151,8 @@
         </div>
 
         <h3 class="secao-titulo">Próximos Jogos</h3>
-        <div class="table-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Local</th><th>Ações</th></tr></thead><tbody id="listaWeb"></tbody></table></div>
-        <div id="listaMobile"></div>
+        <div class="table-wrapper"><table id="tableWeb"><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr></thead><tbody id="listaWeb"></tbody></table></div>
+        <div id="listaMobile" class="mobile-list"></div>
 
         <button class="collapsible-trigger" onclick="toggleSection('historicoSection')" style="background: var(--finished-text); margin-top: 20px;">
             <span>📜 HISTÓRICO DE JOGOS</span> <span id="historicoSectionIcon">▼</span>
