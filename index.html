@@ -40,7 +40,6 @@
         .field label { font-size: 11px; font-weight: bold; color: #475569; }
         input, select { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; }
         
-        /* BOTÕES DE AÇÃO FORMULÁRIO */
         .btn-group { grid-column: 1 / -1; display: flex; gap: 10px; }
         .btn-marcar { flex: 2; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: background 0.3s; }
         .btn-marcar:hover { background: #2c3e50; }
@@ -51,7 +50,6 @@
         .btn-atualizar { background: #e67e22 !important; }
         .btn-atualizar:hover { background: #d35400 !important; }
         
-        /* WEB TABLE */
         .table-wrapper { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 20px; }
         .historico-wrapper { background: var(--finished-bg) !important; }
         table { width: 100%; border-collapse: collapse; min-width: 900px; }
@@ -59,7 +57,6 @@
         td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
         .row-finalizado td { background-color: var(--finished-bg) !important; color: var(--finished-text) !important; }
 
-        /* MOBILE CARDS */
         .mobile-list { display: none; flex-direction: column; gap: 12px; }
         .game-card { background: white; border-radius: 15px; padding: 15px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .card-finalizado-mobile { background: #d1d5db !important; border-color: #94a3b8 !important; opacity: 0.9; }
@@ -75,6 +72,7 @@
         .row-conflito { background-color: #ffe3e3 !important; border-left: 8px solid var(--error) !important; }
         .conflito-card { border-left: 6px solid var(--error); background: #fff5f5; }
         .win-icon { color: #f1c40f; }
+        .maps-link { text-decoration: none; font-size: 16px; cursor: pointer; }
 
         @media screen and (min-width: 1025px) {
             .table-wrapper { display: block !important; }
@@ -141,6 +139,8 @@
                 </div>
                 <div class="field"><label>Adversário</label><input type="text" id="adversario"></div>
                 <div class="field" id="pavilhaoContainer"><label>Pavilhão</label><select id="pavilhao"><option value="ES ALCAIDES FARIA">ES ALCAIDES FARIA</option><option value="MUNICIPAL DE ADÃES">MUNICIPAL DE ADÃES</option></select></div>
+                <div class="field" id="mapsContainer" style="display:none;"><label>Link Google Maps</label><input type="text" id="mapsLink" placeholder="Cole o link aqui"></div>
+                
                 <div class="field" id="boxSetPro" style="display:none;"><label>Set Pró</label><input type="number" id="setPro" value="0"></div>
                 <div class="field" id="boxSetContra" style="display:none;"><label>Set Contra</label><input type="number" id="setContra" value="0"></div>
                 <div class="field" id="boxParciais" style="display:none; grid-column: 1 / -1;"><label>Parciais</label><input type="text" id="parciais"></div>
@@ -191,10 +191,39 @@
     function popularFiltros() { const tSel = document.getElementById('treinador').innerHTML; const eSel = document.getElementById('escalao').innerHTML; document.getElementById('filterTreinador').innerHTML = '<option value="">Treinadores</option>' + tSel; document.getElementById('filterEscalao').innerHTML = '<option value="">Escalões</option>' + eSel; }
 
     window.handleFilterLocalChange = () => { const local = document.getElementById('filterLocal').value; document.getElementById('filterPavilhaoContainer').style.display = (local === 'Casa') ? 'flex' : 'none'; render(); };
-    window.togglePavilionField = () => { const local = document.getElementById('casaFora').value; document.getElementById('pavilhaoContainer').innerHTML = (local === 'Casa') ? `<label>Pavilhão</label><select id="pavilhao"><option value="ES ALCAIDES FARIA">ES ALCAIDES FARIA</option><option value="MUNICIPAL DE ADÃES">MUNICIPAL DE ADÃES</option></select>` : `<label>Pavilhão</label><input type="text" id="pavilhao" placeholder="Nome pavilhão">`; };
+    
+    window.togglePavilionField = () => { 
+        const local = document.getElementById('casaFora').value; 
+        const pCont = document.getElementById('pavilhaoContainer');
+        const mCont = document.getElementById('mapsContainer');
+        if(local === 'Casa') {
+            pCont.innerHTML = `<label>Pavilhão</label><select id="pavilhao"><option value="ES ALCAIDES FARIA">ES ALCAIDES FARIA</option><option value="MUNICIPAL DE ADÃES">MUNICIPAL DE ADÃES</option></select>`;
+            mCont.style.display = 'none';
+        } else {
+            pCont.innerHTML = `<label>Pavilhão</label><input type="text" id="pavilhao" placeholder="Nome pavilhão">`;
+            mCont.style.display = 'flex';
+        }
+    };
 
     window.salvarJogo = async () => {
-        const dados = { treinador: document.getElementById('treinador').value, cor: document.getElementById('cor').value, casaFora: document.getElementById('casaFora').value, data: document.getElementById('data').value, hora: document.getElementById('hora').value, competicao: document.getElementById('competicao').value, jornada: document.getElementById('jornada').value, numJogo: document.getElementById('numJogo').value, escalao: document.getElementById('escalao').value, adversario: document.getElementById('adversario').value, pavilhao: document.getElementById('pavilhao').value, setPro: document.getElementById('setPro').value || 0, setContra: document.getElementById('setContra').value || 0, parciais: document.getElementById('parciais').value || '', finalizado: editId ? (jogosAtuais.find(x => x.id === editId).finalizado || false) : false };
+        const dados = { 
+            treinador: document.getElementById('treinador').value, 
+            cor: document.getElementById('cor').value, 
+            casaFora: document.getElementById('casaFora').value, 
+            data: document.getElementById('data').value, 
+            hora: document.getElementById('hora').value, 
+            competicao: document.getElementById('competicao').value, 
+            jornada: document.getElementById('jornada').value, 
+            numJogo: document.getElementById('numJogo').value, 
+            escalao: document.getElementById('escalao').value, 
+            adversario: document.getElementById('adversario').value, 
+            pavilhao: document.getElementById('pavilhao').value, 
+            mapsLink: document.getElementById('mapsLink')?.value || '',
+            setPro: document.getElementById('setPro').value || 0, 
+            setContra: document.getElementById('setContra').value || 0, 
+            parciais: document.getElementById('parciais').value || '', 
+            finalizado: editId ? (jogosAtuais.find(x => x.id === editId).finalizado || false) : false 
+        };
         try { if(editId) { await updateDoc(doc(db, "jogos", editId), dados); editId = null; } else { await addDoc(jogosCol, dados); } limpar(); document.getElementById('formAgendamento').classList.remove('active'); } catch (e) { alert("Erro ao salvar!"); }
     };
 
@@ -209,14 +238,14 @@
         lWeb.innerHTML = ''; lMob.innerHTML = ''; hWeb.innerHTML = ''; hMob.innerHTML = '';
         const agora = new Date(); let cC = 0, cF = 0, cFin = 0;
 
-        jogosAtuais.forEach(j => j.conflito = false);
         const ativos = jogosAtuais.filter(x => !x.finalizado);
         for (let a of ativos) {
+            a.conflito = false;
             if (a.casaFora !== 'Casa') continue;
             for (let b of ativos) {
                 if (a.id === b.id || b.casaFora !== 'Casa' || a.data !== b.data || a.pavilhao !== b.pavilhao) continue;
                 let diff = Math.abs(new Date(a.data+'T'+a.hora) - new Date(b.data+'T'+b.hora)) / 60000;
-                if (diff < 120) { a.conflito = true; b.conflito = true; }
+                if (diff < 120) { a.conflito = true; }
             }
         }
 
@@ -227,24 +256,25 @@
             const dt = j.data ? j.data.split('-').reverse().join('/') : '-';
             const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
             const bL = j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora';
+            const pinIcon = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link" title="Ver Localização">📍</a>` : '';
 
             if(!j.finalizado) {
                 if(j.casaFora === 'Casa') cC++; else cF++;
                 const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button style="background:var(--accent);color:white;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao}</td><td><span class="badge ${bL}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button style="background:var(--accent);color:white;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge ${bL}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 lWeb.appendChild(tr);
                 
                 const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'conflito-card' : ''}`;
-                card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${bL}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">📍 ${j.pavilhao}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito de Hora</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''} <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${bL}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">📍 ${j.pavilhao} ${pinIcon}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito de Hora</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''} <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
                 lMob.appendChild(card);
             } else {
                 cFin++;
                 const tr = document.createElement('tr'); tr.className = 'row-finalizado';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${isWin ? '<span class="win-icon">🏆</span>' : ''}</span></td><td>${dt}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${isWin ? '<span class="win-icon">🏆</span>' : ''}</span></td><td>${dt}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 hWeb.appendChild(tr);
                 
                 const card = document.createElement('div'); card.className = 'game-card card-finalizado-mobile';
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">${isWin ? '<span class="win-icon" style="margin-right:5px;">🏆</span>' : ''} Resultado: ${j.setPro} - ${j.setContra}</div><div class="info-item">📊 Parciais: ${j.parciais || '---'}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">${isWin ? '<span class="win-icon" style="margin-right:5px;">🏆</span>' : ''} Res: ${j.setPro} - ${j.setContra}</div><div class="info-item">📊 Parciais: ${j.parciais || '---'}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">📍 ${j.pavilhao} ${pinIcon}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
                 hMob.appendChild(card);
             }
         });
@@ -252,17 +282,31 @@
     };
 
     window.prepararEdicao = (id) => {
-        const j = jogosAtuais.find(x => x.id === id); document.getElementById('treinador').value = j.treinador; document.getElementById('cor').value = j.cor; document.getElementById('casaFora').value = j.casaFora; window.togglePavilionField(); 
-        document.getElementById('data').value = j.data; document.getElementById('hora').value = j.hora; document.getElementById('competicao').value = j.competicao||''; document.getElementById('jornada').value = j.jornada||''; document.getElementById('numJogo').value = j.numJogo||''; document.getElementById('escalao').value = j.escalao; document.getElementById('adversario').value = j.adversario; document.getElementById('pavilhao').value = j.pavilhao;
-        document.getElementById('boxSetPro').style.display = 'block'; document.getElementById('boxSetContra').style.display = 'block'; document.getElementById('boxParciais').style.display = 'block'; document.getElementById('setPro').value = j.setPro||0; document.getElementById('setContra').value = j.setContra||0; document.getElementById('parciais').value = j.parciais||'';
+        const j = jogosAtuais.find(x => x.id === id); 
+        document.getElementById('treinador').value = j.treinador; document.getElementById('cor').value = j.cor; 
+        document.getElementById('casaFora').value = j.casaFora; window.togglePavilionField(); 
+        document.getElementById('data').value = j.data; document.getElementById('hora').value = j.hora; 
+        document.getElementById('competicao').value = j.competicao||''; document.getElementById('jornada').value = j.jornada||''; 
+        document.getElementById('numJogo').value = j.numJogo||''; document.getElementById('escalao').value = j.escalao; 
+        document.getElementById('adversario').value = j.adversario; document.getElementById('pavilhao').value = j.pavilhao;
+        if(j.casaFora === 'Fora') document.getElementById('mapsLink').value = j.mapsLink || '';
+
+        document.getElementById('boxSetPro').style.display = 'block'; document.getElementById('boxSetContra').style.display = 'block'; 
+        document.getElementById('boxParciais').style.display = 'block'; document.getElementById('setPro').value = j.setPro||0; 
+        document.getElementById('setContra').value = j.setContra||0; document.getElementById('parciais').value = j.parciais||'';
+        
         const bS = document.getElementById('btnSalvar'); bS.innerText = "Atualizar"; bS.classList.add("btn-atualizar");
         document.getElementById('btnCancelar').style.display = "block";
         document.getElementById('formAgendamento').classList.add('active'); editId = id; window.scrollTo(0,0);
     };
 
     window.eliminarJogo = async (id) => { if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id)); };
+    
     window.limpar = () => { 
-        ['data','hora','competicao','jornada','numJogo','adversario','setPro', 'setContra', 'parciais'].forEach(id => document.getElementById(id).value = '');
+        ['data','hora','competicao','jornada','numJogo','adversario','setPro', 'setContra', 'parciais'].forEach(id => {
+            const el = document.getElementById(id); if(el) el.value = '';
+        });
+        const ml = document.getElementById('mapsLink'); if(ml) ml.value = '';
         const bS = document.getElementById('btnSalvar'); bS.innerText = "Agendar Jogo"; bS.classList.remove("btn-atualizar");
         document.getElementById('btnCancelar').style.display = "none";
         document.getElementById('formAgendamento').classList.remove('active');
