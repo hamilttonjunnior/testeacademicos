@@ -58,13 +58,12 @@
         .btn-marcar:hover { background: #2c3e50; }
         .btn-atualizar { background: #e67e22 !important; }
         
-        /* ESTILOS DE LISTA (WEB VS MOBILE) */
         .table-wrapper { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 20px; }
         table { width: 100%; border-collapse: collapse; min-width: 900px; }
         th { background: #f8fafc; padding: 12px 10px; text-align: left; border-bottom: 2px solid #e2e8f0; color: #64748b; font-size: 12px; text-transform: uppercase; }
         td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
 
-        /* MOBILE CARDS (Referência Lovable) */
+        /* MOBILE CARDS */
         #listaMobile, #listaHistoricoMobile { display: none; flex-direction: column; gap: 15px; }
         .game-card { background: white; border-radius: 15px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .game-card.conflito-card { background: #fff5f5; border-color: #feb2b2; border-left: 6px solid var(--error); }
@@ -82,6 +81,8 @@
         .row-finalizado td { background-color: #cbd5e0 !important; color: #475569 !important; }
         .win-icon { color: #f1c40f; margin-left: 5px; font-size: 16px; }
         .error-tag { color: var(--error); font-size: 10px; font-weight: 800; }
+        .secao-titulo { margin: 30px 0 15px 0; color: var(--primary); display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; }
+        .secao-titulo::before { content: ""; width: 5px; height: 20px; background: var(--accent); border-radius: 3px; }
 
         @media screen and (max-width: 1024px) {
             .table-wrapper { display: none; }
@@ -227,7 +228,6 @@
         listaWeb.innerHTML = ''; listaMobile.innerHTML = ''; histWeb.innerHTML = ''; histMobile.innerHTML = '';
         const agora = new Date(); let cC = 0, cF = 0, cFin = 0;
 
-        // LÓGICA DE CONFLITO (2 HORAS NO MESMO PAVILHÃO)
         jogosAtuais.forEach(j => j.conflito = false);
         for (let i = 0; i < jogosAtuais.length; i++) {
             for (let j = i + 1; j < jogosAtuais.length; j++) {
@@ -244,16 +244,17 @@
 
             const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
             const dt = j.data ? j.data.split('-').reverse().join('/') : '-';
+            const badgeLocal = j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora';
 
             if(!j.finalizado) {
                 if(j.casaFora === 'Casa') cC++; else cF++;
                 // WEB
                 const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button style="background:var(--accent); color:white; border:none; padding:4px; border-radius:4px; font-size:10px; cursor:pointer;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao}</td><td><span class="badge ${j.casaFora==='Casa'?'badge-casa':'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button style="background:var(--accent); color:white; border:none; padding:4px; border-radius:4px; font-size:10px; cursor:pointer;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao}</td><td><span class="badge ${badgeLocal}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 listaWeb.appendChild(tr);
                 // MOBILE
                 const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'conflito-card' : ''}`;
-                card.innerHTML = `<div class="card-header"><span class="game-title">${j.conflito ? '⚠️ ' : ''}${j.adversario}</span><span class="badge ${j.casaFora==='Casa'?'badge-casa':'badge-fora'}">Agendado</span></div><div class="info-item">📅 ${dt} às ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">📍 ${j.pavilhao}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent); color:white; border:none;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</div>`;
+                card.innerHTML = `<div class="card-header"><span class="game-title">${j.conflito ? '⚠️ ' : ''}${j.adversario}</span><span class="badge ${badgeLocal}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} às ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">📍 ${j.pavilhao}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito de Hora</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent); color:white; border:none;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</div>`;
                 listaMobile.appendChild(card);
             } else {
                 cFin++;
