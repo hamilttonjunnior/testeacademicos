@@ -53,7 +53,7 @@
         .table-wrapper { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 20px; }
         .historico-wrapper { background: var(--finished-bg) !important; }
         table { width: 100%; border-collapse: collapse; min-width: 900px; }
-        th { background: #f8fafc; padding: 12px 10px; text-align: left; color: #64748b; font-size: 11px; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; }
+        th { background: #f8fafc; padding: 12px 10px; text-align: left; color: #64748b; font-size: 12px; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; }
         td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
         .row-finalizado td { background-color: var(--finished-bg) !important; color: var(--finished-text) !important; }
 
@@ -65,7 +65,7 @@
         .card-actions { grid-column: 1 / -1; display: flex; gap: 10px; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
         .btn-mobile { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e0; background: white; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 12px; }
 
-        .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
         .badge-casa { background: #d0ebff; color: #1971c2; }
         .badge-fora { background: #ffe3e3; color: #c92a2a; }
         .badge-finalizado { background: #94a3b8; color: white; }
@@ -73,7 +73,6 @@
         .conflito-card { border-left: 6px solid var(--error); background: #fff5f5; }
         .win-icon { color: #f1c40f; }
         
-        /* Estilo do ícone de mapa */
         .maps-link { text-decoration: none; font-size: 18px; cursor: pointer; margin-left: 5px; }
 
         @media screen and (min-width: 1025px) {
@@ -105,7 +104,7 @@
         <header>
             <div style="display: flex; align-items: center;">
                 <img src="academicos.png" alt="Logo" class="header-logo">
-                <h2 style="margin:0; color: var(--primary);">FC Académicos</h2>
+                <h2 style="margin:0; color: var(--primary); font-size: 1.1rem;">FC Académicos</h2>
             </div>
             <button onclick="location.reload()" style="padding: 8px 12px; border-radius: 8px; cursor:pointer;">Sair</button>
         </header>
@@ -240,9 +239,9 @@
         lWeb.innerHTML = ''; lMob.innerHTML = ''; hWeb.innerHTML = ''; hMob.innerHTML = '';
         const agora = new Date(); let cC = 0, cF = 0, cFin = 0;
 
+        jogosAtuais.forEach(j => j.conflito = false);
         const ativos = jogosAtuais.filter(x => !x.finalizado);
         for (let a of ativos) {
-            a.conflito = false;
             if (a.casaFora !== 'Casa') continue;
             for (let b of ativos) {
                 if (a.id === b.id || b.casaFora !== 'Casa' || a.data !== b.data || a.pavilhao !== b.pavilhao) continue;
@@ -258,7 +257,7 @@
             const dt = j.data ? j.data.split('-').reverse().join('/') : '-';
             const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
             const bL = j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora';
-            const pinIcon = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link" title="Ver Rota no Mapa">🗺️</a>` : '';
+            const pinIcon = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link" title="Ver Localização">📍</a>` : '';
 
             if(!j.finalizado) {
                 if(j.casaFora === 'Casa') cC++; else cF++;
