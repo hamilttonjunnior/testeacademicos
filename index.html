@@ -266,7 +266,7 @@
                 lWeb.appendChild(tr);
                 
                 const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'conflito-card' : ''}`;
-                card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${bL}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">📍 ${j.pavilhao} ${pinIcon}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito de Hora</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''} <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${bL}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito de Hora</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''} <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
                 lMob.appendChild(card);
             } else {
                 cFin++;
@@ -275,7 +275,7 @@
                 hWeb.appendChild(tr);
                 
                 const card = document.createElement('div'); card.className = 'game-card card-finalizado-mobile';
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">${isWin ? '<span class="win-icon" style="margin-right:5px;">🏆</span>' : ''} Res: ${j.setPro} - ${j.setContra}</div><div class="info-item">📊 Parciais: ${j.parciais || '---'}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">📍 ${j.pavilhao} ${pinIcon}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">${isWin ? '<span class="win-icon" style="margin-right:5px;">🏆</span>' : ''} Res: ${j.setPro} - ${j.setContra}</div><div class="info-item">📊 Parciais: ${j.parciais || '---'}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
                 hMob.appendChild(card);
             }
         });
