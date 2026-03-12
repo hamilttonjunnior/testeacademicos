@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acadêmicos - Gestão de Jogos</title>
     <style>
         :root { 
@@ -15,7 +15,7 @@
             --finished-text: #475569;
         }
         
-        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; overflow-x: hidden; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         
         #loginScreen { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 320px; }
@@ -30,30 +30,14 @@
         .header-logo { max-height: 45px; margin-right: 15px; }
 
         .collapsible-trigger {
-            width: 100%;
-            padding: 15px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: left;
-            font-weight: 800;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
+            width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px;
+            cursor: pointer; text-align: left; font-weight: 800; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
             transition: background 0.3s;
         }
         .collapsible-trigger:hover { background: #2c3e50; }
         
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-out;
-            margin-bottom: 0;
-        }
-        .collapsible-content.active { max-height: 2000px; margin-bottom: 20px; }
+        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; margin-bottom: 0; }
+        .collapsible-content.active { max-height: 1200px; margin-bottom: 20px; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
         .stat-card { background: #ffffff; padding: 12px; border-radius: 10px; border-left: 5px solid var(--accent); text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
@@ -66,63 +50,58 @@
         input, select { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; width: 100%; box-sizing: border-box; }
         
         .btn-marcar { 
-            grid-column: 1 / -1; 
-            padding: 15px; 
-            background: var(--primary); 
-            color: white; 
-            border: none; 
-            border-radius: 8px; 
-            font-weight: 800; 
-            cursor: pointer; 
-            text-transform: uppercase;
-            transition: background 0.3s, transform 0.1s;
+            grid-column: 1 / -1; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; 
+            font-weight: 800; cursor: pointer; text-transform: uppercase; transition: background 0.3s, transform 0.1s;
         }
         .btn-marcar:hover { background: #2c3e50; }
         .btn-atualizar { background: #e67e22 !important; }
         
-        .table-wrapper { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px; overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; }
+        /* ESTILO WEB (TABELA) */
+        .table-wrapper { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
         th { background: #f8fafc; padding: 12px 10px; text-align: left; border-bottom: 2px solid #e2e8f0; color: #64748b; font-size: 12px; text-transform: uppercase; }
         td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
 
         .historico-wrapper { background: #d1d5db !important; }
-        .row-finalizado td { background-color: #cbd5e0 !important; color: #475569 !important; }
+        .row-finalizado td { background-color: #cbd5e0 !important; color: #475569 !important; border-bottom-color: #94a3b8; }
         .row-conflito td { background-color: #ffe3e3 !important; color: #c92a2a !important; font-weight: 600; }
         .row-conflito { border-left: 8px solid var(--error) !important; }
         
         .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
         .badge-casa { background: #d0ebff; color: #1971c2; }
         .badge-fora { background: #ffe3e3; color: #c92a2a; }
+        .badge-finalizado { background: #94a3b8; color: white; }
         
-        .btn-action { background: #ffffff; border: 1px solid #e2e8f0; padding: 6px 10px; border-radius: 6px; cursor: pointer; margin-bottom: 2px; }
+        .btn-action { background: #ffffff; border: 1px solid #e2e8f0; padding: 4px 8px; border-radius: 6px; cursor: pointer; }
         .btn-finalizar { background: var(--accent); color: white; border: none; padding: 6px 10px; border-radius: 6px; font-size: 10px; font-weight: bold; cursor: pointer; }
-
         .resultado-tag { font-weight: 800; color: var(--primary); font-size: 14px; display: block; margin-top: 4px; }
         .win-icon { color: #f1c40f; margin-left: 5px; font-size: 16px; }
-
         .secao-titulo { margin: 30px 0 15px 0; color: var(--primary); display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 800; }
         .secao-titulo::before { content: ""; width: 5px; height: 20px; background: var(--accent); border-radius: 3px; }
+        .error-tag { color: var(--error); font-size: 10px; font-weight: 800; margin-top: 4px; padding: 2px 5px; background: #ffffff; border-radius: 4px; border: 1px solid var(--error); }
 
-        /* RESPONSIVIDADE PARA CELULAR E TABLET - TELA ÚNICA SEM SCROLL LATERAL */
+        /* NOVO LAYOUT DE CARDS PARA MOBILE (Referência Lovable) */
+        #listaMobile, #listaHistoricoMobile { display: none; flex-direction: column; gap: 15px; }
+
         @media screen and (max-width: 1024px) {
-            /* No Mobile/Tablet, transformamos a tabela em blocos (cards) */
-            table, thead, tbody, th, td, tr { display: block; width: 100%; }
-            thead tr { position: absolute; top: -9999px; left: -9999px; } /* Esconde o cabeçalho */
-            tr { border: 1px solid #ccc; margin-bottom: 10px; border-radius: 8px; background: #fff; position: relative; padding-left: 40%; }
-            td { border: none; border-bottom: 1px solid #eee; position: relative; padding: 10px 5px !important; text-align: right; min-height: 35px; }
-            td:before { 
-                position: absolute; top: 10px; left: 10px; width: 35%; padding-right: 10px; 
-                white-space: nowrap; text-align: left; font-weight: bold; color: #64748b; font-size: 11px;
-                content: attr(data-label); 
+            .table-wrapper { display: none; } /* Esconde a tabela no Mobile/Tablet */
+            #listaMobile, #listaHistoricoMobile { display: flex; } /* Mostra os cards */
+            
+            .game-card {
+                background: white; border-radius: 15px; padding: 15px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #e2e8f0;
+                display: grid; grid-template-columns: 1fr 1fr; gap: 10px; position: relative;
             }
-            td:last-child { border-bottom: 0; text-align: center; padding-left: 5px !important; }
-            .row-conflito { border-left: 10px solid var(--error) !important; padding-left: 35%; }
-        }
-
-        @media screen and (max-width: 600px) {
-            .container { padding: 10px; }
+            .game-card.conflito-card { background: #fff5f5; border-color: #feb2b2; }
+            .game-card .card-header { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 8px; margin-bottom: 5px; }
+            .game-card .game-title { font-weight: 800; font-size: 16px; color: var(--primary); display: flex; align-items: center; gap: 5px; }
+            .game-card .info-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #4a5568; }
+            .game-card .card-actions { grid-column: 1 / -1; display: flex; gap: 10px; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
+            .btn-edit-mobile { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e0; background: white; font-weight: 600; display: flex; justify-content: center; align-items: center; gap: 5px; }
+            
+            .form-grid, .filter-grid { grid-template-columns: 1fr; }
             .stats-grid { grid-template-columns: 1fr 1fr; }
-            header { flex-direction: column; text-align: center; }
+            header { flex-direction: column; gap: 10px; text-align: center; }
         }
     </style>
 </head>
@@ -142,9 +121,9 @@
         <header>
             <div style="display: flex; align-items: center;">
                 <img src="academicos.png" alt="Logo" class="header-logo">
-                <h2 style="margin:0; color: var(--primary); font-size: 1.1rem;">FC Académicos - Gestão</h2>
+                <h2 style="margin:0; color: var(--primary);">FC Académicos - Gestão</h2>
             </div>
-            <button onclick="location.reload()" style="cursor:pointer; padding: 6px 12px; border-radius: 8px; border: 1px solid #cbd5e0; background: white; font-weight: 600; font-size: 0.7rem;">Sair</button>
+            <button onclick="location.reload()" style="cursor:pointer; padding: 8px; border-radius: 8px; background: white; font-weight: 600;">Sair</button>
         </header>
 
         <div class="stats-grid">
@@ -236,18 +215,20 @@
             </div>
             <div class="field"><label>🔍 Local</label><select id="filterLocal" onchange="handleFilterLocalChange()"><option value="">Todos</option><option value="Casa">Casa</option><option value="Fora">Fora</option></select></div>
             <div class="field" id="filterPavilhaoContainer" style="display:none;"><label>🔍 Pavilhão</label><select id="filterPavilhao" onchange="render()"><option value="">Todos</option><option value="ES ALCAIDES FARIA">ES ALCAIDES FARIA</option><option value="MUNICIPAL DE ADÃES">MUNICIPAL DE ADÃES</option></select></div>
-            <div style="display: flex; align-items: flex-end;"><button onclick="window.print()" style="padding: 10px 15px; cursor:pointer; background: #55acee; color: white; border:none; border-radius: 8px; font-weight:bold; font-size: 0.7rem;">🖨️ PDF</button></div>
+            <div style="display: flex; align-items: flex-end;"><button onclick="window.print()" style="padding: 10px 15px; cursor:pointer; background: #55acee; color: white; border:none; border-radius: 8px; font-weight:bold;">🖨️ PDF</button></div>
         </div>
 
         <h3 class="secao-titulo">Próximos Jogos</h3>
-        <div class="table-wrapper"><table id="lista"><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr></thead><tbody></tbody></table></div>
+        <div class="table-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr></thead><tbody id="lista"></tbody></table></div>
+        <div id="listaMobile"></div>
 
         <button class="collapsible-trigger" onclick="toggleSection('historicoContainer')" style="background: var(--finished-text); margin-top: 20px;">
             <span>📜 HISTÓRICO DE JOGOS</span>
             <span id="historicoContainerIcon">▼</span>
         </button>
         <div id="historicoContainer" class="collapsible-content">
-            <div class="table-wrapper historico-wrapper"><table id="listaHistorico"></table></div>
+            <div class="table-wrapper historico-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário/Res.</th><th>Data/Hora</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistorico"></tbody></table></div>
+            <div id="listaHistoricoMobile"></div>
         </div>
     </div>
 </div>
@@ -298,9 +279,13 @@
     function carregarJogos() { const q = query(jogosCol, orderBy("data"), orderBy("hora")); onSnapshot(q, (snapshot) => { jogosAtuais = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); render(); }); }
 
     window.render = () => {
-        const lista = document.getElementById('lista').querySelector('tbody'); const listaHistorico = document.getElementById('listaHistorico');
+        const lista = document.getElementById('lista'); const listaHistorico = document.getElementById('listaHistorico');
+        const listaMobile = document.getElementById('listaMobile'); const listaHistoricoMobile = document.getElementById('listaHistoricoMobile');
+        
         const fTreinador = document.getElementById('filterTreinador').value; const fEscalao = document.getElementById('filterEscalao').value; const fLocal = document.getElementById('filterLocal').value; const fData = document.getElementById('filterData').value; const fMes = document.getElementById('filterMes').value; const fPavilhao = document.getElementById('filterPavilhao').value;
-        lista.innerHTML = ''; listaHistorico.innerHTML = ''; const agora = new Date(); let cCasa = 0, cFora = 0, cFim = 0;
+        
+        lista.innerHTML = ''; listaHistorico.innerHTML = ''; listaMobile.innerHTML = ''; listaHistoricoMobile.innerHTML = '';
+        const agora = new Date(); let cCasa = 0, cFora = 0, cFim = 0;
         
         jogosAtuais.forEach(j => j.conflito = false);
         for (let i = 0; i < jogosAtuais.length; i++) {
@@ -313,24 +298,35 @@
             }
         }
         
-        const ativos = jogosAtuais.filter(j => !j.finalizado);
-        const finalizados = jogosAtuais.filter(j => j.finalizado).reverse();
+        ativos = jogosAtuais.filter(j => !j.finalizado);
+        finalizados = jogosAtuais.filter(j => j.finalizado).reverse();
         
         ativos.forEach(j => {
             if(j.casaFora === 'Casa') cCasa++; else cFora++;
             if(fTreinador && j.treinador !== fTreinador) return; if(fEscalao && j.escalao !== fEscalao) return; if(fLocal && j.casaFora !== fLocal) return; if(fData && j.data !== fData) return; if(fMes && j.data && j.data.split('-')[1] !== fMes) return; if(fLocal === 'Casa' && fPavilhao && j.pavilhao !== fPavilhao) return;
+            
+            // WEB ROW
             const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito'; 
             const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
-            tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td data-label="Treinador" style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td data-label="Comp.">${j.competicao || '-'}</td><td data-label="Jor.">${j.jornada || '-'}</td><td data-label="Nº">${j.numJogo || '-'}</td><td data-label="Escalão">${j.escalao}</td><td data-label="Adversário">${j.adversario}</td><td data-label="Data/Hora">${j.data ? j.data.split('-').reverse().join('/') : '-'} às ${j.hora || '--:--'}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button class="btn-finalizar" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td data-label="Pavilhão">${j.pavilhao || '-'}</td><td data-label="Tipo"><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td data-label="Ações"><button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button><button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+            tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao || '-'}</td><td>${j.jornada || '-'}</td><td>${j.numJogo || '-'}</td><td>${j.escalao}</td><td>${j.adversario}</td><td>${j.data ? j.data.split('-').reverse().join('/') : '-'} às ${j.hora || '--:--'}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button class="btn-finalizar" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao || '-'}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button><button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
             lista.appendChild(tr);
+
+            // MOBILE CARD
+            const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'conflito-card' : ''}`;
+            card.innerHTML = `<div class="card-header"><span class="game-title">${j.conflito ? '⚠️ ' : ''}${j.adversario || 'Sem Adversário'}</span><span class="badge badge-casa">Agendado</span></div><div class="info-item">📅 ${j.data ? j.data.split('-').reverse().join('/') : '-'} às ${j.hora || '--:--'}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">📍 ${j.casaFora} - ${j.pavilhao || '-'}</div><div class="card-actions"><button class="btn-edit-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-edit-mobile" style="background:var(--accent); color:white; border:none;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</div>`;
+            listaMobile.appendChild(card);
         });
         
         finalizados.forEach(j => {
             cFim++; if(fTreinador && j.treinador !== fTreinador) return; if(fEscalao && j.escalao !== fEscalao) return; if(fLocal && j.casaFora !== fLocal) return; if(fData && j.data !== fData) return; if(fMes && j.data && j.data.split('-')[1] !== fMes) return; if(fLocal === 'Casa' && fPavilhao && j.pavilhao !== fPavilhao) return;
             const tr = document.createElement('tr'); tr.className = 'row-finalizado';
             const isWin = parseInt(j.setPro) > parseInt(j.setContra);
-            tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.6;"></td><td data-label="Treinador" style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td data-label="Comp.">${j.competicao || '-'}</td><td data-label="Jor.">${j.jornada || '-'}</td><td data-label="Nº">${j.numJogo || '-'}</td><td data-label="Escalão">${j.escalao}</td><td data-label="Adversário/Res.">${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${isWin ? '<span class="win-icon">🏆</span>' : ''}</span><span class="parciais-tag">(${j.parciais || '---'})</span></td><td data-label="Data/Hora">${j.data ? j.data.split('-').reverse().join('/') : '-'}</td><td data-label="Pavilhão">${j.pavilhao || '-'}</td><td data-label="Status"><span class="badge badge-finalizado">Fim</span></td><td data-label="Ações"><button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button><button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+            tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.6;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao || '-'}</td><td>${j.jornada || '-'}</td><td>${j.numJogo || '-'}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${isWin ? '<span class="win-icon">🏆</span>' : ''}</span><span class="parciais-tag">(${j.parciais || '---'})</span></td><td>${j.data ? j.data.split('-').reverse().join('/') : '-'}</td><td>${j.pavilhao || '-'}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button class="btn-action" onclick="prepararEdicao('${j.id}')">✏️</button><button class="btn-action" onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
             listaHistorico.appendChild(tr);
+
+            const card = document.createElement('div'); card.className = `game-card`; card.style.opacity = "0.7";
+            card.innerHTML = `<div class="card-header"><span class="game-title">${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">📅 ${j.data ? j.data.split('-').reverse().join('/') : '-'}</div><div class="info-item">🏆 Resultado: ${j.setPro} - ${j.setContra}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-edit-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button></div>`;
+            listaHistoricoMobile.appendChild(card);
         });
         document.getElementById('statTotal').innerText = ativos.length + cFim; document.getElementById('statCasa').innerText = cCasa; document.getElementById('statFora').innerText = cFora; document.getElementById('statFim').innerText = cFim;
     };
