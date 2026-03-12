@@ -14,6 +14,7 @@
         
         #loginScreen { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.3); width: 320px; }
+        .login-logo { max-width: 150px; margin-bottom: 20px; display: block; margin-left: auto; margin-right: auto; }
         .login-box input, .login-box button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; box-sizing: border-box; }
         .login-box button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; }
         
@@ -43,7 +44,7 @@
         .btn-marcar { grid-column: 1 / -1; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
         .btn-atualizar { background: #e67e22 !important; }
         
-        /* TABELA WEB COM FUNDO CINZA NO HISTÓRICO */
+        /* WEB TABLE */
         .table-wrapper { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 20px; }
         .historico-wrapper { background: var(--finished-bg) !important; }
         table { width: 100%; border-collapse: collapse; min-width: 900px; }
@@ -51,7 +52,7 @@
         td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
         .row-finalizado td { background-color: var(--finished-bg) !important; color: var(--finished-text) !important; }
 
-        /* MOBILE CARDS ESCUROS PARA FINALIZADOS */
+        /* MOBILE CARDS */
         .mobile-list { display: none; flex-direction: column; gap: 12px; }
         .game-card { background: white; border-radius: 15px; padding: 15px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .card-finalizado-mobile { background: #d1d5db !important; border-color: #94a3b8 !important; }
@@ -145,8 +146,8 @@
         </div>
 
         <h3 class="secao-titulo">Próximos Jogos</h3>
-        <div class="table-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr></thead><tbody id="listaWeb"></tbody></table></div>
-        <div id="listaMobile" class="mobile-list"></div>
+        <div class="table-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Local</th><th>Ações</th></tr></thead><tbody id="listaWeb"></tbody></table></div>
+        <div id="listaMobile"></div>
 
         <button class="collapsible-trigger" onclick="toggleSection('historicoSection')" style="background: var(--finished-text); margin-top: 20px;">
             <span>📜 HISTÓRICO DE JOGOS</span> <span id="historicoSectionIcon">▼</span>
@@ -210,23 +211,19 @@
 
             if(!j.finalizado) {
                 if(j.casaFora==='Casa') cC++; else cF++;
-                // WEB
                 const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito';
                 tr.innerHTML = `<td style="background:${j.cor};width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dataFormat} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button style="background:var(--accent);color:white;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao}</td><td><span class="badge ${badgeLocal}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 lWeb.appendChild(tr);
-                // MOBILE
                 const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'conflito-card' : ''}`;
-                card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${badgeLocal}">${j.casaFora}</span></div><div class="info-item">📅 ${dataFormat} às ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">📍 ${j.pavilhao}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito de Hora</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${badgeLocal}">${j.casaFora}</span></div><div class="info-item">📅 ${dataFormat} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">📍 ${j.pavilhao}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito de Hora</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</div>`;
                 lMob.appendChild(card);
             } else {
                 cFin++;
-                // WEB
                 const tr = document.createElement('tr'); tr.className = 'row-finalizado';
                 tr.innerHTML = `<td style="background:${j.cor};width:8px;opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${isWin ? '<span class="win-icon">🏆</span>' : ''}</span></td><td>${dataFormat}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button></td>`;
                 hWeb.appendChild(tr);
-                // MOBILE
                 const card = document.createElement('div'); card.className = 'game-card card-finalizado-mobile';
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">🏆 Resultado: ${j.setPro} - ${j.setContra} ${isWin?'🏆':''}</div><div class="info-item">📊 Parciais: ${j.parciais || '---'}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button></div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">${isWin ? '<span class="win-icon" style="margin-left:0; margin-right:5px;">🏆</span>' : ''} Resultado: ${j.setPro} - ${j.setContra}</div><div class="info-item">📊 Parciais: ${j.parciais || '---'}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button></div>`;
                 hMob.appendChild(card);
             }
         });
