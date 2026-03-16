@@ -9,62 +9,42 @@
             --primary: #1a2a3a; --accent: #3498db; --error: #e74c3c; 
             --success: #27ae60; --bg: #cbd5e0; --finished-bg: #cbd5e0; --finished-text: #475569;
         }
-        
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
-        
         #loginScreen { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         .login-box input, .login-box button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; box-sizing: border-box; }
         .login-box button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; }
-        
         .main-content { width: 98%; max-width: 1400px; margin: 15px auto; display: none; }
         .container { background: #f1f3f5; padding: 20px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); margin-bottom: 30px; }
-        
         header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #dee2e6; padding-bottom: 10px; }
         .header-logo { max-height: 45px; margin-right: 15px; }
-
-        .collapsible-trigger {
-            width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px;
-            cursor: pointer; text-align: left; font-weight: 800; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
-        }
+        .collapsible-trigger { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer; text-align: left; font-weight: 800; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
         .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; margin-bottom: 0; }
         .collapsible-content.active { max-height: none; margin-bottom: 20px; }
-
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
         .stat-card { background: #ffffff; padding: 12px; border-radius: 10px; border-left: 5px solid var(--accent); text-align: center; }
         .stat-card p { margin: 5px 0 0; font-size: 20px; font-weight: 800; color: var(--primary); }
-        
         .form-grid, .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
         .filter-grid { background: #eef2f7; margin-bottom: 20px; }
         .field { display: flex; flex-direction: column; gap: 4px; position: relative; }
         .field label { font-size: 11px; font-weight: bold; color: #475569; }
         input, select { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; width: 100%; box-sizing: border-box; }
-        
-        /* DROPDOWN CUSTOM */
         .custom-select { position: relative; width: 100%; }
-        .select-box { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; min-height: 38px; box-sizing: border-box; }
-        .options-list { 
-            position: absolute; top: 105%; left: 0; width: 100%; background: white; border: 1px solid #cbd5e0; 
-            border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 100; display: none; max-height: 250px; overflow-y: auto; 
-        }
+        .select-box { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; min-height: 38px; }
+        .options-list { position: absolute; top: 105%; left: 0; width: 100%; background: white; border: 1px solid #cbd5e0; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 100; display: none; max-height: 250px; overflow-y: auto; }
         .options-list.show { display: block; }
         .option-item { padding: 8px 12px; display: flex; align-items: center; gap: 10px; font-size: 12px; cursor: pointer; }
         .option-item:hover { background: #f1f5f9; }
-        .option-item input { width: auto; margin: 0; }
-
         .btn-group { grid-column: 1 / -1; display: flex; gap: 10px; }
-        .btn-marcar { flex: 2; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: background 0.3s; }
-        .btn-marcar:hover { background: #2c3e50; }
+        .btn-marcar { flex: 2; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
         .btn-cancelar { flex: 1; padding: 15px; background: #94a3b8; color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; display: none; }
         .btn-atualizar { background: #e67e22 !important; }
-        
         .table-wrapper { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 20px; }
         .historico-wrapper { background: var(--finished-bg) !important; }
-        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
         th { background: #f8fafc; padding: 12px 10px; text-align: left; color: #64748b; font-size: 12px; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; }
         td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
         .row-finalizado td { background-color: var(--finished-bg) !important; color: var(--finished-text) !important; }
-
         .mobile-list { display: none; flex-direction: column; gap: 12px; }
         .game-card { background: white; border-radius: 15px; padding: 15px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .card-finalizado-mobile { background: #d1d5db !important; opacity: 0.9; }
@@ -72,24 +52,18 @@
         .info-item { font-size: 12px; color: #4a5568; display: flex; align-items: center; gap: 8px; }
         .card-actions { grid-column: 1 / -1; display: flex; gap: 10px; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
         .btn-mobile { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e0; background: white; font-weight: 600; font-size: 12px; display: flex; justify-content: center; align-items: center; }
-
         .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
         .badge-casa { background: #d0ebff; color: #1971c2; }
         .badge-fora { background: #ffe3e3; color: #c92a2a; }
         .badge-finalizado { background: #94a3b8; color: white; }
-        .row-conflito { border-left: 8px solid var(--error) !important; background-color: #ffe3e3 !important; }
-        .conflito-card { border-left: 6px solid var(--error); background: #fff5f5; }
-        .win-icon { color: #f1c40f; }
-        .maps-link { text-decoration: none; font-size: 18px; cursor: pointer; margin-left: 5px; }
+        .row-conflito { border-left: 8px solid var(--error) !important; background-color: #fff5f5 !important; }
+        .conflito-card { border-left: 6px solid var(--error) !important; background: #fff5f5; }
         .resultado-tag { font-weight: 800; color: var(--primary); font-size: 14px; }
-
+        .parciais-tag { font-size: 11px; color: #64748b; font-style: italic; }
+        .maps-link { text-decoration: none; font-size: 18px; }
+        .error-tag { color: var(--error); font-size: 10px; font-weight: bold; }
         @media screen and (min-width: 1025px) { .table-wrapper { display: block !important; } .mobile-list { display: none !important; } }
-        @media screen and (max-width: 1024px) { 
-            .table-wrapper { display: none !important; } .mobile-list { display: flex !important; }
-            .form-grid, .filter-grid { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            header { flex-direction: column; text-align: center; gap: 10px; }
-        }
+        @media screen and (max-width: 1024px) { .table-wrapper { display: none !important; } .mobile-list { display: flex !important; } .form-grid, .filter-grid { grid-template-columns: 1fr; } .stats-grid { grid-template-columns: 1fr 1fr; } header { flex-direction: column; text-align: center; gap: 10px; } }
     </style>
 </head>
 <body>
@@ -147,7 +121,7 @@
                 
                 <div class="field" id="boxSetPro" style="display:none;"><label>Set Pró</label><input type="number" id="setPro" value="0"></div>
                 <div class="field" id="boxSetContra" style="display:none;"><label>Set Contra</label><input type="number" id="setContra" value="0"></div>
-                <div class="field" id="boxParciais" style="display:none; grid-column: 1 / -1;"><label>Parciais</label><input type="text" id="parciais"></div>
+                <div class="field" id="boxParciais" style="display:none; grid-column: 1 / -1;"><label>Parciais</label><input type="text" id="parciais" placeholder="Ex: 25-10, 25-15, 25-20"></div>
 
                 <div class="btn-group">
                     <button class="btn-marcar" id="btnSalvar" onclick="salvarJogo()">Agendar Jogo</button>
@@ -184,14 +158,14 @@
         </div>
 
         <h3 class="secao-titulo">Próximos Jogos</h3>
-        <div class="table-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr></thead><tbody id="listaWeb"></tbody></table></div>
+        <div class="table-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Local</th><th>Ações</th></tr></thead><tbody id="listaWeb"></tbody></table></div>
         <div id="listaMobile" class="mobile-list"></div>
 
         <button class="collapsible-trigger" onclick="toggleSection('historicoContainer')" style="background: var(--finished-text); margin-top: 20px;">
             <span>📜 HISTÓRICO DE JOGOS</span> <span id="historicoContainerIcon">▼</span>
         </button>
         <div id="historicoContainer" class="collapsible-content">
-            <div class="table-wrapper historico-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Escalão</th><th>Adversário/Res.</th><th>Data/Hora</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistoricoWeb"></tbody></table></div>
+            <div class="table-wrapper historico-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Escalão</th><th>Adversário/Resultado</th><th>Data</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistoricoWeb"></tbody></table></div>
             <div id="listaHistoricoMobile" class="mobile-list"></div>
         </div>
     </div>
@@ -206,11 +180,7 @@
     let jogosAtuais = []; let editId = null;
 
     window.toggleSection = (id) => { const c = document.getElementById(id); const icon = document.getElementById(id + 'Icon'); c.classList.toggle('active'); icon.innerText = c.classList.contains('active') ? '▲' : '▼'; };
-    
-    window.toggleDrop = (id) => { 
-        document.querySelectorAll('.options-list').forEach(el => { if(el.id !== id) el.classList.remove('show'); });
-        document.getElementById(id).classList.toggle('show'); 
-    };
+    window.toggleDrop = (id) => { document.querySelectorAll('.options-list').forEach(el => { if(el.id !== id) el.classList.remove('show'); }); document.getElementById(id).classList.toggle('show'); };
 
     window.handleFilterLocalChange = () => {
         const local = document.getElementById('filterLocal').value;
@@ -242,10 +212,10 @@
 
     window.salvarJogo = async () => {
         const dados = { treinador: document.getElementById('treinador').value, cor: document.getElementById('cor').value, casaFora: document.getElementById('casaFora').value, data: document.getElementById('data').value, hora: document.getElementById('hora').value, competicao: document.getElementById('competicao').value, jornada: document.getElementById('jornada').value, numJogo: document.getElementById('numJogo').value, escalao: document.getElementById('escalao').value, adversario: document.getElementById('adversario').value, pavilhao: document.getElementById('pavilhao').value, mapsLink: document.getElementById('mapsLink')?.value || '', setPro: document.getElementById('setPro').value || 0, setContra: document.getElementById('setContra').value || 0, parciais: document.getElementById('parciais').value || '', finalizado: editId ? (jogosAtuais.find(x => x.id === editId).finalizado || false) : false };
-        try { if(editId) { await updateDoc(doc(db, "jogos", editId), dados); editId = null; } else { await addDoc(jogosCol, dados); } limpar(); } catch (e) { alert("Erro!"); }
+        try { if(editId) { await updateDoc(doc(db, "jogos", editId), dados); editId = null; } else { await addDoc(jogosCol, dados); } limpar(); } catch (e) { alert("Erro ao salvar!"); }
     };
 
-    window.finalizarJogoPrompt = (id) => { if (prompt("Senha:") === "academicos2026") { const sp = prompt("Sets Pró:", "0"), sc = prompt("Sets Contra:", "0"), pa = prompt("Parciais:", ""); updateDoc(doc(db, "jogos", id), { finalizado: true, setPro: sp, setContra: sc, parciais: pa }); } };
+    window.finalizarJogoPrompt = (id) => { if (prompt("Senha:") === "academicos2026") { const sp = prompt("Sets Pró:", "0"), sc = prompt("Sets Contra:", "0"), pa = prompt("Parciais (ex: 25-10, 25-12...):", ""); updateDoc(doc(db, "jogos", id), { finalizado: true, setPro: sp, setContra: sc, parciais: pa }); } };
     
     function carregarJogos() { onSnapshot(query(jogosCol, orderBy("data"), orderBy("hora")), (snapshot) => { jogosAtuais = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); render(); }); }
 
@@ -278,24 +248,26 @@
 
             const isWin = parseInt(j.setPro) > parseInt(j.setContra);
             const dt = j.data ? j.data.split('-').reverse().join('/') : '-';
-            const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
             const pinIcon = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link">📍</a>` : '';
+            const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
 
             if(!j.finalizado) {
                 if(j.casaFora === 'Casa') cC++; else cF++;
                 const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.escalao}</td><td>${j.adversario}</td><td>${dt} às ${j.hora}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.escalao}</td><td>${j.adversario}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 lWeb.appendChild(tr);
+                
                 const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'conflito-card' : ''}`;
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''} <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito Horário</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Fim</button>` : ''}</div>`;
                 lMob.appendChild(card);
             } else {
                 cFin++;
                 const tr = document.createElement('tr'); tr.className = 'row-finalizado';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${isWin ? ' 🏆' : ''}</span></td><td>${dt}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${isWin ? ' 🏆' : ''}</span><br><span class="parciais-tag">${j.parciais || ''}</span></td><td>${dt}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 hWeb.appendChild(tr);
+                
                 const card = document.createElement('div'); card.className = 'game-card card-finalizado-mobile';
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">Res: ${j.setPro} - ${j.setContra}${isWin ? ' 🏆' : ''}</div><div class="info-item">📊 Parciais: ${j.parciais || '---'}</div><div class="info-item">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">Res: <b>${j.setPro} - ${j.setContra}</b>${isWin ? ' 🏆' : ''}</div><div class="info-item">📊 ${j.parciais || 'Sem parciais'}</div><div class="info-item">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
                 hMob.appendChild(card);
             }
         });
