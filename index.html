@@ -40,9 +40,6 @@
         .field label { font-size: 11px; font-weight: bold; color: #475569; }
         input, select { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; }
         
-        /* Ajuste para filtros de múltipla seleção */
-        .filter-grid select[multiple] { height: 45px; cursor: pointer; }
-
         .btn-group { grid-column: 1 / -1; display: flex; gap: 10px; }
         .btn-marcar { flex: 2; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: background 0.3s; }
         .btn-marcar:hover { background: #2c3e50; }
@@ -75,6 +72,7 @@
         .row-conflito { background-color: #ffe3e3 !important; border-left: 8px solid var(--error) !important; }
         .conflito-card { border-left: 6px solid var(--error); background: #fff5f5; }
         .win-icon { color: #f1c40f; }
+        
         .maps-link { text-decoration: none; font-size: 18px; cursor: pointer; margin-left: 5px; }
 
         @media screen and (min-width: 1025px) {
@@ -155,12 +153,8 @@
         </div>
 
         <div class="filter-grid">
-            <div class="field"><label>🔍 Treinadores (Vários)</label>
-                <select id="filterTreinador" multiple onchange="render()"></select>
-            </div>
-            <div class="field"><label>🔍 Escalões (Vários)</label>
-                <select id="filterEscalao" multiple onchange="render()"></select>
-            </div>
+            <div class="field"><label>🔍 Treinador</label><select id="filterTreinador" onchange="render()"><option value="">Todos</option></select></div>
+            <div class="field"><label>🔍 Escalão</label><select id="filterEscalao" onchange="render()"><option value="">Todos</option></select></div>
             <div class="field"><label>🔍 Data</label><input type="date" id="filterData" onchange="render()"></div>
             <div class="field"><label>🔍 Local</label><select id="filterLocal" onchange="handleFilterLocalChange()"><option value="">Todos</option><option value="Casa">Casa</option><option value="Fora">Fora</option></select></div>
             <div class="field" id="filterPavilhaoContainer" style="display:none;"><label>🔍 Pavilhão</label><select id="filterPavilhao" onchange="render()"><option value="">Todos</option><option value="ES ALCAIDES FARIA">ES ALCAIDES FARIA</option><option value="MUNICIPAL DE ADÃES">MUNICIPAL DE ADÃES</option></select></div>
@@ -175,7 +169,7 @@
             <span>📜 HISTÓRICO DE JOGOS</span> <span id="historicoContainerIcon">▼</span>
         </button>
         <div id="historicoContainer" class="collapsible-content">
-            <div class="table-wrapper historico-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Escalão</th><th>Adversário/Resultado</th><th>Data</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistoricoWeb"></tbody></table></div>
+            <div class="table-wrapper historico-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário/Res.</th><th>Data/Hora</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistoricoWeb"></tbody></table></div>
             <div id="listaHistoricoMobile" class="mobile-list"></div>
         </div>
     </div>
@@ -195,16 +189,7 @@
     };
 
     window.checkLogin = () => { if(document.getElementById('userIn').value === 'academicos' && document.getElementById('passIn').value === 'academicos2026') { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('app').style.display = 'block'; carregarJogos(); popularFiltros(); } else { alert("Senha incorreta!"); } };
-    
-    function popularFiltros() { 
-        const tSel = document.getElementById('treinador').innerHTML; 
-        const eSel = document.getElementById('escalao').innerHTML; 
-        // Remove o "Selecione..." para o filtro múltiplo ficar mais limpo
-        const cleanT = tSel.replace('<option value="">Selecione...</option>', '');
-        const cleanE = eSel.replace('<option value="">Selecione...</option>', '');
-        document.getElementById('filterTreinador').innerHTML = cleanT; 
-        document.getElementById('filterEscalao').innerHTML = cleanE; 
-    }
+    function popularFiltros() { const tSel = document.getElementById('treinador').innerHTML; const eSel = document.getElementById('escalao').innerHTML; document.getElementById('filterTreinador').innerHTML = '<option value="">Treinadores</option>' + tSel; document.getElementById('filterEscalao').innerHTML = '<option value="">Escalões</option>' + eSel; }
 
     window.handleFilterLocalChange = () => { const local = document.getElementById('filterLocal').value; document.getElementById('filterPavilhaoContainer').style.display = (local === 'Casa') ? 'flex' : 'none'; render(); };
     
@@ -222,7 +207,24 @@
     };
 
     window.salvarJogo = async () => {
-        const dados = { treinador: document.getElementById('treinador').value, cor: document.getElementById('cor').value, casaFora: document.getElementById('casaFora').value, data: document.getElementById('data').value, hora: document.getElementById('hora').value, competicao: document.getElementById('competicao').value, jornada: document.getElementById('jornada').value, numJogo: document.getElementById('numJogo').value, escalao: document.getElementById('escalao').value, adversario: document.getElementById('adversario').value, pavilhao: document.getElementById('pavilhao').value, mapsLink: document.getElementById('mapsLink')?.value || '', setPro: document.getElementById('setPro').value || 0, setContra: document.getElementById('setContra').value || 0, parciais: document.getElementById('parciais').value || '', finalizado: editId ? (jogosAtuais.find(x => x.id === editId).finalizado || false) : false };
+        const dados = { 
+            treinador: document.getElementById('treinador').value, 
+            cor: document.getElementById('cor').value, 
+            casaFora: document.getElementById('casaFora').value, 
+            data: document.getElementById('data').value, 
+            hora: document.getElementById('hora').value, 
+            competicao: document.getElementById('competicao').value, 
+            jornada: document.getElementById('jornada').value, 
+            numJogo: document.getElementById('numJogo').value, 
+            escalao: document.getElementById('escalao').value, 
+            adversario: document.getElementById('adversario').value, 
+            pavilhao: document.getElementById('pavilhao').value, 
+            mapsLink: document.getElementById('mapsLink')?.value || '',
+            setPro: document.getElementById('setPro').value || 0, 
+            setContra: document.getElementById('setContra').value || 0, 
+            parciais: document.getElementById('parciais').value || '', 
+            finalizado: editId ? (jogosAtuais.find(x => x.id === editId).finalizado || false) : false 
+        };
         try { if(editId) { await updateDoc(doc(db, "jogos", editId), dados); editId = null; } else { await addDoc(jogosCol, dados); } limpar(); document.getElementById('formAgendamento').classList.remove('active'); } catch (e) { alert("Erro ao salvar!"); }
     };
 
@@ -232,13 +234,7 @@
     window.render = () => {
         const lWeb = document.getElementById('listaWeb'); const lMob = document.getElementById('listaMobile');
         const hWeb = document.getElementById('listaHistoricoWeb'); const hMob = document.getElementById('listaHistoricoMobile');
-        
-        // Lógica de seleção múltipla
-        const selT = Array.from(document.getElementById('filterTreinador').selectedOptions).map(o => o.value);
-        const selE = Array.from(document.getElementById('filterEscalao').selectedOptions).map(o => o.value);
-        const fData = document.getElementById('filterData').value;
-        const fLocal = document.getElementById('filterLocal').value;
-        const fPav = document.getElementById('filterPavilhao').value;
+        const f = { t: document.getElementById('filterTreinador').value, e: document.getElementById('filterEscalao').value, l: document.getElementById('filterLocal').value, d: document.getElementById('filterData').value, p: document.getElementById('filterPavilhao').value };
         
         lWeb.innerHTML = ''; lMob.innerHTML = ''; hWeb.innerHTML = ''; hMob.innerHTML = '';
         const agora = new Date(); let cC = 0, cF = 0, cFin = 0;
@@ -255,34 +251,31 @@
         }
 
         jogosAtuais.forEach(j => {
-            if(selT.length > 0 && !selT.includes(j.treinador)) return;
-            if(selE.length > 0 && !selE.includes(j.escalao)) return;
-            if(fData && j.data !== fData) return;
-            if(fLocal && j.casaFora !== fLocal) return;
-            if(fLocal === 'Casa' && fPav && j.pavilhao !== fPav) return;
+            if(f.t && j.treinador !== f.t) return; if(f.e && j.escalao !== f.e) return; if(f.l && j.casaFora !== f.l) return; if(f.d && j.data !== f.d) return; if(f.l === 'Casa' && f.p && j.pavilhao !== f.p) return;
 
             const isWin = parseInt(j.setPro) > parseInt(j.setContra);
             const dt = j.data ? j.data.split('-').reverse().join('/') : '-';
             const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
-            const pinIcon = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link">📍</a>` : '';
+            const bL = j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora';
+            const pinIcon = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link" title="Ver Localização">📍</a>` : '';
 
             if(!j.finalizado) {
                 if(j.casaFora === 'Casa') cC++; else cF++;
                 const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button>${isPassado ? `<button style="background:var(--accent);color:white;margin-left:5px;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button style="background:var(--accent);color:white;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge ${bL}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 lWeb.appendChild(tr);
                 
                 const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'conflito-card' : ''}`;
-                card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''} <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${bL}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito de Hora</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''} <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
                 lMob.appendChild(card);
             } else {
                 cFin++;
                 const tr = document.createElement('tr'); tr.className = 'row-finalizado';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}<br><span style="font-weight:800">${j.setPro} - ${j.setContra}${isWin ? ' 🏆' : ''}</span><br><span style="font-size:11px; color:#64748b; font-style:italic;">${j.parciais}</span></td><td>${dt}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${isWin ? '<span class="win-icon">🏆</span>' : ''}</span></td><td>${dt}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 hWeb.appendChild(tr);
                 
                 const card = document.createElement('div'); card.className = 'game-card card-finalizado-mobile';
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">Res: <b>${j.setPro} - ${j.setContra}</b>${isWin ? ' 🏆' : ''}</div><div class="info-item">📊 ${j.parciais || '---'}</div><div class="info-item">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">${isWin ? '<span class="win-icon" style="margin-right:5px;">🏆</span>' : ''} Res: ${j.setPro} - ${j.setContra}</div><div class="info-item">📊 Parciais: ${j.parciais || '---'}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
                 hMob.appendChild(card);
             }
         });
@@ -290,7 +283,7 @@
     };
 
     window.prepararEdicao = (id) => {
-        const j = jogosAtuais.find(x => x.id === id); editId = id;
+        const j = jogosAtuais.find(x => x.id === id); 
         document.getElementById('treinador').value = j.treinador; document.getElementById('cor').value = j.cor; 
         document.getElementById('casaFora').value = j.casaFora; window.togglePavilionField(); 
         document.getElementById('data').value = j.data; document.getElementById('hora').value = j.hora; 
@@ -305,7 +298,7 @@
         
         const bS = document.getElementById('btnSalvar'); bS.innerText = "Atualizar"; bS.classList.add("btn-atualizar");
         document.getElementById('btnCancelar').style.display = "block";
-        document.getElementById('formAgendamento').classList.add('active'); window.scrollTo(0,0);
+        document.getElementById('formAgendamento').classList.add('active'); editId = id; window.scrollTo(0,0);
     };
 
     window.eliminarJogo = async (id) => { if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id)); };
