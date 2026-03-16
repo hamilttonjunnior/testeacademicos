@@ -8,6 +8,7 @@
         :root { 
             --primary: #1a2a3a; --accent: #3498db; --error: #e74c3c; 
             --success: #27ae60; --bg: #cbd5e0; --finished-bg: #cbd5e0; --finished-text: #475569;
+            --warning: #e67e22;
         }
         
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
@@ -15,7 +16,8 @@
         #loginScreen { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 1000; }
         .login-box { background: white; padding: 40px; border-radius: 12px; text-align: center; width: 320px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         .login-box input, .login-box button { width: 100%; padding: 12px; margin: 10px 0; border-radius: 6px; box-sizing: border-box; }
-        .login-box button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; }
+        .login-box button { background: var(--accent); color: white; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .login-box button:hover { background: #2980b9; }
         
         .main-content { width: 98%; max-width: 1400px; margin: 15px auto; display: none; }
         .container { background: #f1f3f5; padding: 20px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); margin-bottom: 30px; }
@@ -25,9 +27,10 @@
 
         .collapsible-trigger {
             width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px;
-            cursor: pointer; text-align: left; font-weight: 800; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;
+            cursor: pointer; text-align: left; font-weight: 800; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; transition: 0.3s;
         }
-        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; margin-bottom: 0; }
+        .collapsible-trigger:hover { background: #2c3e50; }
+        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
         .collapsible-content.active { max-height: none; margin-bottom: 20px; }
 
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
@@ -36,18 +39,26 @@
         
         .form-grid, .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
         .filter-grid { background: #eef2f7; margin-bottom: 20px; }
-        .field { display: flex; flex-direction: column; gap: 4px; }
+        .field { display: flex; flex-direction: column; gap: 4px; position: relative; }
         .field label { font-size: 11px; font-weight: bold; color: #475569; }
-        input, select { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; }
-        
+        input, select { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; transition: 0.3s; }
+        input:focus, select:focus { border-color: var(--accent); outline: none; }
+
+        .multiselect-wrap { position: relative; width: 100%; }
+        .multiselect-selected { background: white; border: 1px solid #cbd5e0; border-radius: 8px; padding: 10px; font-size: 13px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; min-height: 38px; box-sizing: border-box; }
+        .multiselect-dropdown { position: absolute; top: 105%; left: 0; width: 100%; background: white; border: 1px solid #cbd5e0; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 100; display: none; max-height: 250px; overflow-y: auto; padding: 5px 0; }
+        .multiselect-dropdown.show { display: block; }
+        .multiselect-item { padding: 8px 12px; display: flex; align-items: center; gap: 10px; font-size: 12px; cursor: pointer; transition: 0.2s; }
+        .multiselect-item:hover { background: #f8fafc; color: var(--accent); }
+
         .btn-group { grid-column: 1 / -1; display: flex; gap: 10px; }
-        .btn-marcar { flex: 2; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: background 0.3s; }
-        .btn-marcar:hover { background: #2c3e50; }
-        
-        .btn-cancelar { flex: 1; padding: 15px; background: #94a3b8; color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; display: none; transition: background 0.3s; }
+        .btn-marcar { flex: 2; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .btn-marcar:hover { background: #2c3e50; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .btn-cancelar { flex: 1; padding: 15px; background: #94a3b8; color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; display: none; transition: 0.3s; }
         .btn-cancelar:hover { background: #64748b; }
         
-        .btn-atualizar { background: #e67e22 !important; }
+        /* Cor Laranja para Atualizar */
+        .btn-atualizar { background: var(--warning) !important; }
         .btn-atualizar:hover { background: #d35400 !important; }
         
         .table-wrapper { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 20px; }
@@ -58,35 +69,33 @@
         .row-finalizado td { background-color: var(--finished-bg) !important; color: var(--finished-text) !important; }
 
         .mobile-list { display: none; flex-direction: column; gap: 12px; }
-        .game-card { background: white; border-radius: 15px; padding: 15px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card-finalizado-mobile { background: #d1d5db !important; border-color: #94a3b8 !important; opacity: 0.9; }
+        .game-card { background: white; border-radius: 15px; padding: 15px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; transition: 0.3s; }
+        .card-finalizado-mobile { background: #d1d5db !important; opacity: 0.9; }
         .card-full { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 8px; font-weight: 800; color: var(--primary); }
         .info-item { font-size: 12px; color: #4a5568; display: flex; align-items: center; gap: 8px; }
         .card-actions { grid-column: 1 / -1; display: flex; gap: 10px; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
-        .btn-mobile { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e0; background: white; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 12px; }
+        .btn-mobile { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e0; background: white; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 12px; transition: 0.2s; }
+        .btn-mobile:hover { background: #f8fafc; }
 
         .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
         .badge-casa { background: #d0ebff; color: #1971c2; }
         .badge-fora { background: #ffe3e3; color: #c92a2a; }
         .badge-finalizado { background: #94a3b8; color: white; }
-        .row-conflito { background-color: #ffe3e3 !important; border-left: 8px solid var(--error) !important; }
-        .conflito-card { border-left: 6px solid var(--error); background: #fff5f5; }
-        .win-icon { color: #f1c40f; }
         
-        .maps-link { text-decoration: none; font-size: 18px; cursor: pointer; margin-left: 5px; }
+        /* Conflito */
+        .row-conflito { background-color: #fff5f5 !important; border-left: 8px solid var(--error) !important; }
+        .card-conflito { border-left: 8px solid var(--error) !important; background-color: #fff5f5 !important; }
+        .error-tag { color: var(--error); font-size: 11px; font-weight: 800; }
+
+        .win-icon { color: #f1c40f; }
+        .maps-link { text-decoration: none; font-size: 18px; }
         .resultado-tag { font-weight: 800; color: var(--primary); font-size: 14px; }
         .parciais-tag { font-size: 11px; color: #64748b; font-style: italic; }
 
-        @media screen and (min-width: 1025px) {
-            .table-wrapper { display: block !important; }
-            .mobile-list { display: none !important; }
-        }
-
-        @media screen and (max-width: 1024px) {
-            .table-wrapper { display: none !important; }
-            .mobile-list { display: flex !important; }
+        @media screen and (min-width: 1025px) { .table-wrapper { display: block !important; } .mobile-list { display: none !important; } }
+        @media screen and (max-width: 1024px) { 
+            .table-wrapper { display: none !important; } .mobile-list { display: flex !important; }
             .form-grid, .filter-grid { grid-template-columns: 1fr; }
-            .stats-grid { grid-template-columns: 1fr 1fr; }
             header { flex-direction: column; text-align: center; gap: 10px; }
         }
     </style>
@@ -142,8 +151,7 @@
                 </div>
                 <div class="field"><label>Adversário</label><input type="text" id="adversario"></div>
                 <div class="field" id="pavilhaoContainer"><label>Pavilhão</label><select id="pavilhao"><option value="ES ALCAIDES FARIA">ES ALCAIDES FARIA</option><option value="MUNICIPAL DE ADÃES">MUNICIPAL DE ADÃES</option></select></div>
-                <div class="field" id="mapsContainer" style="display:none;"><label>Link Google Maps</label><input type="text" id="mapsLink" placeholder="Cole o link da rota aqui"></div>
-                
+                <div class="field" id="mapsContainer" style="display:none;"><label>Link Google Maps</label><input type="text" id="mapsLink" placeholder="Cole o link aqui"></div>
                 <div class="field" id="boxSetPro" style="display:none;"><label>Set Pró</label><input type="number" id="setPro" value="0"></div>
                 <div class="field" id="boxSetContra" style="display:none;"><label>Set Contra</label><input type="number" id="setContra" value="0"></div>
                 <div class="field" id="boxParciais" style="display:none; grid-column: 1 / -1;"><label>Parciais</label><input type="text" id="parciais"></div>
@@ -155,8 +163,18 @@
         </div>
 
         <div class="filter-grid">
-            <div class="field"><label>🔍 Treinador</label><select id="filterTreinador" onchange="render()"><option value="">Todos</option></select></div>
-            <div class="field"><label>🔍 Escalão</label><select id="filterEscalao" onchange="render()"><option value="">Todos</option></select></div>
+            <div class="field"><label>🔍 Treinadores</label>
+                <div class="multiselect-wrap">
+                    <div class="multiselect-selected" onclick="toggleDrop('dropT')"><span id="txtT">Todos</span> ▾</div>
+                    <div id="dropT" class="multiselect-dropdown"></div>
+                </div>
+            </div>
+            <div class="field"><label>🔍 Escalões</label>
+                <div class="multiselect-wrap">
+                    <div class="multiselect-selected" onclick="toggleDrop('dropE')"><span id="txtE">Todos</span> ▾</div>
+                    <div id="dropE" class="multiselect-dropdown"></div>
+                </div>
+            </div>
             <div class="field"><label>🔍 Data</label><input type="date" id="filterData" onchange="render()"></div>
             <div class="field"><label>🔍 Local</label><select id="filterLocal" onchange="handleFilterLocalChange()"><option value="">Todos</option><option value="Casa">Casa</option><option value="Fora">Fora</option></select></div>
             <div class="field" id="filterPavilhaoContainer" style="display:none;"><label>🔍 Pavilhão</label><select id="filterPavilhao" onchange="render()"><option value="">Todos</option><option value="ES ALCAIDES FARIA">ES ALCAIDES FARIA</option><option value="MUNICIPAL DE ADÃES">MUNICIPAL DE ADÃES</option></select></div>
@@ -171,7 +189,7 @@
             <span>📜 HISTÓRICO DE JOGOS</span> <span id="historicoContainerIcon">▼</span>
         </button>
         <div id="historicoContainer" class="collapsible-content">
-            <div class="table-wrapper historico-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário/Res.</th><th>Data/Hora</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistoricoWeb"></tbody></table></div>
+            <div class="table-wrapper historico-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Escalão</th><th>Adversário/Res.</th><th>Data</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistoricoWeb"></tbody></table></div>
             <div id="listaHistoricoMobile" class="mobile-list"></div>
         </div>
     </div>
@@ -185,59 +203,43 @@
     const app = initializeApp(firebaseConfig); const db = getFirestore(app); const jogosCol = collection(db, "jogos");
     let jogosAtuais = []; let editId = null;
 
-    window.toggleSection = (id) => {
-        const c = document.getElementById(id); const icon = document.getElementById(id + 'Icon');
-        c.classList.toggle('active'); icon.innerText = c.classList.contains('active') ? '▲' : '▼';
+    window.toggleSection = (id) => { const c = document.getElementById(id); const icon = document.getElementById(id + 'Icon'); c.classList.toggle('active'); icon.innerText = c.classList.contains('active') ? '▲' : '▼'; };
+    window.toggleDrop = (id) => { document.querySelectorAll('.multiselect-dropdown').forEach(el => { if(el.id !== id) el.classList.remove('show'); }); document.getElementById(id).classList.toggle('show'); };
+    window.checkLogin = () => { if(document.getElementById('userIn').value === 'academicos' && document.getElementById('passIn').value === 'academicos2026') { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('app').style.display = 'block'; carregarJogos(); initMultiFilters(); } else { alert("Senha incorreta!"); } };
+
+    function initMultiFilters() {
+        const treinadores = ["Jorge Torres", "Amanda González", "Pedro Carvalho", "Inês Ferreira", "Hamilton Júnior", "Ricardo Pereira", "Ricardo Magno", "Pedro Pavezzi", "Carlos Louro", "Cristina Cortez", "Bruno Pereira", "Pablo Romero", "Hélder Serrão", "Carlos Martins"];
+        const escaloes = ["Infantis A Fem", "Infantis B Fem", "Infantis C Fem", "Iniciados A Fem", "Iniciados B Fem", "Iniciados Masc", "Cadetes Fem", "Cadetes Masc", "Juvenis A Fem", "Juvenis B Fem", "Juvenis Masc", "Sub21 Fem", "Séniores Fem", "Séniores Masc", "Veteranos +35 Masc", "Veteranos +45 Masc"];
+        document.getElementById('dropT').innerHTML = treinadores.map(t => `<label class="multiselect-item"><input type="checkbox" value="${t}" onchange="updateMulti('T')"> ${t}</label>`).join('');
+        document.getElementById('dropE').innerHTML = escaloes.map(e => `<label class="multiselect-item"><input type="checkbox" value="${e}" onchange="updateMulti('E')"> ${e}</label>`).join('');
+    }
+
+    window.updateMulti = (type) => {
+        const items = Array.from(document.querySelectorAll(`#drop${type} input:checked`));
+        document.getElementById(`txt${type}`).innerText = items.length === 0 ? "Todos" : (items.length === 1 ? items[0].value : `${items.length} Selecionados`);
+        render();
     };
 
-    window.checkLogin = () => { if(document.getElementById('userIn').value === 'academicos' && document.getElementById('passIn').value === 'academicos2026') { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('app').style.display = 'block'; carregarJogos(); popularFiltros(); } else { alert("Senha incorreta!"); } };
-    function popularFiltros() { const tSel = document.getElementById('treinador').innerHTML; const eSel = document.getElementById('escalao').innerHTML; document.getElementById('filterTreinador').innerHTML = '<option value="">Treinadores</option>' + tSel; document.getElementById('filterEscalao').innerHTML = '<option value="">Escalões</option>' + eSel; }
-
     window.handleFilterLocalChange = () => { const local = document.getElementById('filterLocal').value; document.getElementById('filterPavilhaoContainer').style.display = (local === 'Casa') ? 'flex' : 'none'; render(); };
-    
     window.togglePavilionField = () => { 
-        const local = document.getElementById('casaFora').value; 
-        const pCont = document.getElementById('pavilhaoContainer');
-        const mCont = document.getElementById('mapsContainer');
-        if(local === 'Casa') {
-            pCont.innerHTML = `<label>Pavilhão</label><select id="pavilhao"><option value="ES ALCAIDES FARIA">ES ALCAIDES FARIA</option><option value="MUNICIPAL DE ADÃES">MUNICIPAL DE ADÃES</option></select>`;
-            mCont.style.display = 'none';
-        } else {
-            pCont.innerHTML = `<label>Pavilhão</label><input type="text" id="pavilhao" placeholder="Nome pavilhão">`;
-            mCont.style.display = 'flex';
-        }
+        const local = document.getElementById('casaFora').value; const pCont = document.getElementById('pavilhaoContainer'); const mCont = document.getElementById('mapsContainer');
+        if(local === 'Casa') { pCont.innerHTML = `<label>Pavilhão</label><select id="pavilhao"><option value="ES ALCAIDES FARIA">ES ALCAIDES FARIA</option><option value="MUNICIPAL DE ADÃES">MUNICIPAL DE ADÃES</option></select>`; mCont.style.display = 'none'; }
+        else { pCont.innerHTML = `<label>Pavilhão</label><input type="text" id="pavilhao" placeholder="Nome pavilhão">`; mCont.style.display = 'flex'; }
     };
 
     window.salvarJogo = async () => {
-        const dados = { 
-            treinador: document.getElementById('treinador').value, 
-            cor: document.getElementById('cor').value, 
-            casaFora: document.getElementById('casaFora').value, 
-            data: document.getElementById('data').value, 
-            hora: document.getElementById('hora').value, 
-            competicao: document.getElementById('competicao').value, 
-            jornada: document.getElementById('jornada').value, 
-            numJogo: document.getElementById('numJogo').value, 
-            escalao: document.getElementById('escalao').value, 
-            adversario: document.getElementById('adversario').value, 
-            pavilhao: document.getElementById('pavilhao').value, 
-            mapsLink: document.getElementById('mapsLink')?.value || '',
-            setPro: document.getElementById('setPro').value || 0, 
-            setContra: document.getElementById('setContra').value || 0, 
-            parciais: document.getElementById('parciais').value || '', 
-            finalizado: editId ? (jogosAtuais.find(x => x.id === editId).finalizado || false) : false 
-        };
-        try { if(editId) { await updateDoc(doc(db, "jogos", editId), dados); editId = null; } else { await addDoc(jogosCol, dados); } limpar(); document.getElementById('formAgendamento').classList.remove('active'); } catch (e) { alert("Erro ao salvar!"); }
+        const dados = { treinador: document.getElementById('treinador').value, cor: document.getElementById('cor').value, casaFora: document.getElementById('casaFora').value, data: document.getElementById('data').value, hora: document.getElementById('hora').value, competicao: document.getElementById('competicao').value, jornada: document.getElementById('jornada').value, numJogo: document.getElementById('numJogo').value, escalao: document.getElementById('escalao').value, adversario: document.getElementById('adversario').value, pavilhao: document.getElementById('pavilhao').value, mapsLink: document.getElementById('mapsLink')?.value || '', setPro: document.getElementById('setPro').value || 0, setContra: document.getElementById('setContra').value || 0, parciais: document.getElementById('parciais').value || '', finalizado: editId ? (jogosAtuais.find(x => x.id === editId).finalizado || false) : false };
+        try { if(editId) await updateDoc(doc(db, "jogos", editId), dados); else await addDoc(jogosCol, dados); editId = null; limpar(); } catch (e) { alert("Erro ao salvar!"); }
     };
 
-    window.finalizarJogoPrompt = (id) => { if (prompt("Senha:") === "academicos2026") { const sp = prompt("Sets Pró:", "0"); const sc = prompt("Sets Contra:", "0"); const pa = prompt("Parciais:", ""); updateDoc(doc(db, "jogos", id), { finalizado: true, setPro: sp, setContra: sc, parciais: pa }); } };
-    function carregarJogos() { onSnapshot(query(jogosCol, orderBy("data"), orderBy("hora")), (snapshot) => { jogosAtuais = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })); render(); }); }
+    window.finalizarJogoPrompt = (id) => { if (prompt("Senha:") === "academicos2026") { const sp = prompt("Sets Pró:", "0"), sc = prompt("Sets Contra:", "0"), pa = prompt("Parciais:", ""); updateDoc(doc(db, "jogos", id), { finalizado: true, setPro: sp, setContra: sc, parciais: pa }); } };
+    function carregarJogos() { onSnapshot(query(jogosCol, orderBy("data"), orderBy("hora")), (s) => { jogosAtuais = s.docs.map(d => ({ id: d.id, ...d.data() })); render(); }); }
 
     window.render = () => {
-        const lWeb = document.getElementById('listaWeb'); const lMob = document.getElementById('listaMobile');
-        const hWeb = document.getElementById('listaHistoricoWeb'); const hMob = document.getElementById('listaHistoricoMobile');
-        const f = { t: document.getElementById('filterTreinador').value, e: document.getElementById('filterEscalao').value, l: document.getElementById('filterLocal').value, d: document.getElementById('filterData').value, p: document.getElementById('filterPavilhao').value };
-        
+        const lWeb = document.getElementById('listaWeb'), lMob = document.getElementById('listaMobile'), hWeb = document.getElementById('listaHistoricoWeb'), hMob = document.getElementById('listaHistoricoMobile');
+        const selT = Array.from(document.querySelectorAll('#dropT input:checked')).map(i => i.value);
+        const selE = Array.from(document.querySelectorAll('#dropE input:checked')).map(i => i.value);
+        const fData = document.getElementById('filterData').value, fLocal = document.getElementById('filterLocal').value, fPav = document.getElementById('filterPavilhao').value;
         lWeb.innerHTML = ''; lMob.innerHTML = ''; hWeb.innerHTML = ''; hMob.innerHTML = '';
         const agora = new Date(); let cC = 0, cF = 0, cFin = 0;
 
@@ -247,37 +249,36 @@
             if (a.casaFora !== 'Casa') continue;
             for (let b of ativos) {
                 if (a.id === b.id || b.casaFora !== 'Casa' || a.data !== b.data || a.pavilhao !== b.pavilhao) continue;
-                let diff = Math.abs(new Date(a.data+'T'+a.hora) - new Date(b.data+'T'+b.hora)) / 60000;
-                if (diff < 120) { a.conflito = true; }
+                if (Math.abs(new Date(a.data+'T'+a.hora) - new Date(b.data+'T'+b.hora)) / 60000 < 120) a.conflito = true;
             }
         }
 
         jogosAtuais.forEach(j => {
-            if(f.t && j.treinador !== f.t) return; if(f.e && j.escalao !== f.e) return; if(f.l && j.casaFora !== f.l) return; if(f.d && j.data !== f.d) return; if(f.l === 'Casa' && f.p && j.pavilhao !== f.p) return;
+            if(selT.length > 0 && !selT.includes(j.treinador)) return;
+            if(selE.length > 0 && !selE.includes(j.escalao)) return;
+            if(fData && j.data !== fData) return;
+            if(fLocal && j.casaFora !== fLocal) return;
+            if(fLocal === 'Casa' && fPav && j.pavilhao !== fPav) return;
 
-            const isWin = parseInt(j.setPro) > parseInt(j.setContra);
             const dt = j.data ? j.data.split('-').reverse().join('/') : '-';
+            const pinIcon = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link">📍</a>` : '';
             const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
-            const bL = j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora';
-            const pinIcon = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link" title="Ver Localização">📍</a>` : '';
 
             if(!j.finalizado) {
                 if(j.casaFora === 'Casa') cC++; else cF++;
                 const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button style="background:var(--accent);color:white;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge ${bL}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito Horário</span>' : ''}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button>${isPassado ? `<button style="background:var(--accent);color:white;margin-left:5px;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Fim</button>` : ''}</td>`;
                 lWeb.appendChild(tr);
-                
-                const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'conflito-card' : ''}`;
-                card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${bL}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito de Hora</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''} <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'card-conflito' : ''}`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito Horário</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Fim</button>` : ''}</div>`;
                 lMob.appendChild(card);
             } else {
                 cFin++;
                 const tr = document.createElement('tr'); tr.className = 'row-finalizado';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${isWin ? ' <span class="win-icon">🏆</span>' : ''}</span><br><span class="parciais-tag">${j.parciais || ''}</span></td><td>${dt}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${parseInt(j.setPro) > parseInt(j.setContra) ? ' 🏆' : ''}</span><br><span class="parciais-tag">${j.parciais}</span></td><td>${dt}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 hWeb.appendChild(tr);
-                
                 const card = document.createElement('div'); card.className = 'game-card card-finalizado-mobile';
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">${isWin ? '<span class="win-icon" style="margin-right:5px;">🏆</span>' : ''} Res: <b>${j.setPro} - ${j.setContra}</b></div><div class="info-item">📊 Parciais: ${j.parciais || '---'}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">Res: <b>${j.setPro} - ${j.setContra}</b>${parseInt(j.setPro) > parseInt(j.setContra) ? ' 🏆' : ''}</div><div class="info-item">📊 Parciais: ${j.parciais}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
                 hMob.appendChild(card);
             }
         });
@@ -292,29 +293,16 @@
         document.getElementById('competicao').value = j.competicao||''; document.getElementById('jornada').value = j.jornada||''; 
         document.getElementById('numJogo').value = j.numJogo||''; document.getElementById('escalao').value = j.escalao; 
         document.getElementById('adversario').value = j.adversario; document.getElementById('pavilhao').value = j.pavilhao;
-        if(j.casaFora === 'Fora' && document.getElementById('mapsLink')) document.getElementById('mapsLink').value = j.mapsLink || '';
-
-        document.getElementById('boxSetPro').style.display = 'block'; document.getElementById('boxSetContra').style.display = 'block'; 
-        document.getElementById('boxParciais').style.display = 'block'; document.getElementById('setPro').value = j.setPro||0; 
-        document.getElementById('setContra').value = j.setContra||0; document.getElementById('parciais').value = j.parciais||'';
-        
+        if(j.casaFora === 'Fora') document.getElementById('mapsLink').value = j.mapsLink || '';
+        document.getElementById('setPro').value = j.setPro; document.getElementById('setContra').value = j.setContra; document.getElementById('parciais').value = j.parciais;
+        document.getElementById('boxSetPro').style.display = 'block'; document.getElementById('boxSetContra').style.display = 'block'; document.getElementById('boxParciais').style.display = 'block';
         const bS = document.getElementById('btnSalvar'); bS.innerText = "Atualizar"; bS.classList.add("btn-atualizar");
-        document.getElementById('btnCancelar').style.display = "block";
-        document.getElementById('formAgendamento').classList.add('active'); window.scrollTo(0,0);
+        document.getElementById('btnCancelar').style.display = "block"; document.getElementById('formAgendamento').classList.add('active'); window.scrollTo(0,0);
     };
 
     window.eliminarJogo = async (id) => { if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id)); };
-    
-    window.limpar = () => { 
-        ['data','hora','competicao','jornada','numJogo','adversario','setPro', 'setContra', 'parciais'].forEach(id => {
-            const el = document.getElementById(id); if(el) el.value = '';
-        });
-        const ml = document.getElementById('mapsLink'); if(ml) ml.value = '';
-        const bS = document.getElementById('btnSalvar'); bS.innerText = "Agendar Jogo"; bS.classList.remove("btn-atualizar");
-        document.getElementById('btnCancelar').style.display = "none";
-        document.getElementById('formAgendamento').classList.remove('active');
-        editId = null;
-    };
+    window.limpar = () => { editId = null; ['data','hora','competicao','jornada','numJogo','adversario','setPro','setContra','parciais'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; }); document.getElementById('btnSalvar').innerText = "Agendar Jogo"; document.getElementById('btnSalvar').classList.remove("btn-atualizar"); document.getElementById('btnCancelar').style.display = "none"; document.getElementById('formAgendamento').classList.remove('active'); };
+    window.onclick = (e) => { if (!e.target.closest('.multiselect-wrap')) { document.querySelectorAll('.multiselect-dropdown').forEach(el => el.classList.remove('show')); } };
 </script>
 </body>
 </html>
