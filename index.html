@@ -56,8 +56,6 @@
         .btn-marcar:hover { background: #2c3e50; transform: translateY(-1px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
         .btn-cancelar { flex: 1; padding: 15px; background: #94a3b8; color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; display: none; transition: 0.3s; }
         .btn-cancelar:hover { background: #64748b; }
-        
-        /* Cor Laranja para Atualizar */
         .btn-atualizar { background: var(--warning) !important; }
         .btn-atualizar:hover { background: #d35400 !important; }
         
@@ -82,13 +80,11 @@
         .badge-fora { background: #ffe3e3; color: #c92a2a; }
         .badge-finalizado { background: #94a3b8; color: white; }
         
-        /* Conflito */
         .row-conflito { background-color: #fff5f5 !important; border-left: 8px solid var(--error) !important; }
         .card-conflito { border-left: 8px solid var(--error) !important; background-color: #fff5f5 !important; }
         .error-tag { color: var(--error); font-size: 11px; font-weight: 800; }
-
         .win-icon { color: #f1c40f; }
-        .maps-link { text-decoration: none; font-size: 18px; }
+        .maps-link { text-decoration: none; font-size: 18px; cursor: pointer; }
         .resultado-tag { font-weight: 800; color: var(--primary); font-size: 14px; }
         .parciais-tag { font-size: 11px; color: #64748b; font-style: italic; }
 
@@ -189,7 +185,7 @@
             <span>📜 HISTÓRICO DE JOGOS</span> <span id="historicoContainerIcon">▼</span>
         </button>
         <div id="historicoContainer" class="collapsible-content">
-            <div class="table-wrapper historico-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Escalão</th><th>Adversário/Res.</th><th>Data</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistoricoWeb"></tbody></table></div>
+            <div class="table-wrapper historico-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Escalão</th><th>Adversário/Resultado</th><th>Data</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistoricoWeb"></tbody></table></div>
             <div id="listaHistoricoMobile" class="mobile-list"></div>
         </div>
     </div>
@@ -260,6 +256,7 @@
             if(fLocal && j.casaFora !== fLocal) return;
             if(fLocal === 'Casa' && fPav && j.pavilhao !== fPav) return;
 
+            const isWin = parseInt(j.setPro) > parseInt(j.setContra);
             const dt = j.data ? j.data.split('-').reverse().join('/') : '-';
             const pinIcon = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link">📍</a>` : '';
             const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
@@ -267,18 +264,18 @@
             if(!j.finalizado) {
                 if(j.casaFora === 'Casa') cC++; else cF++;
                 const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito Horário</span>' : ''}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button>${isPassado ? `<button style="background:var(--accent);color:white;margin-left:5px;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Fim</button>` : ''}</td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito de Horário</span>' : ''}${isPassado ? `<br><button style="background:var(--accent);color:white;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;margin-top:5px;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 lWeb.appendChild(tr);
                 const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'card-conflito' : ''}`;
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito Horário</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Fim</button>` : ''}</div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito Horário</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</div>`;
                 lMob.appendChild(card);
             } else {
                 cFin++;
                 const tr = document.createElement('tr'); tr.className = 'row-finalizado';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${parseInt(j.setPro) > parseInt(j.setContra) ? ' 🏆' : ''}</span><br><span class="parciais-tag">${j.parciais}</span></td><td>${dt}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${isWin ? ' 🏆' : ''}</span><br><span class="parciais-tag">${j.parciais}</span></td><td>${dt}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 hWeb.appendChild(tr);
                 const card = document.createElement('div'); card.className = 'game-card card-finalizado-mobile';
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">Res: <b>${j.setPro} - ${j.setContra}</b>${parseInt(j.setPro) > parseInt(j.setContra) ? ' 🏆' : ''}</div><div class="info-item">📊 Parciais: ${j.parciais}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">Res: <b>${j.setPro} - ${j.setContra}</b>${isWin ? ' 🏆' : ''}</div><div class="info-item">📊 Parciais: ${j.parciais}</div><div class="info-item">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
                 hMob.appendChild(card);
             }
         });
