@@ -8,7 +8,7 @@
         :root { 
             --primary: #1a2a3a; --accent: #3498db; --error: #e74c3c; 
             --success: #27ae60; --bg: #cbd5e0; --finished-bg: #cbd5e0; --finished-text: #475569;
-            --warning: #e67e22; --card-bg: #ffffff;
+            --warning: #e67e22;
         }
         body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         #loginScreen { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 1000; }
@@ -25,22 +25,22 @@
         .admin-panel { background: #f8fafc; padding: 25px; border-radius: 15px; margin-bottom: 25px; border: 1px solid #e2e8f0; display: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05); }
         .admin-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #cbd5e0; padding-bottom: 10px; }
         .admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .admin-card { background: white; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-        .admin-card h4 { margin: 0 0 10px 0; color: var(--primary); font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .admin-card { background: white; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; }
+        .admin-card h4 { margin: 0 0 10px 0; color: var(--primary); font-size: 14px; }
         .admin-input-group { display: flex; gap: 5px; margin-bottom: 10px; }
         .admin-list { max-height: 120px; overflow-y: auto; border-top: 1px solid #f1f5f9; padding-top: 10px; }
-        .admin-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; border-radius: 6px; font-size: 12px; }
-        .admin-item:hover { background: #f1f5f9; }
-        .btn-del { color: var(--error); cursor: pointer; font-weight: bold; border: none; background: none; font-size: 14px; padding: 0 5px; }
+        .admin-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 8px; font-size: 12px; }
+        .btn-del { color: var(--error); cursor: pointer; font-weight: bold; border: none; background: none; }
         .btn-add { background: var(--success); color: white; border: none; border-radius: 6px; padding: 0 12px; cursor: pointer; font-weight: bold; }
 
-        /* Outros estilos mantidos */
         .collapsible-trigger { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer; text-align: left; font-weight: 800; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; transition: 0.3s; }
         .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
         .collapsible-content.active { max-height: none; margin-bottom: 20px; }
+
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
         .stat-card { background: #ffffff; padding: 12px; border-radius: 10px; border-left: 5px solid var(--accent); text-align: center; }
         .stat-card p { margin: 5px 0 0; font-size: 20px; font-weight: 800; color: var(--primary); }
+        
         .form-grid, .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; background: #ffffff; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
         .filter-grid { background: #eef2f7; margin-bottom: 20px; }
         .field { display: flex; flex-direction: column; gap: 4px; position: relative; }
@@ -56,6 +56,7 @@
 
         .btn-group { grid-column: 1 / -1; display: flex; gap: 10px; }
         .btn-marcar { flex: 2; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.3s; }
+        .btn-marcar:hover { background: #2c3e50; }
         .btn-cancelar { flex: 1; padding: 15px; background: #94a3b8; color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; display: none; }
         .btn-atualizar { background: var(--warning) !important; }
         
@@ -65,21 +66,34 @@
         th { background: #f8fafc; padding: 12px 10px; text-align: left; color: #64748b; font-size: 12px; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; }
         td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
         .row-finalizado td { background-color: var(--finished-bg) !important; color: var(--finished-text) !important; }
+
         .mobile-list { display: none; flex-direction: column; gap: 12px; }
         .game-card { background: white; border-radius: 15px; padding: 15px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .card-finalizado-mobile { background: #d1d5db !important; opacity: 0.9; }
+        .card-finalizado-mobile { background: #d1d5db !important; border-color: #94a3b8 !important; opacity: 0.9; }
         .card-full { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 8px; font-weight: 800; color: var(--primary); }
+        .info-item { font-size: 12px; color: #4a5568; display: flex; align-items: center; gap: 8px; }
+        .card-actions { grid-column: 1 / -1; display: flex; gap: 10px; margin-top: 10px; border-top: 1px solid #eee; padding-top: 10px; }
+        .btn-mobile { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #cbd5e0; background: white; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; font-size: 12px; }
+
         .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
         .badge-casa { background: #d0ebff; color: #1971c2; }
         .badge-fora { background: #ffe3e3; color: #c92a2a; }
         .badge-finalizado { background: #94a3b8; color: white; }
-        .row-conflito, .card-conflito { background-color: #fff5f5 !important; border-left: 8px solid var(--error) !important; }
+        .row-conflito { background-color: #ffe3e3 !important; border-left: 8px solid var(--error) !important; }
+        .conflito-card { border-left: 6px solid var(--error) !important; background: #fff5f5 !important; }
         .error-tag { color: var(--error); font-size: 11px; font-weight: 800; }
+        .win-icon { color: #f1c40f; }
+        .maps-link { text-decoration: none; font-size: 18px; cursor: pointer; margin-left: 5px; }
         .resultado-tag { font-weight: 800; color: var(--primary); font-size: 14px; }
         .parciais-tag { font-size: 11px; color: #64748b; font-style: italic; }
 
         @media screen and (min-width: 1025px) { .table-wrapper { display: block !important; } .mobile-list { display: none !important; } }
-        @media screen and (max-width: 1024px) { .table-wrapper { display: none !important; } .mobile-list { display: flex !important; } .form-grid, .filter-grid { grid-template-columns: 1fr; } header { flex-direction: column; text-align: center; gap: 10px; } }
+        @media screen and (max-width: 1024px) { 
+            .table-wrapper { display: none !important; } .mobile-list { display: flex !important; }
+            .form-grid, .filter-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            header { flex-direction: column; text-align: center; gap: 10px; }
+        }
     </style>
 </head>
 <body>
@@ -107,29 +121,23 @@
 
         <div id="adminArea" class="admin-panel">
             <div class="admin-header">
-                <h3 style="margin:0; color: var(--primary);">Configurações do Clube</h3>
+                <h3 style="margin:0; color: var(--primary);">Gestão do Clube</h3>
                 <button onclick="document.getElementById('adminArea').style.display='none'" style="border:none; background:none; cursor:pointer; font-size:18px;">✕</button>
             </div>
             <div class="admin-grid">
                 <div class="admin-card">
                     <h4>👤 Treinadores</h4>
-                    <div class="admin-input-group">
-                        <input type="text" id="newT" placeholder="Nome..."><button class="btn-add" onclick="addItem('treinadores', 'newT')">+</button>
-                    </div>
+                    <div class="admin-input-group"><input type="text" id="newT"><button class="btn-add" onclick="addItem('treinadores', 'newT')">+</button></div>
                     <div id="listAdminT" class="admin-list"></div>
                 </div>
                 <div class="admin-card">
                     <h4>🏐 Escalões</h4>
-                    <div class="admin-input-group">
-                        <input type="text" id="newE" placeholder="Ex: Sub-14..."><button class="btn-add" onclick="addItem('escaloes', 'newE')">+</button>
-                    </div>
+                    <div class="admin-input-group"><input type="text" id="newE"><button class="btn-add" onclick="addItem('escaloes', 'newE')">+</button></div>
                     <div id="listAdminE" class="admin-list"></div>
                 </div>
                 <div class="admin-card">
                     <h4>🏠 Pavilhões Casa</h4>
-                    <div class="admin-input-group">
-                        <input type="text" id="newP" placeholder="Nome..."><button class="btn-add" onclick="addItem('pavilhoes', 'newP')">+</button>
-                    </div>
+                    <div class="admin-input-group"><input type="text" id="newP"><button class="btn-add" onclick="addItem('pavilhoes', 'newP')">+</button></div>
                     <div id="listAdminP" class="admin-list"></div>
                 </div>
             </div>
@@ -158,7 +166,7 @@
                 <div class="field"><label>Escalão</label><select id="escalao"></select></div>
                 <div class="field"><label>Adversário</label><input type="text" id="adversario"></div>
                 <div class="field" id="pavilhaoContainer"><label>Pavilhão</label><select id="pavilhao"></select></div>
-                <div class="field" id="mapsContainer" style="display:none;"><label>Link Google Maps</label><input type="text" id="mapsLink" placeholder="Cole o link aqui"></div>
+                <div class="field" id="mapsContainer" style="display:none;"><label>Link Google Maps</label><input type="text" id="mapsLink" placeholder="Cole o link da rota aqui"></div>
                 <div class="field" id="boxSetPro" style="display:none;"><label>Set Pró</label><input type="number" id="setPro" value="0"></div>
                 <div class="field" id="boxSetContra" style="display:none;"><label>Set Contra</label><input type="number" id="setContra" value="0"></div>
                 <div class="field" id="boxParciais" style="display:none; grid-column: 1 / -1;"><label>Parciais</label><input type="text" id="parciais"></div>
@@ -210,7 +218,6 @@
     const app = initializeApp(firebaseConfig); const db = getFirestore(app); const jogosCol = collection(db, "jogos");
     let jogosAtuais = [], listT = [], listE = [], listP = [], editId = null;
 
-    // LISTAS PADRÃO PARA O CASO DE ESTAR VAZIO
     const defaultT = ["Jorge Torres", "Amanda González", "Pedro Carvalho", "Inês Ferreira", "Hamilton Júnior", "Ricardo Pereira", "Ricardo Magno", "Pedro Pavezzi", "Carlos Louro", "Cristina Cortez", "Bruno Pereira", "Pablo Romero", "Hélder Serrão", "Carlos Martins"];
     const defaultE = ["Infantis A Fem", "Infantis B Fem", "Infantis C Fem", "Iniciados A Fem", "Iniciados B Fem", "Iniciados Masc", "Cadetes Fem", "Cadetes Masc", "Juvenis A Fem", "Juvenis B Fem", "Juvenis Masc", "Sub21 Fem", "Séniores Fem", "Séniores Masc", "Veteranos +35 Masc", "Veteranos +45 Masc"];
     const defaultP = ["ES ALCAIDES FARIA", "MUNICIPAL DE ADÃES"];
@@ -237,22 +244,19 @@
         const tSel = document.getElementById('treinador'), eSel = document.getElementById('escalao'), pSel = document.getElementById('pavilhao');
         const fTSel = document.getElementById('dropT'), fESel = document.getElementById('dropE'), fPSel = document.getElementById('filterPavilhao');
         const opt = (val) => `<option value="${val}">${val}</option>`;
-        
         tSel.innerHTML = '<option value="">Selecione...</option>' + listT.map(x => opt(x.val)).join('');
         eSel.innerHTML = '<option value="">Selecione...</option>' + listE.map(x => opt(x.val)).join('');
         if(document.getElementById('casaFora').value === 'Casa') pSel.innerHTML = listP.map(x => opt(x.val)).join('');
         fPSel.innerHTML = '<option value="">Todos</option>' + listP.map(x => opt(x.val)).join('');
-        
         fTSel.innerHTML = listT.map(x => `<label class="multiselect-item"><input type="checkbox" value="${x.val}" onchange="updateMulti('T')"> ${x.val}</label>`).join('');
         fESel.innerHTML = listE.map(x => `<label class="multiselect-item"><input type="checkbox" value="${x.val}" onchange="updateMulti('E')"> ${x.val}</label>`).join('');
-
         document.getElementById('listAdminT').innerHTML = listT.map(x => `<div class="admin-item">${x.val} <button class="btn-del" onclick="delItem('treinadores','${x.id}')">✕</button></div>`).join('');
         document.getElementById('listAdminE').innerHTML = listE.map(x => `<div class="admin-item">${x.val} <button class="btn-del" onclick="delItem('escaloes','${x.id}')">✕</button></div>`).join('');
         document.getElementById('listAdminP').innerHTML = listP.map(x => `<div class="admin-item">${x.val} <button class="btn-del" onclick="delItem('pavilhoes','${x.id}')">✕</button></div>`).join('');
     }
 
     window.addItem = async (col, inputId) => { const v = document.getElementById(inputId).value; if(v) { await addDoc(collection(db, col), {val: v}); document.getElementById(inputId).value = ''; } };
-    window.delItem = async (col, id) => { if(confirm("Remover permanentemente?")) await deleteDoc(doc(db, col, id)); };
+    window.delItem = async (col, id) => { if(confirm("Remover?")) await deleteDoc(doc(db, col, id)); };
 
     window.toggleSection = (id) => { const c = document.getElementById(id); const icon = document.getElementById(id + 'Icon'); c.classList.toggle('active'); icon.innerText = c.classList.contains('active') ? '▲' : '▼'; };
     window.toggleDrop = (id) => { document.querySelectorAll('.multiselect-dropdown').forEach(el => { if(el.id !== id) el.classList.remove('show'); }); document.getElementById(id).classList.toggle('show'); };
@@ -290,10 +294,10 @@
             if(!j.finalizado) {
                 if(j.casaFora === 'Casa') cC++; else cF++;
                 const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button style="background:var(--accent);color:white;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;margin-top:5px;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" style="text-decoration:none;">📍</a>` : ''}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button style="background:var(--accent);color:white;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;margin-top:5px;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link">📍</a>` : ''}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 lWeb.appendChild(tr);
-                const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'card-conflito' : ''}`;
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${j.mapsLink ? '📍' : ''}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito Horário</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</div>`;
+                const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'conflito-card' : ''}`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${j.mapsLink ? '📍' : ''}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito Horário</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''} <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
                 lMob.appendChild(card);
             } else {
                 cFin++;
@@ -301,7 +305,7 @@
                 tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</span><br><span class="parciais-tag">${j.parciais}</span></td><td>${dt}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 hWeb.appendChild(tr);
                 const card = document.createElement('div'); card.className = 'game-card card-finalizado-mobile';
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">Res: <b>${j.setPro} - ${j.setContra}</b>${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</div><div class="info-item">📊 Parciais: ${j.parciais}</div><div class="info-item">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">Res: <b>${j.setPro} - ${j.setContra}</b>${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</div><div class="info-item">📊 Parciais: ${j.parciais || '---'}</div><div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
                 hMob.appendChild(card);
             }
         });
@@ -310,9 +314,13 @@
 
     window.prepararEdicao = (id) => {
         const j = jogosAtuais.find(x => x.id === id); editId = id;
-        document.getElementById('treinador').value = j.treinador; document.getElementById('cor').value = j.cor; document.getElementById('casaFora').value = j.casaFora; window.togglePavilionField(); 
-        document.getElementById('data').value = j.data; document.getElementById('hora').value = j.hora; document.getElementById('competicao').value = j.competicao||''; document.getElementById('jornada').value = j.jornada||''; document.getElementById('numJogo').value = j.numJogo||''; document.getElementById('escalao').value = j.escalao; document.getElementById('adversario').value = j.adversario; document.getElementById('pavilhao').value = j.pavilhao;
-        if(j.casaFora === 'Fora') document.getElementById('mapsLink').value = j.mapsLink || '';
+        document.getElementById('treinador').value = j.treinador; document.getElementById('cor').value = j.cor; 
+        document.getElementById('casaFora').value = j.casaFora; window.togglePavilionField(); 
+        document.getElementById('data').value = j.data; document.getElementById('hora').value = j.hora; 
+        document.getElementById('competicao').value = j.competicao||''; document.getElementById('jornada').value = j.jornada||''; 
+        document.getElementById('numJogo').value = j.numJogo||''; document.getElementById('escalao').value = j.escalao; 
+        document.getElementById('adversario').value = j.adversario; document.getElementById('pavilhao').value = j.pavilhao;
+        if(j.casaFora === 'Fora' && document.getElementById('mapsLink')) document.getElementById('mapsLink').value = j.mapsLink || '';
         document.getElementById('setPro').value = j.setPro; document.getElementById('setContra').value = j.setContra; document.getElementById('parciais').value = j.parciais;
         document.getElementById('boxSetPro').style.display = 'block'; document.getElementById('boxSetContra').style.display = 'block'; document.getElementById('boxParciais').style.display = 'block';
         const bS = document.getElementById('btnSalvar'); bS.innerText = "Atualizar"; bS.classList.add("btn-atualizar");
