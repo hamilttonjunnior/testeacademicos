@@ -40,9 +40,9 @@
         .field label { font-size: 11px; font-weight: bold; color: #475569; }
         input, select { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; width: 100%; box-sizing: border-box; }
         
-        /* MULTI-SELECT CUSTOMIZADO */
+        /* DROPDOWN CUSTOM */
         .custom-select { position: relative; width: 100%; }
-        .select-box { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .select-box { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; cursor: pointer; display: flex; justify-content: space-between; align-items: center; min-height: 38px; box-sizing: border-box; }
         .options-list { 
             position: absolute; top: 105%; left: 0; width: 100%; background: white; border: 1px solid #cbd5e0; 
             border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); z-index: 100; display: none; max-height: 250px; overflow-y: auto; 
@@ -50,10 +50,11 @@
         .options-list.show { display: block; }
         .option-item { padding: 8px 12px; display: flex; align-items: center; gap: 10px; font-size: 12px; cursor: pointer; }
         .option-item:hover { background: #f1f5f9; }
-        .option-item input { width: auto; }
+        .option-item input { width: auto; margin: 0; }
 
         .btn-group { grid-column: 1 / -1; display: flex; gap: 10px; }
-        .btn-marcar { flex: 2; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; }
+        .btn-marcar { flex: 2; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: background 0.3s; }
+        .btn-marcar:hover { background: #2c3e50; }
         .btn-cancelar { flex: 1; padding: 15px; background: #94a3b8; color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; display: none; }
         .btn-atualizar { background: #e67e22 !important; }
         
@@ -81,7 +82,6 @@
         .win-icon { color: #f1c40f; }
         .maps-link { text-decoration: none; font-size: 18px; cursor: pointer; margin-left: 5px; }
         .resultado-tag { font-weight: 800; color: var(--primary); font-size: 14px; }
-        .error-tag { color: var(--error); font-size: 10px; font-weight: bold; }
 
         @media screen and (min-width: 1025px) { .table-wrapper { display: block !important; } .mobile-list { display: none !important; } }
         @media screen and (max-width: 1024px) { 
@@ -107,7 +107,7 @@
         <header>
             <div style="display: flex; align-items: center;">
                 <img src="academicos.png" alt="Logo" class="header-logo">
-                <h2 style="margin:0; color: var(--primary); font-size: 1.1rem;">FC Académicos</h2>
+                <h2 style="margin:0; color: var(--primary);">FC Académicos</h2>
             </div>
             <button onclick="location.reload()" style="padding: 8px 12px; border-radius: 8px; cursor:pointer;">Sair</button>
         </header>
@@ -170,19 +170,28 @@
                 </div>
             </div>
             <div class="field"><label>🔍 Data</label><input type="date" id="filterData" onchange="render()"></div>
-            <div class="field"><label>🔍 Local</label><select id="filterLocal" onchange="render()"><option value="">Todos</option><option value="Casa">Casa</option><option value="Fora">Fora</option></select></div>
+            <div class="field"><label>🔍 Local</label>
+                <select id="filterLocal" onchange="handleFilterLocalChange()">
+                    <option value="">Todos</option><option value="Casa">Casa</option><option value="Fora">Fora</option>
+                </select>
+            </div>
+            <div class="field" id="filterPavilhaoContainer" style="display:none;"><label>🔍 Pavilhão</label>
+                <select id="filterPavilhao" onchange="render()">
+                    <option value="">Todos</option><option value="ES ALCAIDES FARIA">ES ALCAIDES FARIA</option><option value="MUNICIPAL DE ADÃES">MUNICIPAL DE ADÃES</option>
+                </select>
+            </div>
             <div style="display: flex; align-items: flex-end;"><button onclick="window.print()" style="padding: 10px 15px; cursor:pointer; background: #55acee; color: white; border:none; border-radius: 8px; font-weight:bold;">🖨️ PDF</button></div>
         </div>
 
         <h3 class="secao-titulo">Próximos Jogos</h3>
-        <div class="table-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Local</th><th>Ações</th></tr></thead><tbody id="listaWeb"></tbody></table></div>
+        <div class="table-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Escalão</th><th>Adversário</th><th>Data/Hora</th><th>Pavilhão</th><th>Tipo</th><th>Ações</th></tr></thead><tbody id="listaWeb"></tbody></table></div>
         <div id="listaMobile" class="mobile-list"></div>
 
         <button class="collapsible-trigger" onclick="toggleSection('historicoContainer')" style="background: var(--finished-text); margin-top: 20px;">
             <span>📜 HISTÓRICO DE JOGOS</span> <span id="historicoContainerIcon">▼</span>
         </button>
         <div id="historicoContainer" class="collapsible-content">
-            <div class="table-wrapper historico-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Comp.</th><th>Jor.</th><th>Nº</th><th>Escalão</th><th>Adversário/Res.</th><th>Data/Hora</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistoricoWeb"></tbody></table></div>
+            <div class="table-wrapper historico-wrapper"><table><thead><tr><th></th><th>Treinador</th><th>Escalão</th><th>Adversário/Res.</th><th>Data/Hora</th><th>Pavilhão</th><th>Status</th><th>Ações</th></tr></thead><tbody id="listaHistoricoWeb"></tbody></table></div>
             <div id="listaHistoricoMobile" class="mobile-list"></div>
         </div>
     </div>
@@ -201,6 +210,12 @@
     window.toggleDrop = (id) => { 
         document.querySelectorAll('.options-list').forEach(el => { if(el.id !== id) el.classList.remove('show'); });
         document.getElementById(id).classList.toggle('show'); 
+    };
+
+    window.handleFilterLocalChange = () => {
+        const local = document.getElementById('filterLocal').value;
+        document.getElementById('filterPavilhaoContainer').style.display = (local === 'Casa') ? 'flex' : 'none';
+        render();
     };
 
     window.checkLogin = () => { if(document.getElementById('userIn').value === 'academicos' && document.getElementById('passIn').value === 'academicos2026') { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('app').style.display = 'block'; carregarJogos(); initMultiFilters(); } else { alert("Senha incorreta!"); } };
@@ -239,7 +254,7 @@
         const hWeb = document.getElementById('listaHistoricoWeb'); const hMob = document.getElementById('listaHistoricoMobile');
         const selT = Array.from(document.querySelectorAll('#listT input:checked')).map(i => i.value);
         const selE = Array.from(document.querySelectorAll('#listE input:checked')).map(i => i.value);
-        const fData = document.getElementById('filterData').value, fLocal = document.getElementById('filterLocal').value;
+        const fData = document.getElementById('filterData').value, fLocal = document.getElementById('filterLocal').value, fPav = document.getElementById('filterPavilhao').value;
         
         lWeb.innerHTML = ''; lMob.innerHTML = ''; hWeb.innerHTML = ''; hMob.innerHTML = '';
         const agora = new Date(); let cC = 0, cF = 0, cFin = 0;
@@ -259,25 +274,25 @@
             if(selE.length > 0 && !selE.includes(j.escalao)) return;
             if(fData && j.data !== fData) return;
             if(fLocal && j.casaFora !== fLocal) return;
+            if(fLocal === 'Casa' && fPav && j.pavilhao !== fPav) return;
 
             const isWin = parseInt(j.setPro) > parseInt(j.setContra);
             const dt = j.data ? j.data.split('-').reverse().join('/') : '-';
             const isPassado = j.data && j.hora && (agora > new Date(`${j.data}T${j.hora}`));
-            const bL = j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora';
             const pinIcon = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-link">📍</a>` : '';
 
             if(!j.finalizado) {
                 if(j.casaFora === 'Casa') cC++; else cF++;
                 const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button style="background:var(--accent);color:white;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge ${bL}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.escalao}</td><td>${j.adversario}</td><td>${dt} às ${j.hora}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 lWeb.appendChild(tr);
                 const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'conflito-card' : ''}`;
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge ${bL}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito de Hora</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</div>`;
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${pinIcon}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:var(--accent);color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''} <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
                 lMob.appendChild(card);
             } else {
                 cFin++;
                 const tr = document.createElement('tr'); tr.className = 'row-finalizado';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${isWin ? ' 🏆' : ''}</span></td><td>${dt}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:${j.cor}">${j.treinador}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${isWin ? ' 🏆' : ''}</span></td><td>${dt}</td><td>${j.pavilhao} ${pinIcon}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 hWeb.appendChild(tr);
                 const card = document.createElement('div'); card.className = 'game-card card-finalizado-mobile';
                 card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">Res: ${j.setPro} - ${j.setContra}${isWin ? ' 🏆' : ''}</div><div class="info-item">📊 Parciais: ${j.parciais || '---'}</div><div class="info-item">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
