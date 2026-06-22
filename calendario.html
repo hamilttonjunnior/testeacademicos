@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FC Académicos - Calendário de Jogos</title>
+    <link rel="shortcut icon" type="image/x-icon" href="FCA.ico">
+    
+    <link rel="apple-touch-icon" href="academicos.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="academicos.png">
+    
+    <meta name="apple-mobile-web-app-title" content="Académicos">
+    <style>
+        :root { 
+            --primary: #1a2a3a; --accent: #3498db; --error: #e74c3c; 
+            --success: #27ae60; --bg: #cbd5e0; --finished-bg: #cbd5e0; --finished-text: #475569;
+            --warning: #e67e22;
+        }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
+        .main-content { width: 98%; max-width: 1400px; margin: 15px auto; }
+        .container { background: #f1f3f5; padding: 20px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); margin-bottom: 30px; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #dee2e6; padding-bottom: 10px; }
+        .header-logo { max-height: 45px; margin-right: 15px; }
+        
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .stat-card { background: #ffffff; padding: 12px; border-radius: 10px; border-left: 5px solid var(--accent); text-align: center; }
+        .stat-card p { margin: 5px 0 0; font-size: 20px; font-weight: 800; color: var(--primary); }
+        
+        .collapsible-trigger { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; cursor: pointer; text-align: left; font-weight: 800; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; transition: 0.3s; }
+        .collapsible-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+        .collapsible-content.active { max-height: none; margin-bottom: 20px; }
+        
+        .filter-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; background: #eef2f7; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
+        .field { display: flex; flex-direction: column; gap: 4px; position: relative; }
+        .field label { font-size: 11px; font-weight: bold; color: #475569; }
+        input, select { padding: 10px; border: 1px solid #cbd5e0; border-radius: 8px; font-size: 13px; background: #ffffff; }
+        
+        .multiselect-wrap { position: relative; width: 100%; }
+        .multiselect-selected { background: white; border: 1px solid #cbd5e0; border-radius: 8px; padding: 10px; font-size: 13px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; min-height: 38px; box-sizing: border-box; }
+        .multiselect-dropdown { position: absolute; top: 105%; left: 0; width: 100%; background: white; border: 1px solid #cbd5e0; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); z-index: 100; display: none; max-height: 200px; overflow-y: auto; padding: 5px 0; }
+        .multiselect-dropdown.show { display: block; }
+        .multiselect-item { padding: 8px 12px; display: flex; align-items: center; gap: 10px; font-size: 12px; cursor: pointer; }
+        .multiselect-item:hover { background: #f8fafc; }
+        
+        .table-wrapper { background: #ffffff; border-radius: 12px; border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 20px; }
+        .historico-wrapper { background: var(--finished-bg) !important; }
+        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        th { background: #f8fafc; padding: 12px 10px; text-align: left; color: #64748b; font-size: 12px; text-transform: uppercase; border-bottom: 2px solid #e2e8f0; }
+        td { padding: 12px 10px; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+        .row-finalizado td { background-color: var(--finished-bg) !important; color: var(--finished-text) !important; }
+        
+        .mobile-list { display: none; flex-direction: column; gap: 12px; }
+        .game-card { background: white; border-radius: 15px; padding: 15px; border: 1px solid #e2e8f0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .card-finalizado-mobile { background: #d1d5db !important; border-color: #94a3b8 !important; opacity: 0.9; }
+        .card-full { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding-bottom: 8px; font-weight: 800; color: var(--primary); }
+        .info-item { font-size: 12px; color: #4a5568; display: flex; align-items: center; gap: 8px; }
+        
+        .badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 800; text-transform: uppercase; white-space: nowrap; }
+        .badge-casa { background: #d0ebff; color: #1971c2; }
+        .badge-fora { background: #ffe3e3; color: #c92a2a; }
+        .badge-finalizado { background: #94a3b8; color: white; }
+        
+        .maps-btn { display: inline-flex; align-items: center; justify-content: center; background: #27ae60; color: white; text-decoration: none; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: bold; gap: 4px; margin-top: 2px; }
+        .maps-btn:hover { background: #219653; }
+        .resultado-tag { font-weight: 800; color: var(--primary); font-size: 14px; }
+        .parciais-tag { font-size: 11px; color: #64748b; font-style: italic; }
+        
+        @media screen and (min-width: 1025px) { .table-wrapper { display: block !important; } .mobile-list { display: none !important; } }
+        @media screen and (max-width: 1024px) { 
+            .table-wrapper { display: none !important; } .mobile-list { display: flex !important; }
+            .filter-grid { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            header { flex-direction: column; text-align: center; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-content" id="app">
+    <div class="container">
+        <header>
+            <div style="display: flex; align-items: center;">
+                <img src="academicos.png" alt="Logo" class="header-logo" onerror="this.style.display='none'">
+                <h2 style="margin:0; color: var(--primary); font-size: 1.3rem;">FC Académicos - Agenda Pública</h2>
+            </div>
+            <div>
+                <span style="font-size: 12px; color: #64748b; font-weight: bold;">📢 Consulta de Jogos</span>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card"><h3>Total Jogos</h3><p id="statTotal">0</p></div>
+            <div class="stat-card" style="border-left-color: #3498db;"><h3>Em Casa</h3><p id="statCasa">0</p></div>
+            <div class="stat-card" style="border-left-color: #e67e22;"><h3>Fora</h3><p id="statFora">0</p></div>
+            <div class="stat-card" style="border-left-color: var(--success);"><h3>Terminados</h3><p id="statFim">0</p></div>
+        </div>
+
+        <div class="filter-grid">
+            <div class="field"><label>🔍 Filtrar Treinadores</label>
+                <div class="multiselect-wrap">
+                    <div class="multiselect-selected" onclick="toggleDrop('dropT')"><span id="txtT">Todos</span> ▾</div>
+                    <div id="dropT" class="multiselect-dropdown"></div>
+                </div>
+            </div>
+            <div class="field"><label>🔍 Filtrar Escalões</label>
+                <div class="multiselect-wrap">
+                    <div class="multiselect-selected" onclick="toggleDrop('dropE')"><span id="txtE">Todos</span> ▾</div>
+                    <div id="dropE" class="multiselect-dropdown"></div>
+                </div>
+            </div>
+            <div class="field"><label>🔍 Data Específica</label><input type="date" id="filterData" onchange="render()"></div>
+            <div class="field"><label>🔍 Local</label><select id="filterLocal" onchange="handleFilterLocalChange()"><option value="">Todos</option><option value="Casa">Casa</option><option value="Fora">Fora</option></select></div>
+            <div class="field" id="filterPavilhaoContainer" style="display:none;"><label>🔍 Pavilhão</label><select id="filterPavilhao" onchange="render()"><option value="">Todos</option></select></div>
+        </div>
+
+        <h3 style="color: var(--primary); margin-top: 25px; border-left: 4px solid var(--accent); padding-left: 10px;">🗓️ Próximos Jogos</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Treinador</th>
+                        <th>Competição</th>
+                        <th>Jornada</th>
+                        <th>Nº Jogo</th>
+                        <th>Escalão</th>
+                        <th>Adversário</th>
+                        <th>Data / Hora</th>
+                        <th>Pavilhão / Localização</th>
+                        <th>Local</th>
+                    </tr>
+                </thead>
+                <tbody id="listaWeb"></tbody>
+            </table>
+        </div>
+        <div id="listaMobile" class="mobile-list"></div>
+
+        <button class="collapsible-trigger" onclick="toggleSection('historicoContainer')" style="background: var(--finished-text); margin-top: 30px;">
+            <span>📜 HISTÓRICO DE RESULTADOS</span> <span id="historicoContainerIcon">▼</span>
+        </button>
+        <div id="historicoContainer" class="collapsible-content">
+            <div class="table-wrapper historico-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Treinador</th>
+                            <th>Escalão</th>
+                            <th>Adversário / Resultado</th>
+                            <th>Data</th>
+                            <th>Pavilhão</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaHistoricoWeb"></tbody>
+                </table>
+            </div>
+            <div id="listaHistoricoMobile" class="mobile-list"></div>
+        </div>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // O mesmo config do seu banco de dados atual
+    const firebaseConfig = { apiKey: "AIzaSyB86TeZnp2qdOXXwjvD3hFfzTi3Z3NkVMc", authDomain: "academicos-d2cfc.firebaseapp.com", projectId: "academicos-d2cfc", storageBucket: "academicos-d2cfc.firebasestorage.app", messagingSenderId: "550824625713", appId: "1:550824625713:web:f3194f8e4f06dc141a3710" };
+    const app = initializeApp(firebaseConfig); const db = getFirestore(app); const jogosCol = collection(db, "jogos");
+    let jogosAtuais = [], listT = [], listE = [], listP = [];
+
+    // Carregamento inicial das listas para os filtros da página pública
+    onSnapshot(collection(db, "treinadores"), s => { listT = s.docs.map(d => d.data().val).sort((a,b) => a.localeCompare(b)); updateUIFilters(); });
+    onSnapshot(collection(db, "escaloes"), s => { listE = s.docs.map(d => d.data().val).sort((a,b) => a.localeCompare(b)); updateUIFilters(); });
+    onSnapshot(collection(db, "pavilhoes"), s => { listP = s.docs.map(d => d.data().val).sort((a,b) => a.localeCompare(b)); updateUIFilters(); });
+
+    function updateUIFilters() {
+        const fTSel = document.getElementById('dropT'), fESel = document.getElementById('dropE'), fPSel = document.getElementById('filterPavilhao');
+        fPSel.innerHTML = '<option value="">Todos</option>' + listP.map(x => `<option value="${x}">${x}</option>`).join('');
+        fTSel.innerHTML = listT.map(x => `<label class="multiselect-item"><input type="checkbox" value="${x}" onchange="updateMulti('T')"> ${x}</label>`).join('');
+        fESel.innerHTML = listE.map(x => `<label class="multiselect-item"><input type="checkbox" value="${x}" onchange="updateMulti('E')"> ${x}</label>`).join('');
+    }
+
+    window.toggleSection = (id) => { const c = document.getElementById(id); const icon = document.getElementById(id + 'Icon'); c.classList.toggle('active'); icon.innerText = c.classList.contains('active') ? '▲' : '▼'; };
+    window.toggleDrop = (id) => { document.querySelectorAll('.multiselect-dropdown').forEach(el => { if(el.id !== id) el.classList.remove('show'); }); document.getElementById(id).classList.toggle('show'); };
+    window.updateMulti = (type) => { const items = Array.from(document.querySelectorAll(`#drop${type} input:checked`)); document.getElementById(`txt${type}`).innerText = items.length === 0 ? "Todos" : (items.length === 1 ? items[0].value : `${items.length} Selecionados`); render(); };
+    window.handleFilterLocalChange = () => { document.getElementById('filterPavilhaoContainer').style.display = (document.getElementById('filterLocal').value === 'Casa') ? 'flex' : 'none'; render(); };
+
+    // Escuta os jogos em tempo real
+    onSnapshot(query(jogosCol, orderBy("data"), orderBy("hora")), (s) => { 
+        jogosAtuais = s.docs.map(d => ({ id: d.id, ...d.data() })); 
+        render(); 
+    });
+
+    window.render = () => {
+        const lWeb = document.getElementById('listaWeb'), lMob = document.getElementById('listaMobile'), hWeb = document.getElementById('listaHistoricoWeb'), hMob = document.getElementById('listaHistoricoMobile');
+        const selT = Array.from(document.querySelectorAll('#dropT input:checked')).map(i => i.value), selE = Array.from(document.querySelectorAll('#dropE input:checked')).map(i => i.value);
+        const fD = document.getElementById('filterData').value, fL = document.getElementById('filterLocal').value, fP = document.getElementById('filterPavilhao').value;
+        
+        lWeb.innerHTML = ''; lMob.innerHTML = ''; hWeb.innerHTML = ''; hMob.innerHTML = '';
+        let cC = 0, cF = 0, cFin = 0;
+
+        jogosAtuais.forEach(j => {
+            if(selT.length > 0 && !selT.includes(j.treinador)) return; 
+            if(selE.length > 0 && !selE.includes(j.escalao)) return; 
+            if(fD && j.data !== fD) return; 
+            if(fL && j.casaFora !== fL) return; 
+            if(fL === 'Casa' && fP && j.pavilhao !== fP) return;
+
+            const dt = j.data ? j.data.split('-').reverse().join('/') : '-';
+
+            if(!j.finalizado) {
+                if(j.casaFora === 'Casa') cC++; else cF++;
+                
+                // Botão de mapa elegante para os pais se houver link
+                const mapHTML = j.mapsLink ? `<br><a href="${j.mapsLink}" target="_blank" class="maps-btn">📍 Abrir Mapa</a>` : '';
+
+                // Renderização Web
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td>
+                                <td style="font-weight:bold; color:${j.cor}">${j.treinador}</td>
+                                <td>${j.competicao||'-'}</td>
+                                <td>${j.jornada||'-'}</td>
+                                <td>${j.numJogo||'-'}</td>
+                                <td style="font-weight:bold;">${j.escalao}</td>
+                                <td>${j.adversario || '---'}</td>
+                                <td style="font-weight:bold;">${dt} às ${j.hora}</td>
+                                <td>${j.pavilhao} ${mapHTML}</td>
+                                <td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td>`;
+                lWeb.appendChild(tr);
+
+                // Renderização Mobile
+                const card = document.createElement('div'); 
+                card.className = 'game-card';
+                card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div>
+                                  <div class="info-item">📅 <b>${dt} - ${j.hora}</b></div>
+                                  <div class="info-item">Volley: <b>${j.escalao}</b></div>
+                                  <div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div>
+                                  <div class="info-item" style="grid-column: 1/-1; display:block; margin-top:5px;">🏠 Pav: ${j.pavilhao} ${j.mapsLink ? `<br><a href="${j.mapsLink}" target="_blank" class="maps-btn" style="margin-top:5px;">📍 Rota no Google Maps</a>` : ''}</div>`;
+                lMob.appendChild(card);
+            } else {
+                cFin++;
+                
+                // Histórico Web
+                const tr = document.createElement('tr'); tr.className = 'row-finalizado';
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td>
+                                <td style="font-weight:bold; color:${j.cor}">${j.treinador}</td>
+                                <td>${j.escalao}</td>
+                                <td><b>${j.adversario}</b><br><span class="resultado-tag">${j.setPro} - ${j.setContra}${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</span><br><span class="parciais-tag">${j.parciais || ''}</span></td>
+                                <td>${dt}</td>
+                                <td>${j.pavilhao}</td>
+                                <td><span class="badge badge-finalizado">Terminado</span></td>`;
+                hWeb.appendChild(tr);
+
+                // Histórico Mobile
+                const card = document.createElement('div'); card.className = 'game-card card-finalizado-mobile';
+                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div>
+                                  <div class="info-item" style="grid-column:1/-1; font-size:14px;">Resultado: <b class="resultado-tag">${j.setPro} - ${j.setContra}</b>${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</div>
+                                  <div class="info-item" style="grid-column:1/-1;">📊 Parciais: ${j.parciais || '---'}</div>
+                                  <div class="info-item">🏐 ${j.escalao}</div>
+                                  <div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div>`;
+                hMob.appendChild(card);
+            }
+        });
+        
+        document.getElementById('statTotal').innerText = cC+cF+cFin; 
+        document.getElementById('statCasa').innerText = cC; 
+        document.getElementById('statFora').innerText = cF; 
+        document.getElementById('statFim').innerText = cFin;
+    };
+
+    window.onclick = (e) => { if (!e.target.closest('.multiselect-wrap')) { document.querySelectorAll('.multiselect-dropdown').forEach(el => el.classList.remove('show')); } };
+</script>
+</body>
+</html>
