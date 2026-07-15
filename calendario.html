@@ -233,6 +233,7 @@
                 const card = document.createElement('div'); 
                 card.className = 'game-card';
                 card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div>
+                                  <div class="info-item" style="grid-column: 1/-1;">🏆 Comp: <b>${j.competicao || '-'}</b></div>
                                   <div class="info-item">📅 <b>${dt} - ${j.hora}</b></div>
                                   <div class="info-item">Volley: <b>${j.escalao}</b></div>
                                   <div class="info-item" style="color:${j.cor}">👤 ${j.treinador}</div>
@@ -255,6 +256,7 @@
                 // Histórico Mobile
                 const card = document.createElement('div'); card.className = 'game-card card-finalizado-mobile';
                 card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div>
+                                  <div class="info-item" style="grid-column:1/-1;">🏆 Comp: <b>${j.competicao || '-'}</b></div>
                                   <div class="info-item" style="grid-column:1/-1; font-size:14px;">Resultado: <b class="resultado-tag">${j.setPro} - ${j.setContra}</b>${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</div>
                                   <div class="info-item" style="grid-column:1/-1;">📊 Parciais: ${j.parciais || '---'}</div>
                                   <div class="info-item">🏐 ${j.escalao}</div>
