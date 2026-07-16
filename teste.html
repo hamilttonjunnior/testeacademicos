@@ -329,7 +329,7 @@
         .stat-card.total p { color: #000000; }
 
         .stat-card.casa {
-            background: #111111; /* Cinza Muito Escuro */
+            background: #111111; 
             border: 1px solid #111111;
             color: #ffffff;
         }
@@ -338,14 +338,14 @@
 
         .stat-card.fora {
             background: #ffffff;
-            border: 2px dashed #000000; /* Borda tracejada moderna */
+            border: 2px dashed #000000; 
             color: #000000;
         }
         .stat-card.fora h3 { color: #000000; font-weight: 800; }
         .stat-card.fora p { color: #000000; }
 
         .stat-card.fim {
-            background: var(--finished-bg); /* Cinza Claro Sólido */
+            background: var(--finished-bg); 
             border: 1px solid var(--gray-border);
             color: var(--finished-text);
         }
@@ -474,7 +474,7 @@
         .btn-cancelar { flex: 1; padding: 16px; display: none; }
         .btn-atualizar { background: var(--warning) !important; }
 
-        /* Tabelas */
+        /* Tabelas com layout flexível para respeitar colunas finas */
         .secao-titulo {
             font-size: 16px;
             font-weight: 900;
@@ -493,7 +493,12 @@
         .historico-wrapper { 
             background: var(--finished-bg) !important; 
         }
-        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            min-width: 900px; 
+            table-layout: auto; /* Permite redimensionar colunas vazias */
+        }
         th { 
             background: #fafafa; 
             padding: 16px 14px; 
@@ -505,6 +510,15 @@
             letter-spacing: 0.5px;
             border-bottom: 1px solid var(--gray-border); 
         }
+        
+        /* Cabeçalho da primeira coluna (cor) definido como super fino */
+        th:first-child {
+            width: 4px;
+            max-width: 4px;
+            min-width: 4px;
+            padding: 0;
+        }
+        
         td { 
             padding: 16px 14px; 
             border-bottom: 1px solid var(--gray-border); 
@@ -605,13 +619,13 @@
             white-space: nowrap; 
         }
         .badge-casa { 
-            background: #111111; /* Preto para corresponder ao card de casa */
+            background: #111111; 
             color: #ffffff; 
         }
         .badge-fora { 
             background: #ffffff; 
             color: #000000; 
-            border: 1px solid #000000; /* Branco com contorno para o card de fora */
+            border: 1px solid #000000; 
         }
         .badge-finalizado { 
             background: #666666; 
@@ -913,8 +927,8 @@
                 if(j.casaFora === 'Casa') cC++; else cF++;
                 const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito';
                 
-                // Alteração: célula de cor alterada para 3px de largura e padding 0 para ficar rente à borda
-                tr.innerHTML = `<td style="background:${j.cor}; width:3px; padding:0;"></td><td style="font-weight:bold; color:#000000">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button class="btn-dark" style="padding:4px 8px; font-size:10px; margin-top:5px;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" style="text-decoration:none;">📍</a>` : ''}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                // Correção de largura absoluta: width: 4px; max-width: 4px; min-width: 4px; padding: 0;
+                tr.innerHTML = `<td style="background:${j.cor}; width:4px; max-width:4px; min-width:4px; padding:0; margin:0;"></td><td style="font-weight:bold; color:#000000">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button class="btn-dark" style="padding:4px 8px; font-size:10px; margin-top:5px;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" style="text-decoration:none;">📍</a>` : ''}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 lWeb.appendChild(tr);
                 
                 // Card Mobile atualizado com Comp e NumJogo
@@ -938,8 +952,8 @@
                 cFin++;
                 const tr = document.createElement('tr'); tr.className = 'row-finalizado';
                 
-                // Alteração: célula de cor alterada para 3px de largura e padding 0 no histórico de jogos
-                tr.innerHTML = `<td style="background:${j.cor}; width:3px; opacity:0.5; padding:0;"></td><td style="font-weight:bold; color:#555555">${j.treinador}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</span><br><span class="parciais-tag">${j.parciais}</span></td><td>${dt}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                // Correção de largura absoluta no histórico: width: 4px; max-width: 4px; min-width: 4px; padding: 0;
+                tr.innerHTML = `<td style="background:${j.cor}; width:4px; max-width:4px; min-width:4px; opacity:0.5; padding:0; margin:0;"></td><td style="font-weight:bold; color:#555555">${j.treinador}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</span><br><span class="parciais-tag">${j.parciais}</span></td><td>${dt}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 hWeb.appendChild(tr);
                 
                 // Card Histórico Mobile atualizado com Comp e NumJogo
