@@ -291,7 +291,7 @@
             margin-bottom: 25px; 
         }
 
-        /* Grade de Estatísticas */
+        /* Grade de Estatísticas com Escala de Cinzas Diversificada */
         .stats-grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
@@ -299,25 +299,58 @@
             margin-bottom: 25px; 
         }
         .stat-card { 
-            background: #ffffff; 
-            padding: 16px; 
+            padding: 18px; 
             border-radius: 12px; 
-            border: 1px solid var(--gray-border);
             text-align: center; 
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-2px);
         }
         .stat-card h3 {
             margin: 0;
             font-size: 11px;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: var(--gray-dark);
         }
         .stat-card p { 
-            margin: 10px 0 0; 
-            font-size: 26px; 
+            margin: 8px 0 0; 
+            font-size: 28px; 
             font-weight: 900; 
-            color: #000000; 
         }
+        
+        /* Diferenciando cada Quadro com tons específicos */
+        .stat-card.total {
+            background: #ffffff;
+            border: 1px solid var(--gray-border);
+            color: #000000;
+        }
+        .stat-card.total h3 { color: var(--gray-dark); }
+        .stat-card.total p { color: #000000; }
+
+        .stat-card.casa {
+            background: #111111; /* Cinza Muito Escuro */
+            border: 1px solid #111111;
+            color: #ffffff;
+        }
+        .stat-card.casa h3 { color: #a0aec0; }
+        .stat-card.casa p { color: #ffffff; }
+
+        .stat-card.fora {
+            background: #ffffff;
+            border: 2px dashed #000000; /* Borda tracejada moderna */
+            color: #000000;
+        }
+        .stat-card.fora h3 { color: #000000; font-weight: 800; }
+        .stat-card.fora p { color: #000000; }
+
+        .stat-card.fim {
+            background: var(--finished-bg); /* Cinza Claro Sólido */
+            border: 1px solid var(--gray-border);
+            color: var(--finished-text);
+        }
+        .stat-card.fim h3 { color: var(--finished-text); }
+        .stat-card.fim p { color: #000000; }
 
         /* Formulários e Filtros */
         .form-grid, .filter-grid { 
@@ -562,7 +595,7 @@
             color: #ffffff;
         }
 
-        /* Badges */
+        /* Badges Minimalistas na escala de Cinza correspondente */
         .badge { 
             padding: 6px 10px; 
             border-radius: 4px; 
@@ -571,9 +604,19 @@
             text-transform: uppercase; 
             white-space: nowrap; 
         }
-        .badge-casa { background: #000000; color: #ffffff; }
-        .badge-fora { background: #ffffff; color: #000000; border: 1px solid #000000; }
-        .badge-finalizado { background: #666666; color: #ffffff; }
+        .badge-casa { 
+            background: #111111; /* Preto para corresponder ao card de casa */
+            color: #ffffff; 
+        }
+        .badge-fora { 
+            background: #ffffff; 
+            color: #000000; 
+            border: 1px solid #000000; /* Branco com contorno para o card de fora */
+        }
+        .badge-finalizado { 
+            background: #666666; 
+            color: #ffffff; 
+        }
 
         .row-conflito { background-color: #fff0f0 !important; border-left: 4px solid var(--error) !important; }
         .row-conflito td { background-color: #fff0f0 !important; }
@@ -601,11 +644,13 @@
 </head>
 <body>
 
+<!-- Sistema Global de Modais Customizados CSS -->
 <div id="customModal" class="custom-modal">
     <div class="modal-box">
         <h3 id="modalTitle">Confirmação</h3>
         <div class="modal-inputs" id="modalInputs">
-            </div>
+            <!-- Gerado dinamicamente via JS -->
+        </div>
         <div class="modal-footer">
             <button class="btn-light" id="modalBtnCancel" onclick="closeCustomModal()">Cancelar</button>
             <button class="btn-dark" id="modalBtnConfirm">Confirmar</button>
@@ -658,11 +703,12 @@
             </div>
         </div>
 
+        <!-- Grade de Estatísticas estilizada com tons de cinza -->
         <div class="stats-grid">
-            <div class="stat-card"><h3>Total</h3><p id="statTotal">0</p></div>
-            <div class="stat-card"><h3>Casa</h3><p id="statCasa">0</p></div>
-            <div class="stat-card"><h3>Fora</h3><p id="statFora">0</p></div>
-            <div class="stat-card"><h3>Fim</h3><p id="statFim">0</p></div>
+            <div class="stat-card total"><h3>Total</h3><p id="statTotal">0</p></div>
+            <div class="stat-card casa"><h3>Casa</h3><p id="statCasa">0</p></div>
+            <div class="stat-card fora"><h3>Fora</h3><p id="statFora">0</p></div>
+            <div class="stat-card fim"><h3>Fim</h3><p id="statFim">0</p></div>
         </div>
 
         <button class="collapsible-trigger" onclick="toggleSection('formAgendamento')">
@@ -866,7 +912,9 @@
             if(!j.finalizado) {
                 if(j.casaFora === 'Casa') cC++; else cF++;
                 const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:#000000">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button class="btn-dark" style="padding:4px 8px; font-size:10px; margin-top:5px;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" style="text-decoration:none;">📍</a>` : ''}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                
+                // Alteração: célula de cor alterada para 3px de largura e padding 0 para ficar rente à borda
+                tr.innerHTML = `<td style="background:${j.cor}; width:3px; padding:0;"></td><td style="font-weight:bold; color:#000000">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button class="btn-dark" style="padding:4px 8px; font-size:10px; margin-top:5px;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" style="text-decoration:none;">📍</a>` : ''}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 lWeb.appendChild(tr);
                 
                 // Card Mobile atualizado com Comp e NumJogo
@@ -889,7 +937,9 @@
             } else {
                 cFin++;
                 const tr = document.createElement('tr'); tr.className = 'row-finalizado';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:#555555">${j.treinador}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</span><br><span class="parciais-tag">${j.parciais}</span></td><td>${dt}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                
+                // Alteração: célula de cor alterada para 3px de largura e padding 0 no histórico de jogos
+                tr.innerHTML = `<td style="background:${j.cor}; width:3px; opacity:0.5; padding:0;"></td><td style="font-weight:bold; color:#555555">${j.treinador}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</span><br><span class="parciais-tag">${j.parciais}</span></td><td>${dt}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 hWeb.appendChild(tr);
                 
                 // Card Histórico Mobile atualizado com Comp e NumJogo
