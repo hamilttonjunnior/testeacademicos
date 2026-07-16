@@ -12,20 +12,20 @@
     <meta name="apple-mobile-web-app-title" content="Académicos">
     <style>
         :root { 
-            /* Paleta Monocromática e Minimalista */
+            /* Paleta Monocromática Avançada */
             --primary: #000000; 
-            --accent: #111111; 
+            --accent: #222222; /* Cinza Escuro para botões primários */
             --error: #ff4d4d; 
             --success: #1a1a1a; 
-            --bg: #f3f4f6; 
-            --finished-bg: #eaeaea; 
-            --finished-text: #555555;
-            --warning: #333333;
+            --bg: #f8f9fa; 
+            --finished-bg: #eeeeee; 
+            --finished-text: #666666;
+            --warning: #444444;
             
             /* Tons auxiliares de Cinza */
-            --gray-light: #f9f9f9;
-            --gray-border: #e5e5e5;
-            --gray-dark: #777777;
+            --gray-light: #f1f3f5; /* Cinza Claro para botões secundários / fundos */
+            --gray-border: #e2e8f0;
+            --gray-dark: #64748b;
         }
 
         body { 
@@ -38,7 +38,7 @@
             color: #111111;
         }
 
-        /* Tela de Login Ultramoderna */
+        /* Tela de Login */
         #loginScreen { 
             position: fixed; 
             inset: 0; 
@@ -77,7 +77,7 @@
             padding: 14px; 
             margin-top: 15px;
             border-radius: 8px; 
-            background: #000000; 
+            background: var(--accent); 
             color: #ffffff; 
             border: none; 
             cursor: pointer; 
@@ -86,7 +86,62 @@
             transition: 0.2s; 
         }
         .login-box button:hover {
-            background: #222222;
+            background: var(--primary);
+        }
+
+        /* Pop-up / Modal Elegante em CSS */
+        .custom-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .custom-modal.show {
+            display: flex;
+        }
+        .modal-box {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 14px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            animation: fadeIn 0.2s ease-out;
+        }
+        @keyframes fadeIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-box h3 {
+            margin: 0 0 15px 0;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+        }
+        .modal-box .modal-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .modal-box label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .modal-box input {
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .modal-footer {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
         }
 
         /* Área de Conteúdo Principal */
@@ -117,7 +172,6 @@
         .header-logo { 
             max-height: 40px; 
             margin-right: 15px; 
-            filter: grayscale(1); /* Aplica efeito P&B na logo se desejar */
         }
         header h2 {
             font-weight: 800;
@@ -126,7 +180,7 @@
 
         /* Painel Admin Moderno */
         .admin-panel { 
-            background: var(--gray-light); 
+            background: var(--bg); 
             padding: 30px; 
             border-radius: 12px; 
             margin-bottom: 30px; 
@@ -185,7 +239,6 @@
             align-items: center; 
             padding: 8px; 
             font-size: 13px; 
-            border-bottom: 1px solid #fdfdfd;
         }
         .btn-del { 
             color: var(--error); 
@@ -196,7 +249,7 @@
             padding: 5px;
         }
         .btn-add { 
-            background: #000000; 
+            background: var(--accent); 
             color: #ffffff; 
             border: none; 
             border-radius: 8px; 
@@ -206,11 +259,11 @@
             font-size: 16px;
         }
 
-        /* Colapsáveis de Agendamento e Histórico */
+        /* Colapsáveis */
         .collapsible-trigger { 
             width: 100%; 
             padding: 18px 20px; 
-            background: #000000; 
+            background: var(--accent); 
             color: #ffffff; 
             border: none; 
             border-radius: 10px; 
@@ -226,7 +279,7 @@
             transition: background 0.2s; 
         }
         .collapsible-trigger:hover {
-            background: #222222;
+            background: var(--primary);
         }
         .collapsible-content { 
             max-height: 0; 
@@ -234,7 +287,7 @@
             transition: max-height 0.4s cubic-bezier(0, 1, 0, 1); 
         }
         .collapsible-content.active { 
-            max-height: 2000px; /* Garante que caiba todo o conteúdo de forma limpa */
+            max-height: 2000px; 
             margin-bottom: 25px; 
         }
 
@@ -251,10 +304,6 @@
             border-radius: 12px; 
             border: 1px solid var(--gray-border);
             text-align: center; 
-            transition: transform 0.2s;
-        }
-        .stat-card:hover {
-            transform: translateY(-2px);
         }
         .stat-card h3 {
             margin: 0;
@@ -281,7 +330,7 @@
             border: 1px solid var(--gray-border); 
         }
         .filter-grid { 
-            background: var(--gray-light); 
+            background: var(--bg); 
             margin-bottom: 30px; 
         }
         .field { 
@@ -316,7 +365,7 @@
             cursor: pointer;
         }
 
-        /* Multiselect Estilo Dropdown Moderno */
+        /* Multiselect */
         .multiselect-wrap { position: relative; width: 100%; }
         .multiselect-selected { 
             background: white; 
@@ -355,47 +404,44 @@
             font-size: 13px; 
             cursor: pointer; 
         }
-        .multiselect-item:hover { background: var(--gray-light); }
+        .multiselect-item:hover { background: var(--bg); }
 
-        /* Botões */
-        .btn-group { grid-column: 1 / -1; display: flex; gap: 12px; margin-top: 10px; }
-        .btn-marcar { 
-            flex: 2; 
-            padding: 16px; 
-            background: #000000; 
-            color: #ffffff; 
-            border: none; 
-            border-radius: 8px; 
-            font-weight: 800; 
+        /* Hierarquia de Botões Customizada */
+        .btn-dark {
+            padding: 12px 18px;
+            background: var(--accent);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
             font-size: 13px;
-            cursor: pointer; 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px;
-            transition: 0.2s; 
-        }
-        .btn-marcar:hover {
-            background: #222222;
-        }
-        .btn-cancelar { 
-            flex: 1; 
-            padding: 16px; 
-            background: #ffffff; 
-            color: #000000; 
-            border: 1px solid var(--gray-border); 
-            border-radius: 8px; 
-            font-weight: 800; 
-            cursor: pointer; 
-            display: none; 
+            cursor: pointer;
             transition: 0.2s;
         }
-        .btn-cancelar:hover {
-            background: var(--gray-light);
+        .btn-dark:hover {
+            background: var(--primary);
         }
-        .btn-atualizar { 
-            background: #333333 !important; 
+        .btn-light {
+            padding: 12px 18px;
+            background: var(--gray-light);
+            color: #000000;
+            border: 1px solid var(--gray-border);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-light:hover {
+            background: #e2e8f0;
         }
 
-        /* Tabelas e Wrappers */
+        .btn-group { grid-column: 1 / -1; display: flex; gap: 12px; margin-top: 10px; }
+        .btn-marcar { flex: 2; padding: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .btn-cancelar { flex: 1; padding: 16px; display: none; }
+        .btn-atualizar { background: var(--warning) !important; }
+
+        /* Tabelas */
         .secao-titulo {
             font-size: 16px;
             font-weight: 900;
@@ -413,11 +459,10 @@
         }
         .historico-wrapper { 
             background: var(--finished-bg) !important; 
-            border-color: var(--gray-border);
         }
         table { width: 100%; border-collapse: collapse; min-width: 900px; }
         th { 
-            background: var(--gray-light); 
+            background: #fafafa; 
             padding: 16px 14px; 
             text-align: left; 
             color: #000000; 
@@ -434,15 +479,13 @@
             color: #111111;
         }
         tr:hover td {
-            background-color: var(--gray-light);
+            background-color: #fafafa;
         }
         .row-finalizado td { 
             background-color: var(--finished-bg) !important; 
             color: var(--finished-text) !important; 
-            border-bottom-color: #dfdfdf;
         }
 
-        /* Botões de Ação na Tabela */
         td button {
             background: #ffffff;
             border: 1px solid var(--gray-border);
@@ -455,10 +498,9 @@
         td button:hover {
             background: #000000;
             color: #ffffff;
-            border-color: #000000;
         }
 
-        /* Estilos Mobile (Modo Cartões) */
+        /* Estilos Mobile Refinados com Comp. e Nº Jogo */
         .mobile-list { display: none; flex-direction: column; gap: 15px; }
         .game-card { 
             background: #ffffff; 
@@ -487,7 +529,7 @@
         }
         .info-item { 
             font-size: 13px; 
-            color: #333333; 
+            color: #222222; 
             display: flex; 
             align-items: center; 
             gap: 8px; 
@@ -505,7 +547,7 @@
             padding: 12px; 
             border-radius: 8px; 
             border: 1px solid var(--gray-border); 
-            background: #ffffff; 
+            background: var(--gray-light); 
             color: #000000;
             font-weight: 700; 
             cursor: pointer; 
@@ -516,12 +558,11 @@
             transition: 0.2s;
         }
         .btn-mobile:hover {
-            background: #000000;
+            background: var(--accent);
             color: #ffffff;
-            border-color: #000000;
         }
 
-        /* Badges Minimalistas */
+        /* Badges */
         .badge { 
             padding: 6px 10px; 
             border-radius: 4px; 
@@ -529,61 +570,18 @@
             font-weight: 900; 
             text-transform: uppercase; 
             white-space: nowrap; 
-            letter-spacing: 0.5px;
         }
-        .badge-casa { 
-            background: #000000; 
-            color: #ffffff; 
-        }
-        .badge-fora { 
-            background: #ffffff; 
-            color: #000000; 
-            border: 1px solid #000000;
-        }
-        .badge-finalizado { 
-            background: #555555; 
-            color: #ffffff; 
-        }
+        .badge-casa { background: #000000; color: #ffffff; }
+        .badge-fora { background: #ffffff; color: #000000; border: 1px solid #000000; }
+        .badge-finalizado { background: #666666; color: #ffffff; }
 
-        /* Alertas de Conflito de Horário */
-        .row-conflito { 
-            background-color: #fff0f0 !important; 
-            border-left: 4px solid var(--error) !important; 
-        }
-        .row-conflito td {
-            background-color: #fff0f0 !important;
-        }
-        .conflito-card { 
-            border-left: 4px solid var(--error) !important; 
-            background: #fff0f0 !important; 
-        }
-        .error-tag { 
-            color: var(--error); 
-            font-size: 10px; 
-            font-weight: 800; 
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
+        .row-conflito { background-color: #fff0f0 !important; border-left: 4px solid var(--error) !important; }
+        .row-conflito td { background-color: #fff0f0 !important; }
+        .conflito-card { border-left: 4px solid var(--error) !important; background: #fff0f0 !important; }
+        .error-tag { color: var(--error); font-size: 10px; font-weight: 800; text-transform: uppercase; }
         
-        .win-icon { color: #000000; }
         .resultado-tag { font-weight: 900; color: #000000; font-size: 15px; }
-        .parciais-tag { font-size: 12px; color: var(--gray-dark); font-weight: 500; }
-
-        /* Estilização para Botão PDF */
-        button[onclick="window.print()"] {
-            background: #000000 !important;
-            color: #ffffff !important;
-            border: none !important;
-            padding: 12px 20px !important;
-            border-radius: 8px !important;
-            font-weight: 800 !important;
-            font-size: 12px !important;
-            letter-spacing: 0.5px;
-            transition: 0.2s;
-        }
-        button[onclick="window.print()"]:hover {
-            background: #222222 !important;
-        }
+        .parciais-tag { font-size: 12px; color: var(--gray-dark); }
 
         /* Responsividade */
         @media screen and (min-width: 1025px) { 
@@ -603,6 +601,18 @@
 </head>
 <body>
 
+<div id="customModal" class="custom-modal">
+    <div class="modal-box">
+        <h3 id="modalTitle">Confirmação</h3>
+        <div class="modal-inputs" id="modalInputs">
+            </div>
+        <div class="modal-footer">
+            <button class="btn-light" id="modalBtnCancel" onclick="closeCustomModal()">Cancelar</button>
+            <button class="btn-dark" id="modalBtnConfirm">Confirmar</button>
+        </div>
+    </div>
+</div>
+
 <div id="loginScreen">
     <div class="login-box">
         <img src="academicos.png" alt="Logo" style="max-width:150px; margin-bottom:20px;">
@@ -619,8 +629,8 @@
                 <h2 style="margin:0; color: var(--primary); font-size: 1.1rem;">FC Académicos - Gestão de Jogos 2026/2027</h2>
             </div>
             <div style="display: flex; gap: 8px;">
-                <button onclick="openAdmin()" style="padding: 8px 14px; border-radius: 8px; cursor:pointer; background: var(--primary); color: white; border: none; font-size: 12px; font-weight: 700;">⚙️ Gestão</button>
-                <button onclick="location.reload()" style="padding: 8px 14px; border-radius: 8px; cursor:pointer; font-size: 12px; font-weight: 700; background: #ffffff; border: 1px solid var(--gray-border);">Sair</button>
+                <button class="btn-dark" onclick="openAdmin()" style="padding: 8px 14px; font-size: 12px;">⚙️ Gestão</button>
+                <button class="btn-light" onclick="location.reload()" style="padding: 8px 14px; font-size: 12px;">Sair</button>
             </div>
         </header>
 
@@ -676,8 +686,8 @@
                 <div class="field" id="boxSetContra" style="display:none;"><label>Set Contra</label><input type="number" id="setContra" value="0"></div>
                 <div class="field" id="boxParciais" style="display:none; grid-column: 1 / -1;"><label>Parciais</label><input type="text" id="parciais"></div>
                 <div class="btn-group">
-                    <button class="btn-marcar" id="btnSalvar" onclick="salvarJogo()">Agendar Jogo</button>
-                    <button class="btn-cancelar" id="btnCancelar" onclick="limpar()">Cancelar</button>
+                    <button class="btn-dark btn-marcar" id="btnSalvar" onclick="salvarJogo()">Agendar Jogo</button>
+                    <button class="btn-light btn-cancelar" id="btnCancelar" onclick="limpar()">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -698,7 +708,7 @@
             <div class="field"><label>🔍 Data</label><input type="date" id="filterData" onchange="render()"></div>
             <div class="field"><label>🔍 Local</label><select id="filterLocal" onchange="handleFilterLocalChange()"><option value="">Todos</option><option value="Casa">Casa</option><option value="Fora">Fora</option></select></div>
             <div class="field" id="filterPavilhaoContainer" style="display:none;"><label>🔍 Pavilhão</label><select id="filterPavilhao" onchange="render()"><option value="">Todos</option></select></div>
-            <div style="display: flex; align-items: flex-end;"><button onclick="window.print()">🖨️ PDF</button></div>
+            <div style="display: flex; align-items: flex-end;"><button class="btn-dark" onclick="window.print()" style="padding: 12px 20px;">🖨️ PDF</button></div>
         </div>
 
         <h3 class="secao-titulo">Próximos Jogos</h3>
@@ -727,8 +737,34 @@
     const defaultE = ["Infantis A Fem", "Infantis B Fem", "Infantis C Fem", "Iniciados A Fem", "Iniciados B Fem", "Iniciados Masc", "Cadetes Fem", "Cadetes Masc", "Juvenis A Fem", "Juvenis B Fem", "Juvenis Masc", "Sub21 Fem", "Séniores Fem", "Séniores Masc", "Veteranos +35 Masc", "Veteranos +45 Masc"];
     const defaultP = ["ES ALCAIDES FARIA", "MUNICIPAL DE ADÃES"];
 
+    // Gerenciador do Modal CSS customizado
+    window.openCustomModal = (title, inputsHtml, onConfirm) => {
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalInputs').innerHTML = inputsHtml;
+        const modal = document.getElementById('customModal');
+        modal.classList.add('show');
+        
+        document.getElementById('modalBtnConfirm').onclick = () => {
+            onConfirm();
+        };
+    };
+    
+    window.closeCustomModal = () => {
+        document.getElementById('customModal').classList.remove('show');
+    };
+
     window.checkLogin = () => { if(document.getElementById('userIn').value === 'academicos' && document.getElementById('passIn').value === 'academicos2026') { document.getElementById('loginScreen').style.display = 'none'; document.getElementById('app').style.display = 'block'; checkDefaults(); carregarJogos(); } else { alert("Senha incorreta!"); } };
-    window.openAdmin = () => { if(prompt("Senha Admin:") === "admin2026") document.getElementById('adminArea').style.display = 'block'; };
+    
+    window.openAdmin = () => { 
+        window.openCustomModal("Acesso Restrito", '<label>Senha do Administrador</label><input type="password" id="adminPassField">', () => {
+            if(document.getElementById('adminPassField').value === "admin2026") {
+                document.getElementById('adminArea').style.display = 'block';
+                window.closeCustomModal();
+            } else {
+                alert("Senha inválida!");
+            }
+        });
+    };
 
     async function checkDefaults() {
         const uploadIfMissing = async (colName, defaults) => {
@@ -768,7 +804,12 @@
     }
 
     window.addItem = async (col, inputId) => { const v = document.getElementById(inputId).value; if(v) { await addDoc(collection(db, col), {val: v}); document.getElementById(inputId).value = ''; } };
-    window.delItem = async (col, id) => { if(confirm("Remover?")) await deleteDoc(doc(db, col, id)); };
+    window.delItem = async (col, id) => { 
+        window.openCustomModal("Remover Item", '<p style="font-size:13px; margin:0;">Tem certeza de que deseja remover este item permanentemente?</p>', async () => {
+            await deleteDoc(doc(db, col, id));
+            window.closeCustomModal();
+        });
+    };
 
     window.toggleSection = (id) => { const c = document.getElementById(id); const icon = document.getElementById(id + 'Icon'); c.classList.toggle('active'); icon.innerText = c.classList.contains('active') ? '▲' : '▼'; };
     window.toggleDrop = (id) => { document.querySelectorAll('.multiselect-dropdown').forEach(el => { if(el.id !== id) el.classList.remove('show'); }); document.getElementById(id).classList.toggle('show'); };
@@ -785,7 +826,26 @@
         try { if(editId) await updateDoc(doc(db, "jogos", editId), d); else await addDoc(jogosCol, d); editId = null; limpar(); } catch (e) { alert("Erro!"); }
     };
 
-    window.finalizarJogoPrompt = (id) => { if (prompt("Senha:") === "academicos2026") { const sp = prompt("Sets Pró:", "0"), sc = prompt("Sets Contra:", "0"), pa = prompt("Parciais:", ""); updateDoc(doc(db, "jogos", id), { finalizado: true, setPro: sp, setContra: sc, parciais: pa }); } };
+    window.finalizarJogoPrompt = (id) => {
+        const inputsHtml = `
+            <label>Confirmar Senha:</label><input type="password" id="fS">
+            <label>Sets Pró:</label><input type="number" id="fSP" value="0">
+            <label>Sets Contra:</label><input type="number" id="fSC" value="0">
+            <label>Parciais:</label><input type="text" id="fPA" placeholder="Ex: 25-23, 21-25">
+        `;
+        window.openCustomModal("Finalizar Jogo", inputsHtml, () => {
+            if (document.getElementById('fS').value === "academicos2026") {
+                const sp = document.getElementById('fSP').value;
+                const sc = document.getElementById('fSC').value;
+                const pa = document.getElementById('fPA').value;
+                updateDoc(doc(db, "jogos", id), { finalizado: true, setPro: sp, setContra: sc, parciais: pa });
+                window.closeCustomModal();
+            } else {
+                alert("Senha inválida!");
+            }
+        });
+    };
+    
     function carregarJogos() { onSnapshot(query(jogosCol, orderBy("data"), orderBy("hora")), (s) => { jogosAtuais = s.docs.map(d => ({ id: d.id, ...d.data() })); render(); }); }
 
     window.render = () => {
@@ -806,18 +866,44 @@
             if(!j.finalizado) {
                 if(j.casaFora === 'Casa') cC++; else cF++;
                 const tr = document.createElement('tr'); if(j.conflito) tr.className = 'row-conflito';
-                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:#000000">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button style="background:#000000;color:white;border:none;padding:4px;border-radius:4px;font-size:10px;cursor:pointer;margin-top:5px;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" style="text-decoration:none;">📍</a>` : ''}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
+                tr.innerHTML = `<td style="background:${j.cor}; width:8px;"></td><td style="font-weight:bold; color:#000000">${j.treinador}</td><td>${j.competicao||'-'}</td><td>${j.jornada||'-'}</td><td>${j.numJogo||'-'}</td><td>${j.escalao}</td><td>${j.adversario || '---'}</td><td>${dt} às ${j.hora}${j.conflito ? '<br><span class="error-tag">⚠️ Conflito</span>' : ''}${isPassado ? `<br><button class="btn-dark" style="padding:4px 8px; font-size:10px; margin-top:5px;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''}</td><td>${j.pavilhao} ${j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" style="text-decoration:none;">📍</a>` : ''}</td><td><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 lWeb.appendChild(tr);
+                
+                // Card Mobile atualizado com Comp e NumJogo
                 const card = document.createElement('div'); card.className = `game-card ${j.conflito ? 'conflito-card' : ''}`;
-                card.innerHTML = `<div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div><div class="info-item">📅 ${dt} - ${j.hora}</div><div class="info-item">🏐 ${j.escalao}</div><div class="info-item" style="color:#000000; font-weight:700">👤 ${j.treinador}</div><div class="info-item">Pav: ${j.pavilhao} ${j.mapsLink ? '📍' : ''}</div>${j.conflito ? '<div class="info-item error-tag">⚠️ Conflito Horário</div>' : ''}<div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>${isPassado ? `<button class="btn-mobile" style="background:#000000;color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''} <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `
+                    <div class="card-full"><span>${j.adversario || '---'}</span><span class="badge ${j.casaFora === 'Casa' ? 'badge-casa' : 'badge-fora'}">${j.casaFora}</span></div>
+                    <div class="info-item">📅 ${dt} - ${j.hora}</div>
+                    <div class="info-item">🏐 ${j.escalao}</div>
+                    <div class="info-item" style="color:#000000; font-weight:700">👤 ${j.treinador}</div>
+                    <div class="info-item">🏆 Comp: ${j.competicao || '-'}</div>
+                    <div class="info-item">🔢 Nº Jogo: ${j.numJogo || '-'}</div>
+                    <div class="info-item" style="grid-column: span 2;">📍 Pav: ${j.pavilhao} ${j.mapsLink ? '📍' : ''}</div>
+                    ${j.conflito ? '<div class="info-item error-tag" style="grid-column: span 2;">⚠️ Conflito Horário</div>' : ''}
+                    <div class="card-actions">
+                        <button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button>
+                        ${isPassado ? `<button class="btn-mobile" style="background:#000000;color:white;" onclick="finalizarJogoPrompt('${j.id}')">🏁 Finalizar</button>` : ''} 
+                        <button class="btn-mobile" style="flex:0.3; background:#fff0f0; color:var(--error); border-color:var(--error);" onclick="eliminarJogo('${j.id}')">🗑️</button>
+                    </div>`;
                 lMob.appendChild(card);
             } else {
                 cFin++;
                 const tr = document.createElement('tr'); tr.className = 'row-finalizado';
                 tr.innerHTML = `<td style="background:${j.cor}; width:8px; opacity:0.5;"></td><td style="font-weight:bold; color:#555555">${j.treinador}</td><td>${j.escalao}</td><td>${j.adversario}<br><span class="resultado-tag">${j.setPro} - ${j.setContra}${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</span><br><span class="parciais-tag">${j.parciais}</span></td><td>${dt}</td><td>${j.pavilhao}</td><td><span class="badge badge-finalizado">Fim</span></td><td><button onclick="prepararEdicao('${j.id}')">✏️</button> <button onclick="eliminarJogo('${j.id}')">🗑️</button></td>`;
                 hWeb.appendChild(tr);
+                
+                // Card Histórico Mobile atualizado com Comp e NumJogo
                 const card = document.createElement('div'); card.className = 'game-card card-finalizado-mobile';
-                card.innerHTML = `<div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div><div class="info-item">Res: <b>${j.setPro} - ${j.setContra}</b>${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</div><div class="info-item">📊 Parciais: ${j.parciais || '---'}</div><div class="info-item" style="color:#555555">👤 ${j.treinador}</div><div class="card-actions"><button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button></div>`;
+                card.innerHTML = `
+                    <div class="card-full"><span>${j.adversario}</span><span class="badge badge-finalizado">Fim</span></div>
+                    <div class="info-item">Res: <b>${j.setPro} - ${j.setContra}</b>${parseInt(j.setPro)>parseInt(j.setContra) ? ' 🏆' : ''}</div>
+                    <div class="info-item">📊 Parciais: ${j.parciais || '---'}</div>
+                    <div class="info-item" style="color:#555555">👤 ${j.treinador}</div>
+                    <div class="info-item">🏆 ${j.competicao || '-'} (Jor. ${j.jornada || '-'})</div>
+                    <div class="card-actions">
+                        <button class="btn-mobile" onclick="prepararEdicao('${j.id}')">✏️ Editar</button> 
+                        <button class="btn-mobile" style="flex:0.3" onclick="eliminarJogo('${j.id}')">🗑️</button>
+                    </div>`;
                 hMob.appendChild(card);
             }
         });
@@ -839,7 +925,17 @@
         document.getElementById('btnCancelar').style.display = "block"; document.getElementById('formAgendamento').classList.add('active'); window.scrollTo(0,0);
     };
 
-    window.eliminarJogo = async (id) => { if (prompt("Senha para eliminar:") === "academicos2026") await deleteDoc(doc(db, "jogos", id)); };
+    window.eliminarJogo = async (id) => {
+        window.openCustomModal("Confirmar Exclusão", '<label>Senha para eliminar:</label><input type="password" id="delPassField">', async () => {
+            if(document.getElementById('delPassField').value === "academicos2026") {
+                await deleteDoc(doc(db, "jogos", id));
+                window.closeCustomModal();
+            } else {
+                alert("Senha incorreta!");
+            }
+        });
+    };
+    
     window.limpar = () => { editId = null; ['data','hora','competicao','jornada','numJogo','adversario','setPro','setContra','parciais'].forEach(id => { const el = document.getElementById(id); if(el) el.value = ''; }); document.getElementById('btnSalvar').innerText = "Agendar Jogo"; document.getElementById('btnSalvar').classList.remove("btn-atualizar"); document.getElementById('btnCancelar').style.display = "none"; document.getElementById('formAgendamento').classList.remove('active'); };
     window.onclick = (e) => { if (!e.target.closest('.multiselect-wrap')) { document.querySelectorAll('.multiselect-dropdown').forEach(el => el.classList.remove('show')); } };
 </script>
