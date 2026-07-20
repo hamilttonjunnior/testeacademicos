@@ -827,18 +827,17 @@
     };
 
     async function checkDefaults() {
-        const uploadIfMissing = async (colName, defaults) => {
+        const uploadIfEmpty = async (colName, defaults) => {
             const s = await getDocs(collection(db, colName));
-            const existing = s.docs.map(d => d.data().val);
-            for(let v of defaults) {
-                if(!existing.includes(v)) { 
+            if (s.empty) {
+                for(let v of defaults) {
                     await addDoc(collection(db, colName), {val: v}); 
                 }
             }
         };
-        await uploadIfMissing("treinadores", defaultT);
-        await uploadIfMissing("escaloes", defaultE);
-        await uploadIfMissing("pavilhoes", defaultP);
+        await uploadIfEmpty("treinadores", defaultT);
+        await uploadIfEmpty("escaloes", defaultE);
+        await uploadIfEmpty("pavilhoes", defaultP);
         syncLists();
     }
 
