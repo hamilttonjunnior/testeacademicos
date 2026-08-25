@@ -506,6 +506,13 @@
     const firebaseConfig = { apiKey: "AIzaSyB86TeZnp2qdOXXwjvD3hFfzTi3Z3NkVMc", authDomain: "academicos-d2cfc.firebaseapp.com", projectId: "academicos-d2cfc", storageBucket: "academicos-d2cfc.firebasestorage.app", messagingSenderId: "550824625713", appId: "1:550824625713:web:f3194f8e4f06dc141a3710" };
     const app = initializeApp(firebaseConfig); const db = getFirestore(app); const jogosCol = collection(db, "jogos");
     let jogosAtuais = [], listT = [], listE = [], listP = [];
+    let initialUrlChecked = false;
+
+    // Função para ler parâmetro da URL
+    function getUrlParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
 
     onSnapshot(collection(db, "treinadores"), s => { listT = s.docs.map(d => d.data().val).sort((a,b) => a.localeCompare(b)); updateUIFilters(); });
     onSnapshot(collection(db, "escaloes"), s => { listE = s.docs.map(d => d.data().val).sort((a,b) => a.localeCompare(b)); updateUIFilters(); });
@@ -525,6 +532,17 @@
 
     onSnapshot(query(jogosCol, orderBy("data"), orderBy("hora")), (s) => { 
         jogosAtuais = s.docs.map(d => ({ id: d.id, ...d.data() })); 
+
+        // Na primeira carga dos dados, verifica se existe parâmetro 'data' na URL
+        if (!initialUrlChecked) {
+            const dataUrl = getUrlParam('data');
+            if (dataUrl) {
+                const inputData = document.getElementById('filterData');
+                if (inputData) inputData.value = dataUrl;
+            }
+            initialUrlChecked = true;
+        }
+
         render(); 
     });
 
@@ -533,6 +551,15 @@
         const selT = Array.from(document.querySelectorAll('#dropT input:checked')).map(i => i.value), selE = Array.from(document.querySelectorAll('#dropE input:checked')).map(i => i.value);
         const fD = document.getElementById('filterData').value, fL = document.getElementById('filterLocal').value, fP = document.getElementById('filterPavilhao').value;
         
+        // Atualiza a URL com a data selecionada sem recarregar a página
+        const currentUrl = new URL(window.location);
+        if (fD) {
+            currentUrl.searchParams.set('data', fD);
+        } else {
+            currentUrl.searchParams.delete('data');
+        }
+        window.history.replaceState({}, '', currentUrl);
+
         lWeb.innerHTML = ''; lMob.innerHTML = ''; hWeb.innerHTML = ''; hMob.innerHTML = '';
         let cC = 0, cF = 0, cFin = 0;
 
@@ -550,7 +577,7 @@
                 
                 const mapHTML = j.mapsLink ? `<a href="${j.mapsLink}" target="_blank" class="maps-btn">📍 Mapa</a>` : '';
 
-                // Renderização Web Próximos (coluna fina de cor respeitada)
+                // Renderização Web Próximos
                 const tr = document.createElement('tr');
                 tr.innerHTML = `<td style="background:${j.cor}; width:4px; max-width:4px; min-width:4px; padding:0; margin:0;"></td>
                                 <td style="font-weight:bold; color:#000000">${j.treinador}</td>
