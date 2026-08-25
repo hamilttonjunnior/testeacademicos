@@ -134,7 +134,7 @@
         /* Filtros */
         .filter-grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); 
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
             gap: 16px; 
             background: var(--bg); 
             padding: 24px; 
@@ -446,7 +446,8 @@
                     <div id="dropE" class="multiselect-dropdown"></div>
                 </div>
             </div>
-            <div class="field"><label>🔍 Data Específica</label><input type="date" id="filterData" onchange="render()"></div>
+            <div class="field"><label>📅 Data Inicial</label><input type="date" id="filterDataInicio" onchange="render()"></div>
+            <div class="field"><label>📅 Data Final</label><input type="date" id="filterDataFim" onchange="render()"></div>
             <div class="field"><label>🔍 Local</label><select id="filterLocal" onchange="handleFilterLocalChange()"><option value="">Todos</option><option value="Casa">Casa</option><option value="Fora">Fora</option></select></div>
             <div class="field" id="filterPavilhaoContainer" style="display:none;"><label>🔍 Pavilhão</label><select id="filterPavilhao" onchange="render()"><option value="">Todos</option></select></div>
             <div style="display: flex; align-items: flex-end;"><button class="btn-dark" onclick="window.print()" style="padding: 12px 20px;">🖨️ PDF</button></div>
@@ -508,7 +509,6 @@
     let jogosAtuais = [], listT = [], listE = [], listP = [];
     let initialUrlChecked = false;
 
-    // Função para ler parâmetro da URL
     function getUrlParam(param) {
         const urlParams = new URLSearchParams(window.location.search);
         return urlParams.get(param);
@@ -533,13 +533,14 @@
     onSnapshot(query(jogosCol, orderBy("data"), orderBy("hora")), (s) => { 
         jogosAtuais = s.docs.map(d => ({ id: d.id, ...d.data() })); 
 
-        // Na primeira carga dos dados, verifica se existe parâmetro 'data' na URL
+        // Ao carregar, verifica se existem parâmetros de intervalo de data na URL
         if (!initialUrlChecked) {
-            const dataUrl = getUrlParam('data');
-            if (dataUrl) {
-                const inputData = document.getElementById('filterData');
-                if (inputData) inputData.value = dataUrl;
-            }
+            const dInicio = getUrlParam('dataInicio') || getUrlParam('data');
+            const dFim = getUrlParam('dataFim');
+            
+            if (dInicio) document.getElementById('filterDataInicio').value = dInicio;
+            if (dFim) document.getElementById('filterDataFim').value = dFim;
+            
             initialUrlChecked = true;
         }
 
@@ -549,15 +550,16 @@
     window.render = () => {
         const lWeb = document.getElementById('listaWeb'), lMob = document.getElementById('listaMobile'), hWeb = document.getElementById('listaHistoricoWeb'), hMob = document.getElementById('listaHistoricoMobile');
         const selT = Array.from(document.querySelectorAll('#dropT input:checked')).map(i => i.value), selE = Array.from(document.querySelectorAll('#dropE input:checked')).map(i => i.value);
-        const fD = document.getElementById('filterData').value, fL = document.getElementById('filterLocal').value, fP = document.getElementById('filterPavilhao').value;
+        const fDInicio = document.getElementById('filterDataInicio').value;
+        const fDFim = document.getElementById('filterDataFim').value;
+        const fL = document.getElementById('filterLocal').value, fP = document.getElementById('filterPavilhao').value;
         
-        // Atualiza a URL com a data selecionada sem recarregar a página
+        // Atualiza a URL com o intervalo de datas selecionado
         const currentUrl = new URL(window.location);
-        if (fD) {
-            currentUrl.searchParams.set('data', fD);
-        } else {
-            currentUrl.searchParams.delete('data');
-        }
+        if (fDInicio) currentUrl.searchParams.set('dataInicio', fDInicio); else currentUrl.searchParams.delete('dataInicio');
+        if (fDFim) currentUrl.searchParams.set('dataFim', fDFim); else currentUrl.searchParams.delete('dataFim');
+        currentUrl.searchParams.delete('data'); // limpa o antigo caso venha na URL
+        
         window.history.replaceState({}, '', currentUrl);
 
         lWeb.innerHTML = ''; lMob.innerHTML = ''; hWeb.innerHTML = ''; hMob.innerHTML = '';
@@ -566,7 +568,11 @@
         jogosAtuais.forEach(j => {
             if(selT.length > 0 && !selT.includes(j.treinador)) return; 
             if(selE.length > 0 && !selE.includes(j.escalao)) return; 
-            if(fD && j.data !== fD) return; 
+            
+            // Filtro por Intervalo de Data
+            if(fDInicio && j.data < fDInicio) return;
+            if(fDFim && j.data > fDFim) return;
+
             if(fL && j.casaFora !== fL) return; 
             if(fL === 'Casa' && fP && j.pavilhao !== fP) return;
 
